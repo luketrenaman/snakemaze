@@ -102,7 +102,7 @@
 	g.renderer.backgroundColor = 0x444444;
 	g.all = new PIXI.Container();
 	document.body.appendChild(g.renderer.view);
-	PIXI.loader.add("assets/snake-head.png").add("assets/rainbow.json").add("assets/snake-body.png").add("assets/snake-corner.png").add("assets/snake-tail.png").add("assets/grass.png").add("assets/flowers-1.png").add("assets/flowers-2.png").add("assets/rock.png").add("assets/gem-1.png").add("assets/gem-2.png").add("assets/gem-3.png").add("assets/level-1.png").add("assets/titlescreen.png").add("assets/start.png").load(fonts);1;
+	PIXI.loader.add("assets/snake-head.png").add("assets/rainbow.json").add("assets/snake-body.png").add("assets/snake-corner.png").add("assets/snake-tail.png").add("assets/grass.png").add("assets/flowers-1.png").add("assets/flowers-2.png").add("assets/rock.png").add("assets/gem-1.png").add("assets/gem-2.png").add("assets/gem-3.png").add("assets/level-1.png").add("assets/titlescreen.png").add("assets/start.png").add("assets/back.png").add("assets/music.png").add("assets/nomusic.png").load(fonts);
 	
 	function fonts() {
 		WebFont.load({
@@ -124,7 +124,7 @@
 		//Button is a function that creates an interactive sprite at a certain position, and provide a callback
 		(0, _menu2.default)();
 		console.log(g.manager);
-		g.manager.show("level");
+		g.manager.show("start"); //set to level for debug
 		g.all.updateLayersOrder = function () {
 			g.all.children.sort(function (a, b) {
 				a.zOrder = a.zOrder || 0;
@@ -514,8 +514,9 @@
 	  g.soundManager.x = 832 - 128;
 	  g.soundManager.y = 640 - 64;
 	  g.soundManager.zOrder = -4;
-	  var music = new PIXI.Sprite(_shapes2.default.rectangle(64, 64, "#00f"));
+	  var music = new PIXI.Sprite(PIXI.loader.resources["assets/music.png"].texture);
 	  (0, _button2.default)(music, 0, 0, function () {
+	    music.setTexture(PIXI.loader.resources["assets/nomusic.png"].texture);
 	    //Handle music disable
 	    console.log("music");
 	  });
@@ -616,7 +617,7 @@
 	  for (var i = 0; i < 5; i++) {
 	    _loop(i);
 	  }
-	  var exit = new PIXI.Sprite(_shapes2.default.rectangle(64, 64, "#0f0"));
+	  var exit = new PIXI.Sprite(PIXI.loader.resources["assets/back.png"].texture);
 	  levelSelect.addChild(exit);
 	  (0, _button2.default)(exit, 0, 0, function () {
 	    g.manager.show("start");
@@ -657,7 +658,9 @@
 	    sprite.interactive = true;
 	    sprite.x = x;
 	    sprite.y = y;
-	    sprite.on('click', func);
+	    sprite.on('click', function () {
+	        func();g.renderer.render(g.all);
+	    });
 	};
 
 /***/ }),

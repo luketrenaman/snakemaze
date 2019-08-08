@@ -7,8 +7,9 @@ export default function(){
     g.soundManager.x = 832-128;
     g.soundManager.y = 640-64;
     g.soundManager.zOrder = -4;
-    let music = new PIXI.Sprite(shapes.rectangle(64,64,"#00f"));
+    let music = new PIXI.Sprite(PIXI.loader.resources["assets/music.png"].texture)
     button(music,0,0,function(){
+        music.setTexture(PIXI.loader.resources["assets/nomusic.png"].texture);
         //Handle music disable
         console.log("music")
     });
@@ -75,7 +76,7 @@ export default function(){
             })
         }
     }
-    let exit = new PIXI.Sprite(shapes.rectangle(64,64,"#0f0"));
+    let exit = new PIXI.Sprite(PIXI.loader.resources["assets/back.png"].texture);
     levelSelect.addChild(exit);
     button(exit,0,0,function(){
         g.manager.show("start");
