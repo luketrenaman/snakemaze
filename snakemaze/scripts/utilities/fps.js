@@ -24,7 +24,6 @@ module.exports = function(cb) {
             requestAnimationFrame(draw);
             ct++
             cb(ct,a)
-            ct%= 64;
         }
     }
     draw();

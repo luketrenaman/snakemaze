@@ -1,3 +1,26 @@
+class menuManager{
+    constructor(){
+        this.menus = []
+    }
+    show(menuName){
+        this.hide();
+        this.menus.forEach(function(val){
+            if(val.name === menuName){
+                val.visible = true;
+                g.soundManager.visible = val.sound;
+            }
+        })
+        g.renderer.render(g.all);
+    }
+    hide(){
+        this.menus.forEach(function(val){
+            val.visible = false;
+        })
+    }
+    push(val){
+        this.menus.push(val);
+    }
+}
 import shapes from "./../drawing/shapes.js";
 import button from "./button.js";
 export default function(){
@@ -8,10 +31,14 @@ export default function(){
     g.soundManager.y = 640-64;
     g.soundManager.zOrder = -4;
     let music = new PIXI.Sprite(PIXI.loader.resources["assets/music.png"].texture)
+    music.enabled = true;
     button(music,0,0,function(){
-        music.setTexture(PIXI.loader.resources["assets/nomusic.png"].texture);
-        //Handle music disable
-        console.log("music")
+        if(music.enabled){
+            music.setTexture(PIXI.loader.resources["assets/nomusic.png"].texture);
+        } else{
+            music.setTexture(PIXI.loader.resources["assets/music.png"].texture);
+        }
+        music.enabled = !music.enabled;
     });
     let sounds = new PIXI.Sprite(shapes.rectangle(64,64,"#00f"));
     button(sounds,64,0,function(){
@@ -21,29 +48,6 @@ export default function(){
     g.soundManager.addChild(music); 
     g.soundManager.addChild(sounds);
     g.all.addChild(g.soundManager);
-	class menuManager{
-		constructor(){
-			this.menus = []
-		}
-		show(menuName){
-			this.hide();
-			this.menus.forEach(function(val){
-				if(val.name === menuName){
-					val.visible = true;
-					g.soundManager.visible = val.sound;
-				}
-			})
-			g.renderer.render(g.all);
-		}
-		hide(){
-			this.menus.forEach(function(val){
-				val.visible = false;
-			})
-		}
-		push(val){
-			this.menus.push(val);
-		}
-	}
 	g.manager = new menuManager();
 	//construct menus my brotha
 	class menu extends PIXI.Container{

@@ -147,8 +147,6 @@
 					return b.zIndex - a.zIndex;
 				});
 			};
-			//hide menus
-			g.manager.hide();
 			//give kill function
 			this.kill = function () {
 				loop.stop();
@@ -235,6 +233,35 @@
 			var predirection = snake.direction;
 			g.all.updateLayersOrder();
 			var start = 1;
+			//Start by moving the snake to allow instantaneous snake positioning
+			for (var _i = 0; _i < 2; _i++) {
+				switch (_levels2.default[num].snake.direction) {
+					case "r":
+						snake.move(1, 0);
+						break;
+					case "l":
+						snake.move(-1, 0);
+						break;
+					case "u":
+						snake.move(0, 1);
+						break;
+					case "d":
+						snake.move(0, -1);
+						break;
+				}
+			}
+			//snake.move(0,0);
+			//hide menus
+			g.manager.hide();
+			g.stage.y = -snake.sprites[0].y + 320;
+			g.stage.x = -snake.sprites[0].x + 416;
+			var countdown = new PIXI.Text("3", {
+				font: "52px Pixel",
+				fill: "white"
+			});
+			g.all.addChild(countdown);
+			countdown.y = 320;
+			countdown.x = 416;
 			var loop = new _fps2.default(function (frames, self) {
 				g.stage.y += (320 - snake.sprites[0].worldTransform.ty) / (40 - +(Math.abs(320 - snake.sprites[0].worldTransform.ty) > 640) * 39);
 				g.stage.x += (416 - snake.sprites[0].worldTransform.tx) / (40 - +(Math.abs(416 - snake.sprites[0].worldTransform.tx) > 832) * 39);
@@ -245,32 +272,32 @@
 				tiles.children.forEach(function (val) {
 					val.visible = !(val.x + g.stage.x < -32 || val.x + g.stage.x > 864 || val.y + g.stage.y < -32 || val.y + g.stage.y > 672);
 				});
-				pause.handle(self, background);
-				_keyPress2.default.check([65, 37], function () {
-					//Left
-					if (direction == "u" || direction == "d" && predirection != "l") {
-						predirection = "l";
-					}
-				});
-				_keyPress2.default.check([68, 39], function () {
-					//Right
-					if (direction == "u" || direction == "d" && predirection != "r") {
-						predirection = "r";
-					}
-				});
-				_keyPress2.default.check([87, 38], function () {
-					//Up
-					if (direction == "r" || direction == "l" && predirection != "u") {
-						predirection = "u";
-					}
-				});
-				_keyPress2.default.check([83, 40], function () {
-					//Down
-					if (direction == "r" || direction == "l" && predirection != "d") {
-						predirection = "d";
-					}
-				});
-				if (frames % 8 == 0) {
+				if (frames % 8 == 0 && frames > 180) {
+					pause.handle(self, background);
+					_keyPress2.default.check([65, 37], function () {
+						//Left
+						if (direction == "u" || direction == "d" && predirection != "l") {
+							predirection = "l";
+						}
+					});
+					_keyPress2.default.check([68, 39], function () {
+						//Right
+						if (direction == "u" || direction == "d" && predirection != "r") {
+							predirection = "r";
+						}
+					});
+					_keyPress2.default.check([87, 38], function () {
+						//Up
+						if (direction == "r" || direction == "l" && predirection != "u") {
+							predirection = "u";
+						}
+					});
+					_keyPress2.default.check([83, 40], function () {
+						//Down
+						if (direction == "r" || direction == "l" && predirection != "d") {
+							predirection = "d";
+						}
+					});
 					direction = predirection;
 					switch (direction) {
 						case "l":
@@ -284,6 +311,12 @@
 							break;
 						case 'd':
 							snake.move(0, -1);
+					}
+				} else {
+					if (Math.ceil(3 - frames / 60) === 0) {
+						countdown.visible = false;
+					} else {
+						countdown.setText(Math.ceil(3 - frames / 60));
 					}
 				}
 				g.renderer.render(g.all);
@@ -442,7 +475,6 @@
 	            requestAnimationFrame(draw);
 	            ct++;
 	            cb(ct, a);
-	            ct %= 64;
 	        }
 	    }
 	    draw();
@@ -502,129 +534,96 @@
 	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	exports.default = function () {
-	  if (window.g == undefined) window.g = {};
-	  g = window.g;
-	  g.soundManager = new PIXI.Container();
-	  g.soundManager.x = 832 - 128;
-	  g.soundManager.y = 640 - 64;
-	  g.soundManager.zOrder = -4;
-	  var music = new PIXI.Sprite(PIXI.loader.resources["assets/music.png"].texture);
-	  (0, _button2.default)(music, 0, 0, function () {
-	    music.setTexture(PIXI.loader.resources["assets/nomusic.png"].texture);
-	    //Handle music disable
-	    console.log("music");
-	  });
-	  var sounds = new PIXI.Sprite(_shapes2.default.rectangle(64, 64, "#00f"));
-	  (0, _button2.default)(sounds, 64, 0, function () {
-	    //Handle sfx disable
-	    console.log("sfx");
-	  });
-	  g.soundManager.addChild(music);
-	  g.soundManager.addChild(sounds);
-	  g.all.addChild(g.soundManager);
+	    if (window.g == undefined) window.g = {};
+	    g = window.g;
+	    g.soundManager = new PIXI.Container();
+	    g.soundManager.x = 832 - 128;
+	    g.soundManager.y = 640 - 64;
+	    g.soundManager.zOrder = -4;
+	    var music = new PIXI.Sprite(PIXI.loader.resources["assets/music.png"].texture);
+	    music.enabled = true;
+	    (0, _button2.default)(music, 0, 0, function () {
+	        if (music.enabled) {
+	            music.setTexture(PIXI.loader.resources["assets/nomusic.png"].texture);
+	        } else {
+	            music.setTexture(PIXI.loader.resources["assets/music.png"].texture);
+	        }
+	        music.enabled = !music.enabled;
+	    });
+	    var sounds = new PIXI.Sprite(_shapes2.default.rectangle(64, 64, "#00f"));
+	    (0, _button2.default)(sounds, 64, 0, function () {
+	        //Handle sfx disable
+	        console.log("sfx");
+	    });
+	    g.soundManager.addChild(music);
+	    g.soundManager.addChild(sounds);
+	    g.all.addChild(g.soundManager);
+	    g.manager = new menuManager();
+	    //construct menus my brotha
 	
-	  var menuManager = function () {
-	    function menuManager() {
-	      _classCallCheck(this, menuManager);
+	    var menu = function (_PIXI$Container) {
+	        _inherits(menu, _PIXI$Container);
 	
-	      this.menus = [];
-	    }
+	        function menu(name, sound) {
+	            _classCallCheck(this, menu);
 	
-	    _createClass(menuManager, [{
-	      key: "show",
-	      value: function show(menuName) {
-	        this.hide();
-	        this.menus.forEach(function (val) {
-	          if (val.name === menuName) {
-	            val.visible = true;
-	            g.soundManager.visible = val.sound;
-	          }
-	        });
-	        g.renderer.render(g.all);
-	      }
-	    }, {
-	      key: "hide",
-	      value: function hide() {
-	        this.menus.forEach(function (val) {
-	          val.visible = false;
-	        });
-	      }
-	    }, {
-	      key: "push",
-	      value: function push(val) {
-	        this.menus.push(val);
-	      }
-	    }]);
+	            var _this = _possibleConstructorReturn(this, (menu.__proto__ || Object.getPrototypeOf(menu)).call(this));
 	
-	    return menuManager;
-	  }();
+	            _this.name = name;
+	            _this.sound = sound;
+	            g.manager.push(_this);
+	            g.all.addChild(_this);
+	            return _this;
+	        }
 	
-	  g.manager = new menuManager();
-	  //construct menus my brotha
-	
-	  var menu = function (_PIXI$Container) {
-	    _inherits(menu, _PIXI$Container);
-	
-	    function menu(name, sound) {
-	      _classCallCheck(this, menu);
-	
-	      var _this = _possibleConstructorReturn(this, (menu.__proto__ || Object.getPrototypeOf(menu)).call(this));
-	
-	      _this.name = name;
-	      _this.sound = sound;
-	      g.manager.push(_this);
-	      g.all.addChild(_this);
-	      return _this;
-	    }
-	
-	    return menu;
-	  }(PIXI.Container);
-	  //startScreen
+	        return menu;
+	    }(PIXI.Container);
+	    //startScreen
 	
 	
-	  var startScreen = new menu("start", true);
-	  var background = new PIXI.Sprite(PIXI.loader.resources["assets/titlescreen.png"].texture);
-	  startScreen.addChild(background);
-	  var start = new PIXI.Sprite(PIXI.loader.resources["assets/start.png"].texture);
-	  startScreen.addChild(start);
-	  (0, _button2.default)(start, 64 * 4 + 32, 64 * 6, function () {
-	    g.manager.show("level");
-	  });
-	  //level select
-	  var levelSelect = new menu("level", true);
+	    var startScreen = new menu("start", true);
+	    var background = new PIXI.Sprite(PIXI.loader.resources["assets/titlescreen.png"].texture);
+	    startScreen.addChild(background);
+	    var start = new PIXI.Sprite(PIXI.loader.resources["assets/start.png"].texture);
+	    startScreen.addChild(start);
+	    (0, _button2.default)(start, 64 * 4 + 32, 64 * 6, function () {
+	        g.manager.show("level");
+	    });
+	    //level select
+	    var levelSelect = new menu("level", true);
 	
-	  var _loop = function _loop(i) {
-	    var _loop2 = function _loop2(j) {
+	    var _loop = function _loop(i) {
+	        var _loop2 = function _loop2(j) {
 	
-	      var lev = new PIXI.Sprite(PIXI.loader.resources["assets/level-1.png"].texture);
-	      levelSelect.addChild(lev);
-	      (0, _button2.default)(lev, i * 128 + 128, j * 128 + 128, function () {
-	        g.level = new g.newLevel(i + j * 5);
-	      });
+	            var lev = new PIXI.Sprite(PIXI.loader.resources["assets/level-1.png"].texture);
+	            levelSelect.addChild(lev);
+	            (0, _button2.default)(lev, i * 128 + 128, j * 128 + 128, function () {
+	                g.level = new g.newLevel(i + j * 5);
+	            });
+	        };
+	
+	        for (var j = 0; j < 2; j++) {
+	            _loop2(j);
+	        }
 	    };
 	
-	    for (var j = 0; j < 2; j++) {
-	      _loop2(j);
+	    for (var i = 0; i < 5; i++) {
+	        _loop(i);
 	    }
-	  };
-	
-	  for (var i = 0; i < 5; i++) {
-	    _loop(i);
-	  }
-	  var exit = new PIXI.Sprite(PIXI.loader.resources["assets/back.png"].texture);
-	  levelSelect.addChild(exit);
-	  (0, _button2.default)(exit, 0, 0, function () {
-	    g.manager.show("start");
-	  });
-	  var deathMenu = new menu("death", false);
-	  var deathBase = new PIXI.Sprite(_shapes2.default.rectangle(64 * 6, 64 * 4, "#000"));
-	  deathMenu.addChild(deathBase);
+	    var exit = new PIXI.Sprite(PIXI.loader.resources["assets/back.png"].texture);
+	    levelSelect.addChild(exit);
+	    (0, _button2.default)(exit, 0, 0, function () {
+	        g.manager.show("start");
+	    });
+	    var deathMenu = new menu("death", false);
+	    var deathBase = new PIXI.Sprite(_shapes2.default.rectangle(64 * 6, 64 * 4, "#000"));
+	    deathMenu.addChild(deathBase);
 	};
 	
 	var _shapes = __webpack_require__(4);
@@ -634,14 +633,50 @@
 	var _button = __webpack_require__(7);
 	
 	var _button2 = _interopRequireDefault(_button);
-
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
+	
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
+	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
+	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var menuManager = function () {
+	    function menuManager() {
+	        _classCallCheck(this, menuManager);
+	
+	        this.menus = [];
+	    }
+	
+	    _createClass(menuManager, [{
+	        key: "show",
+	        value: function show(menuName) {
+	            this.hide();
+	            this.menus.forEach(function (val) {
+	                if (val.name === menuName) {
+	                    val.visible = true;
+	                    g.soundManager.visible = val.sound;
+	                }
+	            });
+	            g.renderer.render(g.all);
+	        }
+	    }, {
+	        key: "hide",
+	        value: function hide() {
+	            this.menus.forEach(function (val) {
+	                val.visible = false;
+	            });
+	        }
+	    }, {
+	        key: "push",
+	        value: function push(val) {
+	            this.menus.push(val);
+	        }
+	    }]);
+
+	    return menuManager;
+	}();
 
 /***/ }),
 /* 7 */
