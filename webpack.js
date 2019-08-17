@@ -5,7 +5,7 @@ module.exports = function(cwd,ptype) {
   if(ptype === "react"){
     return {
         "devtool": "source-map",
-        "entry": "./" + cwd + "scripts/index.jsx",
+        "entry": "./" + cwd + "src/index.jsx",
         "output": {
             "path": require("path").resolve("./" + cwd),
             "filename": cwd + "bundle.js"
@@ -26,7 +26,7 @@ module.exports = function(cwd,ptype) {
   if(ptype === "javascript"){
     return {
       "devtool": "source-map",
-      "entry": "./" + cwd + "scripts/index.js",
+      "entry": "./" + cwd + "src/index.js",
       "output": {
           "path": require("path").resolve("./" + cwd),
           "filename": cwd + "bundle.js"
