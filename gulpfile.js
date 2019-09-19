@@ -3,7 +3,7 @@ var browserSync = require('browser-sync')
     .create();
 var argv = require('yargs')
     .argv;
-var webpack = require('gulp-webpack');
+var webpack = require('webpack-stream');
 var ptype = argv.project != undefined ? argv.project : "javascript";
 var cwd = argv.a != undefined ? argv.a : ""
 cwd = cwd[cwd.length-1] != "/" ? cwd + "/":cwd;

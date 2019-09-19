@@ -11,12 +11,12 @@ module.exports = function(cwd,ptype) {
             "filename": cwd + "bundle.js"
         },
          "module": {
-    "loaders": [
+    "rules": [
       {
         "test": /\.jsx$/,
         "loader": "babel-loader",
         "query": {
-          "presets": ["es2015","react"]
+          "presets": ["env","react"]
         }
       }
     ]
@@ -26,18 +26,19 @@ module.exports = function(cwd,ptype) {
   if(ptype === "javascript"){
     return {
       "devtool": "source-map",
-      "entry": "./" + cwd + "src/index.js",
+      "entry": "./" + cwd + "src/index.ts",
       "output": {
           "path": require("path").resolve("./" + cwd),
           "filename": cwd + "bundle.js"
       },
        "module": {
-  "loaders": [
+  "rules": [
+    {"test": /\.ts$/,"loader":"awesome-typescript-loader"},
     {
       "test": /\.js$/,
       "loader": "babel-loader",
       "query": {
-        "presets": ["es2015"]
+        "presets": ["env"]
       }
     }
   ]

@@ -1,7 +1,7 @@
 module.exports = function(arr,tiles) {
     //Map size is 20 blocks tall and 32 wide
     //0 is grass 1 is dirt
-   function getName(x, y) {
+function getName(x, y) {
   let l = arr[y][x-1] === 1,
       t = arr[y-1] && arr[y-1][x] === 1,
       r = arr[y][x+1] === 1,

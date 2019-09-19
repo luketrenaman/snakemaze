@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "outDir": "./snakemaze/built",
+        "allowJs": true,
+        "target": "es5"
+    },
+    "include": [
+        "./snakemaze/src/**/*"
+    ]
+}

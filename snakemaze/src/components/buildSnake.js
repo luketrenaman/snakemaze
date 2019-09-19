@@ -255,7 +255,7 @@ export default class buildSnake {
             //TODO = HANDLE DEATH OF THE SNAKE WITH A DEATH SCREEN
 
             collide = true;
-            g.level.death();
+            g.level.end("death");
         }
         if (this.counter.rules.current != this.counter.rules.max) {
             this.gems.forEach((gem)=> {
@@ -274,7 +274,7 @@ export default class buildSnake {
             if (this.locations[0].x === this.exitSprite.coord.x && this.locations[0].y === this.exitSprite.coord.y) {
                 //TODO = WIN SCREEN
                 collide = true;
-                g.level.death()
+                g.level.end("victory")
             }
         }
         return collide;

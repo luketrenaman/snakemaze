@@ -86,10 +86,25 @@ export default function(){
     })
     // -- MENU TO SHOW ON DEATH --
     //TODO
+    let exit2 = new PIXI.Sprite(PIXI.loader.resources["assets/back.png"].texture);
+    button(exit2,0,0,function(){
+        g.manager.show("start");
+        g.level.kill();
+    })
     let deathMenu = new menu("death",false);
     let deathBase = new PIXI.Sprite(shapes.rectangle(64*6,64*4,"#000"));
+    deathBase.x = 832 /2 - deathBase.width / 2
+    deathBase.y = 640 / 2 - deathBase.height / 2
     deathMenu.zOrder = -4;
     deathMenu.addChild(deathBase);
+    deathMenu.addChild(exit2);
+    let victoryMenu = new menu("victory",false);
+    let victoryBase = new PIXI.Sprite(shapes.rectangle(64*6,64*4,"#fff"));
+    victoryBase.x = 832 /2 - victoryBase.width / 2
+    victoryBase.y = 640 / 2 - victoryBase.height / 2
+    victoryMenu.zOrder = -4;
+    victoryMenu.addChild(victoryBase);
+    victoryMenu.addChild(exit2);
 
   
 }
