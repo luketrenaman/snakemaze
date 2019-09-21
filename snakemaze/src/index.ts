@@ -1,6 +1,6 @@
 //glpnasfasfasfsafsa
 //Initialize a global value g
-window.g = {};
+declare var g: object;
 //Utilities
 import key from "./utilities/key-press.js";
 import "./utilities/equals.js";
@@ -16,7 +16,7 @@ import tileRender from "./tile-rendering/map.js";
 Number.prototype.mod = function(n) {
 	return ((this % n) + n) % n;
 }; 
-key.listen();
+key.listen(); 
 g.renderer = PIXI.autoDetectRenderer(832, 640);
 g.renderer.backgroundColor = 0x444444;
 g.all = new PIXI.Container();

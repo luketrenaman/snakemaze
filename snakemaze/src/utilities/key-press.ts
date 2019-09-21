@@ -25,7 +25,7 @@ export default new function() {
             if (a.map.indexOf(e) != -1) {
                 a.map.splice(a.map.indexOf(e), 1);
             }
-            a.tethers.forEach(function(tether, index) {
+            a.tethers.forEach(function(tether:object, index) {
                 if (tether.type == "up") {
                     if (e === tether.key) {
                         tether.func();

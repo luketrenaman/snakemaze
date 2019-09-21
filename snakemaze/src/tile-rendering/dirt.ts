@@ -1,4 +1,4 @@
-module.exports = function(x,dbg) {
+export default function(x,dbg) {
     var shapes = require("../drawing/shapes");
     var lighten = require("./lighten")
     var canvas = shapes.canvas(32, 32);

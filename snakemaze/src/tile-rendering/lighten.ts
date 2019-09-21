@@ -1,4 +1,4 @@
-module.exports = function(color, percent) {
+export default function(color, percent) {
   	var num = parseInt(color,16),
 		amt = Math.round(2.55 * percent),
 		R = (num >> 16) + amt,

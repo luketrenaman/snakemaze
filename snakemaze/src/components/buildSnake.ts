@@ -1,21 +1,29 @@
 import shapes from "../drawing/shapes.js";
-function segment(type) {
+class segment extends PIXI.Sprite {
+    segmentType:string;
+    zIndex:number;
+
+    constructor(type){
     //Layering for segments, positioning, etc.
-    var obj = new PIXI.Sprite(PIXI.loader.resources["assets/snake-" + type + ".png"].texture);
-    obj.scale.x = 0.5;
-    obj.scale.y = 0.5;
-    obj.anchor.x = 0.5;
-    obj.anchor.y = 0.5;
-    obj.x = -16 - 416;
-    obj.y = -16 - 320;
-    g.stage.addChild(obj);
-    if (type === "head" || type === "tail") {
-        obj.zIndex = 0;
+    super(PIXI.loader.resources["assets/snake-" + type + ".png"].texture);
+        this.scale.x = 0.5;
+        this.scale.y = 0.5;
+        this.anchor.x = 0.5;
+        this.anchor.y = 0.5;
+        this.x = -16 - 416;
+        this.y = -16 - 320;
+        g.stage.addChild(this);
+        if (type === "head" || type === "tail") {
+            this.zIndex = 0;
+        }
+        this.segmentType = type;    
     }
-    obj.segmentType = type;
-    return obj;
 }
 export default class buildSnake {
+    exit: boolean
+    sprites: Array<PIXI.Sprite>;
+    counter: PIXI.Container;
+    locations: Array<object>;
     constructor() {
         this.exit = false;
         this.locations = [

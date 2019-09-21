@@ -1,4 +1,4 @@
-module.exports = new function() {
+export default new function() {
     var a = this;
     this.renderer = "";
     this.canvas = function(width, height) {

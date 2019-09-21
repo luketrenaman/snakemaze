@@ -20,10 +20,15 @@ gulp.task('browserSync', function() {
     });
 });
 gulp.task('webpack',function(){
-    return gulp.src("")
-    .pipe(webpack(require('./webpack.js')(cwd,ptype)))
-    .pipe(gulp.dest(""))
-    .pipe(browserSync.stream());
+    try{
+        return gulp.src("")
+        .pipe(webpack(require('./webpack.js')(cwd,ptype)))
+        .pipe(gulp.dest(""))
+        .pipe(browserSync.stream());
+    } catch{
+        console.error("oh babe u mess up")
+        return -1;
+    }
 })
 
 gulp.task('default',["browserSync"], function(callback) {

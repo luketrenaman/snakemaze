@@ -4,6 +4,9 @@ import button from "./button.js";
 export default class {
 /*
 */
+    obj:PIXI.Sprite;
+    allow:boolean;
+    veto:boolean;
     constructor(){
         var a = this;
         var pauseScreen = new PIXI.Sprite(shapes.rectangle(832, 640, "rgba(44, 62, 80,0.7)"));
@@ -29,7 +32,7 @@ export default class {
         })
         this.obj.addChild(abort);
     }
-    handle(obj,background) {
+    handle(obj:PIXI.Sprite,background) {
         let a = this;
         function wait() {
             if(!a.veto){

@@ -1,4 +1,4 @@
-module.exports = function(arr,tiles) {
+export default function(arr,tiles) {
     //Map size is 20 blocks tall and 32 wide
     //0 is grass 1 is dirt
 function getName(x, y) {
@@ -11,9 +11,9 @@ function getName(x, y) {
       br = arr[y + 1] && arr[y + 1][x + 1] === 1,
       bl = arr[y + 1] && arr[y + 1][x - 1] === 1;
   return [
-    (l & t ? +tl : 0),    +t||0,    (r & t ? +tr : 0),
+    (l && t ? +tl : 0),    +t||0,    (r && t ? +tr : 0),
     +l,                                             +r,
-    (l & b ? +bl : 0),    +b||0,    (r & b ? +br : 0)
+    (l && b ? +bl : 0),    +b||0,    (r && b ? +br : 0)
   ];
 }
     var debug = [];
