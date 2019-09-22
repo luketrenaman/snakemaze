@@ -50,14 +50,16 @@ class SoundMenu extends PIXI.Sprite{
     constructor(x:number,y:number,textureOn:PIXI.Texture,textureOff:PIXI.Texture){
         super(textureOn);
         this.enabled = true;
-        button(this,0,0,function(){
-            if(this.enabled){
-                this.setTexture(textureOn);
-            } else{
-                this.setTexture(textureOff);
+        button(this, x, y, () => {
+                if (this.enabled) {
+                    this.setTexture(textureOn);
+                }
+                else {
+                    this.setTexture(textureOff);
+                }
+                this.enabled = !this.enabled;
             }
-            this.enabled = !this.enabled;
-        });
+            );
     }
 }
 export default function(){
@@ -80,9 +82,9 @@ export default function(){
     startScreen.addChild(background);
     let start = new PIXI.Sprite(PIXI.loader.resources["assets/start.png"].texture)
     startScreen.addChild(start);
-    button(start,64*4 + 32,64*6,function(){
-        g.manager.show("level");
-    })
+    button(start, 64 * 4 + 32, 64 * 6, function () {
+            g.manager.show("level");
+        })
     // -- LEVEL SELECT --
     let levelSelect = new Menu("level",true);
     for(let i = 0;i < 5;i++){
@@ -90,24 +92,30 @@ export default function(){
             
             let lev = new PIXI.Sprite(PIXI.loader.resources["assets/level-1.png"].texture)
             levelSelect.addChild(lev);
-            button(lev,i*128+128,j*128+128,function(){
-                g.level = new g.newLevel(i+j*5);
-            })
+            button(
+                lev, i * 128 + 128, j * 128 + 128, function () {
+                    g.level = new g.newLevel(i + j * 5);
+                }
+                )
         }
     }
     // -- QUIT BUTTON --
     let exit = new PIXI.Sprite(PIXI.loader.resources["assets/back.png"].texture);
     levelSelect.addChild(exit);
-    button(exit,0,0,function(){
-        g.manager.show("start");
-    })
+    button(
+        exit, 0, 0, function () {
+            g.manager.show("start");
+        }
+        )
     // -- MENU TO SHOW ON DEATH --
     //TODO
     let exit2 = new PIXI.Sprite(PIXI.loader.resources["assets/back.png"].texture);
-    button(exit2,0,0,function(){
-        g.manager.show("start");
-        g.level.kill();
-    })
+    button(
+        exit2, 0, 0, function () {
+            g.manager.show("start");
+            g.level.kill();
+        }
+    )
     let deathMenu = new Menu("death",false);
     let deathBase = new PIXI.Sprite(shapes.rectangle(64*6,64*4,"#000"));
     deathBase.x = 832 /2 - deathBase.width / 2

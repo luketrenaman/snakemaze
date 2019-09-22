@@ -28,10 +28,7 @@ export default class{
     restart(){
         this.ct = 0;
     }
-    draw(){
-        console.log("------")
-        console.log(this.going)
-        console.log(this);
+    draw=()=>{
         if (this.going) {
             requestAnimationFrame(this.draw);
             this.ct++

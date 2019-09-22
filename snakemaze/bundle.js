@@ -534,14 +534,14 @@ var SoundMenu = /** @class */ (function (_super) {
     function SoundMenu(x, y, textureOn, textureOff) {
         var _this = _super.call(this, textureOn) || this;
         _this.enabled = true;
-        button_1["default"](_this, 0, 0, function () {
-            if (this.enabled) {
-                this.setTexture(textureOn);
+        button_1["default"](_this, x, y, function () {
+            if (_this.enabled) {
+                _this.setTexture(textureOn);
             }
             else {
-                this.setTexture(textureOff);
+                _this.setTexture(textureOff);
             }
-            this.enabled = !this.enabled;
+            _this.enabled = !_this.enabled;
         });
         return _this;
     }
@@ -1483,6 +1483,14 @@ Object.defineProperty(Array.prototype, "equals", { enumerable: false });
 exports.__esModule = true;
 var default_1 = /** @class */ (function () {
     function default_1(cb) {
+        var _this = this;
+        this.draw = function () {
+            if (_this.going) {
+                requestAnimationFrame(_this.draw);
+                _this.ct++;
+                _this.cb(_this.ct, _this);
+            }
+        };
         this.going = true;
         this.ct = 0;
         this.cb = cb;
@@ -1506,16 +1514,6 @@ var default_1 = /** @class */ (function () {
     };
     default_1.prototype.restart = function () {
         this.ct = 0;
-    };
-    default_1.prototype.draw = function () {
-        console.log("------");
-        console.log(this.going);
-        console.log(this);
-        if (this.going) {
-            requestAnimationFrame(this.draw);
-            this.ct++;
-            this.cb(this.ct, this);
-        }
     };
     return default_1;
 }());
