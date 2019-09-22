@@ -1,6 +1,6 @@
+import shapes from "../drawing/shapes";
+import lighten from "./lighten";
 export default function(x,dbg) {
-    var shapes = require("../drawing/shapes");
-    var lighten = require("./lighten")
     var canvas = shapes.canvas(32, 32);
     var condition = false;
     //5d2e0d

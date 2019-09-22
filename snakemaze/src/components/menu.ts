@@ -34,8 +34,8 @@ class Menu extends PIXI.Container{
         g.all.addChild(this);
     }
 }
-import shapes from "../drawing/shapes.ts";
-import button from "./button.js";
+import shapes from "../drawing/shapes";
+import button from "./button";
 class SoundManager extends PIXI.Container{
     zOrder:number;
     constructor(){
@@ -61,7 +61,7 @@ class SoundMenu extends PIXI.Sprite{
     }
 }
 export default function(){
-    console.log("FABRICATIONS");
+    console.log("FABRICATI ONSs");
     g.manager = new MenuManager();
     // -- HANDLE MUSIC --
     g.soundManager = new SoundManager();

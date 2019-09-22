@@ -1,6 +1,6 @@
-import shapes from "../drawing/shapes.js";
-import key from "../utilities/key-press.js";
-import button from "./button.js";
+import shapes from "../drawing/shapes";
+import key from "../utilities/key-press";
+import button from "./button";
 export default class {
 /*
 */

@@ -1,22 +1,24 @@
 //glpnasfasfasfsafsa
 //Initialize a global value g
-declare var g: object;
+
 //Utilities
-import key from "./utilities/key-press.js";
-import "./utilities/equals.js";
-import fps from "./utilities/fps.js";
+import key from "./utilities/key-press";
+import "./utilities/equals";
+import fps from "./utilities/fps";
 //Level
-import levels from "./level/levels.js";
+import levels from "./level/levels";
 //Components
-import menuConstructor from "./components/menu.js";
-import pauseConstructor from "./components/pause.js";
-import buildSnake from "./components/buildSnake.js";
+import menuConstructor from "./components/menu";
+import pauseConstructor from "./components/pause";
+import buildSnake from "./components/buildSnake";
 //Tile rendering
-import tileRender from "./tile-rendering/map.js";
+import tileRender from "./tile-rendering/map";
+console.log("initialize")
 Number.prototype.mod = function(n) {
 	return ((this % n) + n) % n;
 }; 
 key.listen(); 
+window.g = {};
 g.renderer = PIXI.autoDetectRenderer(832, 640);
 g.renderer.backgroundColor = 0x444444;
 g.all = new PIXI.Container();
@@ -57,7 +59,7 @@ function setup() {
 		});
 	};
 	g.newLevel = function(num) {
-		if (levels[num] == undefined) return;
+		if (levels[num] == undefined) return; 
 		//maze
 		g.maze = levels[num];
 		//stage

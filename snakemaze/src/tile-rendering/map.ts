@@ -1,3 +1,5 @@
+import shapes from "../drawing/shapes";
+import dirt from "./dirt";
 export default function(arr,tiles) {
     //Map size is 20 blocks tall and 32 wide
     //0 is grass 1 is dirt
@@ -21,7 +23,7 @@ function getName(x, y) {
         arr[i].forEach(function(cel, j) {
             let cell = arr[i][j]
             if(typeof cell === "object"){
-                cell = new PIXI.Sprite(require("../drawing/shapes.js").rectangle(32,32,"#fff"));
+                cell = new PIXI.Sprite(shapes.rectangle(32,32,"#fff"));
                 cell.x = j * 32;
                 cell.y = i * 32;
                 tiles.addChild(cell)
@@ -34,7 +36,7 @@ function getName(x, y) {
                     break;
                     case 1:
                         //PIXI.loader.resources["assets/tile.png"].texture
-                        cell = new PIXI.Sprite(require("./dirt")(getName(j, i)));
+                        cell = new PIXI.Sprite(dirt(getName(j, i)));
                         cell.x = j * 32;
                         cell.y = i * 32;
                         tiles.addChild(cell);

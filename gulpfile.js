@@ -20,15 +20,13 @@ gulp.task('browserSync', function() {
     });
 });
 gulp.task('webpack',function(){
-    try{
-        return gulp.src("")
-        .pipe(webpack(require('./webpack.js')(cwd,ptype)))
-        .pipe(gulp.dest(""))
-        .pipe(browserSync.stream());
-    } catch{
-        console.error("oh babe u mess up")
-        return -1;
-    }
+    return gulp.src("")
+    .pipe(webpack(require('./webpack.js')(cwd,ptype), require("webpack")))
+    .on('error', function handleError() {
+        this.emit('end'); // Recover from errors
+    })
+    .pipe(gulp.dest(""))
+    .pipe(browserSync.stream());
 })
 
 gulp.task('default',["browserSync"], function(callback) {

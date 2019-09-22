@@ -1,8 +1,13 @@
-export default new function() {
-    var a = this;
-    this.map = [];
-    this.tethers = [];
-    this.listen = function() {
+export default new class{
+    map:Array<number>;
+    tethers:Array<Object>;
+    constructor(){
+        var a = this;
+        this.map = [];
+        this.tethers = [];
+    }
+    listen = function() {
+        var a = this;
         document.onkeydown = function(e) {
             e = e || window.event;
             e = e.which || e.keyCode || 0;
@@ -35,7 +40,8 @@ export default new function() {
             });
         };
     };
-    this.check = function(key, callback, not) {
+    check(key, callback, not?) {
+        var a = this;
         if (typeof key != "object") {
             key = [key];
         }
@@ -50,7 +56,8 @@ export default new function() {
             not();
         }
     };
-    this.waitUp = function(key, func, perma) {
+    waitUp(key, func, perma) {
+        var a = this;
         if (perma === undefined) {
             perma = false;
         }
@@ -61,7 +68,8 @@ export default new function() {
             "perma": perma
         });
     };
-    this.waitDown = function(key, func, perma) {
+    waitDown(key, func, perma) {
+        var a = this;
         if (perma === undefined) {
             perma = false;
         }

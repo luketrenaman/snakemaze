@@ -1,31 +1,41 @@
-export default function(cb) {
-    this.going = true;
-    this.start = function() {
+export default class{
+    going:boolean;
+    ct:number;
+    cb:Function;
+
+    constructor(cb:(ct:number,obj:Object) => (void)){
         this.going = true;
-        requestAnimationFrame(draw);
-    };
-    this.resume = this.start;
-    this.stop = function() {
-        this.going = false;
-    };
-    this.pause = this.stop;
-    this.toggle = function() {
+        this.ct = 0;
+        this.cb = cb;
+        this.draw();
+    }
+    start(){
+        this.going = true;
+        requestAnimationFrame(this.draw);
+    }
+    resume(){
+        this.start();
+    }
+    toggle(){
         this.going = !this.going;
-    };
-    this.restart = function() {
-        ct = 0;
-    };
-    var a = this;
-    var ct = 0;
-
-
-    function draw() {
-        if (a.going) {
-            requestAnimationFrame(draw);
-            ct++
-            cb(ct,a)
+    }
+    stop(){
+        this.going = false;
+    }
+    pause(){
+        this.stop();
+    }
+    restart(){
+        this.ct = 0;
+    }
+    draw(){
+        console.log("------")
+        console.log(this.going)
+        console.log(this);
+        if (this.going) {
+            requestAnimationFrame(this.draw);
+            this.ct++
+            this.cb(this.ct,this);
         }
     }
-    draw();
-    return this;
 }

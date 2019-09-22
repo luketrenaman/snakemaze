@@ -1,2 +1,1629 @@
-!function(e){var t={};function r(n){if(t[n])return t[n].exports;var s=t[n]={i:n,l:!1,exports:{}};return e[n].call(s.exports,s,s.exports,r),s.l=!0,s.exports}r.m=e,r.c=t,r.d=function(e,t,n){r.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:n})},r.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},r.t=function(e,t){if(1&t&&(e=r(e)),8&t)return e;if(4&t&&"object"==typeof e&&e&&e.__esModule)return e;var n=Object.create(null);if(r.r(n),Object.defineProperty(n,"default",{enumerable:!0,value:e}),2&t&&"string"!=typeof e)for(var s in e)r.d(n,s,function(t){return e[t]}.bind(null,s));return n},r.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return r.d(t,"a",t),t},r.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},r.p="",r(r.s=3)}([function(e,t,r){"use strict";e.exports=new function(){var e=this;this.renderer="",this.canvas=function(e,t){var r=document.createElement("canvas");r.width=e,r.height=t;var n=r.getContext("2d");return{canvas:r,ctx:n}},this.rectangle=function(t,r,n){var s=e.canvas(t,r);return s.ctx.fillStyle=n,s.ctx.fillRect(0,0,t,r),PIXI.Texture.fromCanvas(s.canvas)},this.circle=function(t,r){var n=e.canvas(2*t,2*t);return n.ctx.fillStyle=r,n.ctx.beginPath(),n.ctx.arc(t,t,t,0,2*Math.PI),n.ctx.fill(),PIXI.Texture.fromCanvas(n.canvas)}}},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var n="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e};t.default=new function(){var e=this;this.map=[],this.tethers=[],this.listen=function(){document.onkeydown=function(t){t=(t=t||window.event).which||t.keyCode||0,-1==e.map.indexOf(t)&&e.map.push(t),e.tethers.forEach((function(r,n){"down"==r.type&&t===r.key&&(r.func(),r.perma||e.tethers.splice(n,1))}))},document.onkeyup=function(t){t=(t=t||window.event).which||t.keyCode||0,-1!=e.map.indexOf(t)&&e.map.splice(e.map.indexOf(t),1),e.tethers.forEach((function(r,n){"up"==r.type&&t===r.key&&(r.func(),r.perma||e.tethers.splice(n,1))}))}},this.check=function(t,r,s){"object"!=(void 0===t?"undefined":n(t))&&(t=[t]);for(var i=0;i<t.length;i++)if(-1!=e.map.indexOf(t[i]))return r(),void(i=t.length);void 0!==s&&s()},this.waitUp=function(t,r,n){void 0===n&&(n=!1),e.tethers.push({key:t,func:r,type:"up",perma:n})},this.waitDown=function(t,r,n){void 0===n&&(n=!1),e.tethers.push({key:t,func:r,type:"down",perma:n})}}},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default=function(e,t,r,n){e.buttonMode=!0,e.interactive=!0,e.x=t,e.y=r,e.on("click",(function(){n(),g.renderer.render(g.all)}))}},function(e,t,r){"use strict";var n=u(r(1));r(4);var s=u(r(5)),i=u(r(6)),a=u(r(7)),o=u(r(8)),l=u(r(9)),c=u(r(10));function u(e){return e&&e.__esModule?e:{default:e}}window.g={},Number.prototype.mod=function(e){return(this%e+e)%e},n.default.listen(),g.renderer=PIXI.autoDetectRenderer(832,640),g.renderer.backgroundColor=4473924,g.all=new PIXI.Container,document.body.appendChild(g.renderer.view),PIXI.loader.add("assets/snake-head.png").add("assets/rainbow.json").add("assets/snake-body.png").add("assets/snake-corner.png").add("assets/snake-tail.png").add("assets/grass.png").add("assets/flowers-1.png").add("assets/flowers-2.png").add("assets/rock.png").add("assets/gem-1.png").add("assets/gem-2.png").add("assets/gem-3.png").add("assets/level-1.png").add("assets/titlescreen.png").add("assets/start.png").add("assets/back.png").add("assets/music.png").add("assets/nomusic.png").load((function(){WebFont.load({custom:{families:["Pixel","pixelmono"],urls:["/stylesheet.css"]},active:function(e){var t;console.log("font loaded!"),t=[PIXI.loader.resources["assets/grass.png"].texture,PIXI.loader.resources["assets/flowers-1.png"].texture,PIXI.loader.resources["assets/flowers-2.png"].texture,PIXI.loader.resources["assets/rock.png"].texture],(0,a.default)(),console.log(g.manager),g.manager.show("start"),g.all.updateLayersOrder=function(){g.all.children.sort((function(e,t){return e.zOrder=e.zOrder||0,t.zOrder=t.zOrder||0,t.zOrder-e.zOrder}))},g.newLevel=function(e){if(null!=i.default[e]){g.maze=i.default[e],g.stage=new PIXI.Container,g.stage.zOrder=-1,g.all.addChild(g.stage),g.stage.updateLayersOrder=function(){g.stage.children.sort((function(e,t){return e.zIndex=e.zIndex||0,t.zIndex=t.zIndex||0,t.zIndex-e.zIndex}))},this.kill=function(){w.stop(),g.level.endLoop.stop(),g.all.removeChild(g.stage),g.all.removeChild(x.counter),g.all.removeChild(r.obj),g.manager.show("level")},this.end=function(e){w.stop();var t=0;x.counter.xvel=0,g.level.endLoop=new s.default((function(e,r){if(x.exit&&e%10==0&&(x.exitSprite.cycle++,x.exitSprite.cycle%=8,x.exitSprite.setTexture(PIXI.loader.resources["assets/rainbow.json"].textures["rainbow"+x.exitSprite.cycle+".png"])),x.sprites.length-1==t&&(x.counter.xvel+=.1,x.counter.x+=x.counter.xvel),e%10==0)if(x.sprites.length-1==t)x.sprites[t].tint="0x000",g.manager.show("death");else do{x.sprites[t].tint="0x000",t++}while(x.locations[t].x===x.locations[t+1].x&&x.locations[t].y===x.locations[t+1].y);isNaN(x.sprites[t].worldTransform.ty)||isNaN(x.sprites[t].worldTransform.tx)||(g.stage.y+=(320-x.sprites[t].worldTransform.ty)/40,g.stage.x+=(416-x.sprites[t].worldTransform.tx)/40),u.children.forEach((function(e){e.y=(64*e.orig.y+g.stage.y).mod(704)-g.stage.y-64,e.x=(64*e.orig.x+g.stage.x).mod(896)-g.stage.x-64})),y.children.forEach((function(e){e.visible=!(e.x+g.stage.x<-32||e.x+g.stage.x>864||e.y+g.stage.y<-32||e.y+g.stage.y>672)})),g.renderer.render(g.all)}))};var r=new o.default;g.soundManager.visible=!1;var a=[80,90,100,104],u=new PIXI.Container;u.zIndex=500;for(var d=-2;d<26;d++)for(var f=-2;f<20;f++){var h=Math.random()*a[a.length-1],p=new PIXI.Sprite(t[a.indexOf(a.filter((function(e){return h<e}))[0])]);p.scale.x=.5,p.scale.y=.5,p.x=32*d,p.y=32*f,p.orig={x:d/2,y:f/2},u.addChild(p)}var y=new PIXI.Container;y.zIndex=-1,g.stage.addChild(y),(0,c.default)(g.maze.data,y),g.stage.addChild(u);var x=new l.default;x.layer();var m=x.direction,v=x.direction;g.all.updateLayersOrder();for(var b=0;b<2;b++)switch(i.default[e].snake.direction){case"r":x.move(1,0);break;case"l":x.move(-1,0);break;case"u":x.move(0,1);break;case"d":x.move(0,-1)}g.manager.hide(),g.stage.y=320-x.sprites[0].y,g.stage.x=416-x.sprites[0].x;var I=new PIXI.Text("3",{font:"52px Pixel",fill:"white"});g.all.addChild(I),I.y=320,I.x=416;var w=new s.default((function(e,t){if(g.stage.y+=(320-x.sprites[0].worldTransform.ty)/(40-39*+(Math.abs(320-x.sprites[0].worldTransform.ty)>640)),g.stage.x+=(416-x.sprites[0].worldTransform.tx)/(40-39*+(Math.abs(416-x.sprites[0].worldTransform.tx)>832)),u.children.forEach((function(e){e.y=(64*e.orig.y+g.stage.y).mod(704)-g.stage.y-64,e.x=(64*e.orig.x+g.stage.x).mod(896)-g.stage.x-64})),y.children.forEach((function(e){e.visible=!(e.x+g.stage.x<-32||e.x+g.stage.x>864||e.y+g.stage.y<-32||e.y+g.stage.y>672)})),e%8==0&&e>180)switch(r.handle(t,u),n.default.check([65,37],(function(){("u"==m||"d"==m&&"l"!=v)&&(v="l")})),n.default.check([68,39],(function(){("u"==m||"d"==m&&"r"!=v)&&(v="r")})),n.default.check([87,38],(function(){("r"==m||"l"==m&&"u"!=v)&&(v="u")})),n.default.check([83,40],(function(){("r"==m||"l"==m&&"d"!=v)&&(v="d")})),m=v){case"l":x.move(-1,0);break;case"r":x.move(1,0);break;case"u":x.move(0,1);break;case"d":x.move(0,-1)}else 0===Math.ceil(3-e/60)?I.visible=!1:I.setText(Math.ceil(3-e/60));g.renderer.render(g.all)}));return this}}}})})),console.log("breaaak")},function(e,t,r){"use strict";Array.prototype.equals&&console.warn("Overriding existing Array.prototype.equals. Possible causes: New API defines the method, there's a framework conflict or you've got double inclusions in your code."),Array.prototype.equals=function(e){if(!e)return!1;if(this.length!=e.length)return!1;for(var t=0,r=this.length;t<r;t++)if(this[t]instanceof Array&&e[t]instanceof Array){if(!this[t].equals(e[t]))return!1}else if(this[t]!=e[t])return!1;return!0},Object.defineProperty(Array.prototype,"equals",{enumerable:!1})},function(e,t,r){"use strict";e.exports=function(e){this.going=!0,this.start=function(){this.going=!0,requestAnimationFrame(n)},this.resume=this.start,this.stop=function(){this.going=!1},this.pause=this.stop,this.toggle=function(){this.going=!this.going},this.restart=function(){r=0};var t=this,r=0;function n(){t.going&&(requestAnimationFrame(n),e(++r,t))}return n(),this}},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default=[{mode:"normal",snake:{x:16,y:2,direction:"r"},data:[[1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1],[1,2,2,2,2,2,2,2,2,2,2,2,1,0,1,2,2,2,2,2,2,2,2,2,1],[1,2,2,2,2,2,2,2,2,2,2,2,1,1,1,2,2,2,2,2,2,2,2,2,1],[1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],[1,2,2,2,2,2,2,2,2,2,2,2,1,1,1,2,2,2,2,2,2,2,2,2,1],[1,2,2,2,2,2,2,2,2,2,2,2,1,1,1,2,2,2,2,2,2,2,2,2,1],[1,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,2,2,1],[1,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,2,2,1],[1,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,2,2,1],[1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],[1,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,2,2,1],[1,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,2,2,1],[1,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,2,2,1],[1,2,2,2,2,2,2,2,2,2,2,2,1,1,1,2,2,2,2,2,2,2,2,2,1],[1,2,2,2,2,2,2,2,2,2,2,2,1,1,1,2,2,2,2,2,2,2,2,2,1],[1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],[1,2,2,2,2,2,2,2,2,2,2,2,1,1,1,2,2,2,2,2,2,2,2,2,1],[1,2,2,2,2,2,2,2,2,2,2,2,1,0,1,2,2,2,2,2,2,2,2,2,1],[1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1]]},{mode:"normal",snake:{x:14,y:6,direction:"u"},data:[[0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0],[0,0,0,0,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,0,0,0,0],[0,0,0,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,0,0,0],[1,1,1,1,2,2,2,1,1,1,1,1,1,2,2,2,1,1,1,1,1,2,2,2,1,1,1,1],[1,2,2,2,2,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,1,1,2,2,2,2,2,1],[1,2,2,2,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,2,2,2,2,1],[1,2,2,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1,2,2,1],[1,2,2,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,2,2,1],[1,2,2,1,2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,1,2,2,1],[1,2,2,1,2,2,1,1,1,1,2,2,1,2,2,1,2,2,1,1,1,1,2,2,1,2,2,1],[1,2,2,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,2,2,1],[1,2,2,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,2,2,1],[1,2,2,1,1,1,1,1,1,1,2,2,1,2,2,1,2,2,1,1,1,1,1,1,1,2,2,1],[1,2,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,1],[1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],[1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1],[0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0]]},{mode:"normal",snake:{x:12,y:76,direction:"l"},data:[[1,{x:1,y:0,id:"2",target:"1",direction:"u"},1,0,0,0,0,0,0,0,0,0],[1,1,1,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,2,2,2,2,2,2,2,2],[2,2,2,2,2,2,2,2,2,2,2,2],[2,2,2,2,2,2,1,2,2,2,2,2],[2,2,2,2,2,2,2,2,2,2,2,2],[2,2,2,2,2,2,2,2,2,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,1,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,1,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,1,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,1,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,1,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,1,1,1],[0,0,0,0,0,0,0,0,0,1,{x:10,y:74,id:"1",target:"2",direction:"d"},1]]},{mode:"crash",snake:{x:2,y:16,direction:"u"},end:{x:2,y:18},data:[[1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[1,0,1,1,1,1,1,1,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[1,0,1,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[1,0,1,0,0,0,0,0,0,1,0,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0],[1,0,1,0,0,0,0,0,0,1,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0],[1,0,1,1,0,0,1,0,0,1,0,1,0,0,0,1,0,1,1,1,1,1,1,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0],[1,0,0,1,0,0,0,0,0,1,0,1,0,0,0,1,0,1,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0],[1,1,0,1,0,0,0,0,0,1,0,1,0,0,0,1,0,1,0,1,1,1,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0],[0,1,0,1,0,0,0,0,0,1,0,1,0,0,0,1,0,1,0,1,0,0,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0],[0,1,0,1,0,0,0,0,0,1,0,1,0,0,0,1,0,1,0,1,1,1,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0],[0,1,0,1,0,0,0,0,0,1,0,1,0,0,0,1,0,1,0,0,0,1,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0],[0,1,0,1,0,0,0,0,0,1,0,1,1,1,1,1,0,1,1,1,0,1,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0],[0,1,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,1,1,0,1,0,1,1,1,1,1,1,1,1,1,1,1,1],[0,1,0,1,0,0,0,0,0,1,1,1,1,1,1,1,0,1,0,1,0,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1],[0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,1,0,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,0,1],[0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1],[0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,0,1],[0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,1,1,1,1,1,0,1,0,1],[0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,1],[0,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,0,0,0,0,0,0,0,1,0,1,1,1,1,1,0,1],[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1],[0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1]],fruit:[]},{mode:"normal",snake:{x:2,y:16,direction:"r"},data:[[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,0,0],[0,0,0,0,0,0,0,0,0,1,1,2,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,0],[0,0,0,0,0,1,1,1,1,2,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,0],[0,0,0,0,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,0],[0,0,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],[0,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],[0,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],[0,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,1],[1,2,2,2,2,2,2,2,2,2,2,2,2,1,1,2,1,1,1,1,1,2,1,1,1,1,0,1,0,0,1,1,1,1,2,1,1,2,2,1,2,1,1,2,2,2,1],[1,2,2,2,2,2,2,2,2,2,1,1,1,1,1,2,1,1,2,2,1,2,2,1,1,1,1,1,1,1,2,2,1,1,2,1,1,1,1,1,2,1,2,2,2,2,1],[1,2,2,2,2,2,2,2,2,2,2,2,2,1,2,2,1,1,2,2,1,1,2,2,1,2,2,1,1,2,2,2,1,1,2,1,1,1,2,2,2,2,2,2,2,2,1],[1,2,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],[1,1,2,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],[1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],[0,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],[0,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,2,2,2,2,2,2,1],[0,0,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,2,2,2,2,2,2,2,2,2,2,2,1],[0,0,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,2,2,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],[0,0,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],[0,0,0,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,2,2,2,2,2,2,2,1],[0,0,0,0,1,1,2,2,2,2,2,2,2,2,2,2,1,2,2,2,2,2,2,2,2,2,2,1,1,1,2,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],[0,0,0,0,1,1,1,2,2,2,2,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,2,2,1,2,2,2,2,2,2,2,2,2,2,1],[0,0,0,0,0,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],[0,0,0,0,0,0,1,1,2,2,2,2,1,2,2,2,2,2,2,2,2,2,2,2,1,2,2,2,1,2,2,1,2,2,2,2,2,1,2,2,2,2,2,2,2,2,1],[0,0,0,0,0,0,0,1,2,2,2,2,2,2,2,2,2,2,2,1,2,1,2,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],[0,0,0,0,0,0,0,1,1,2,2,1,1,1,1,2,2,1,2,1,2,2,2,2,2,2,2,2,1,1,2,1,2,2,2,1,2,2,2,2,2,2,2,2,2,2,1],[0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,2,2,1,2,1,2,2,1,1,1,1,1,2,2,2,2,2,1,2,2,2,2,2,2,2,2,2,2,2,2,2,1],[0,0,0,0,0,0,0,0,0,0,0,1,1,0,1,2,2,2,2,2,2,1,2,1,2,2,2,2,2,2,2,2,2,2,2,2,2,1,2,2,2,2,2,2,2,1,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,1,2,2,1,2,2,2,1,2,2,2,1,2,2,2,2,2,2,2,2,2,1,2,2,2,2,2,2,2,1,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,2,2,2,2,2,2,2,1,2,2,2,2,2,2,1,2,2,2,2,2,2,2,2,2,2,2,2,2,1,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,2,2,2,2,2,2,2,1,2,2,2,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,2,1,2,1,2,2,2,2,2,2,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,2,2,2,2,2,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,2,2,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0]]},{mode:"normal",snake:{x:1,y:7,direction:"r"},end:{x:-15,y:-2},data:[[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,2,2,2,1,1,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,2,2,2,2,2,2,2,1,0,0,0],[0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,1,1,0,0],[0,0,0,0,0,0,0,0,0,0,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,0,0],[0,0,1,1,1,1,1,1,0,0,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,0,0],[0,1,2,2,2,2,2,2,1,0,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,0],[1,2,2,2,2,2,2,2,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1],[1,2,2,1,1,1,1,2,2,2,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,0],[1,2,2,2,2,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,0],[1,2,2,2,2,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,0],[1,2,2,1,1,1,2,2,2,2,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,0],[1,2,2,2,2,2,2,2,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,0],[0,1,2,2,2,2,2,2,1,0,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,0],[0,0,1,1,1,1,1,1,0,0,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,0,0],[0,0,0,0,0,0,0,0,0,0,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,0,0],[0,0,0,0,0,0,0,0,0,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,0,0],[0,0,0,0,0,0,0,0,0,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,0,0],[0,0,0,0,0,0,0,0,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1,0,0,0],[0,0,0,0,0,0,0,0,1,2,2,2,2,2,2,2,2,2,2,2,2,1,1,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,1,2,2,2,2,2,2,2,2,2,1,1,1,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,1,2,2,2,2,2,2,2,2,2,1,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,1,1,2,2,2,2,2,2,2,1,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,1,2,2,2,2,2,2,2,1,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,1,2,2,2,2,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,1,2,2,2,2,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,1,2,2,2,2,2,1,1,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,1,2,2,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,1,2,2,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,1,2,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,1,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,1,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,1,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]}]},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var n=function(){function e(e,t){for(var r=0;r<t.length;r++){var n=t[r];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}return function(t,r,n){return r&&e(t.prototype,r),n&&e(t,n),t}}();t.default=function(){g.manager=new l,g.soundManager=new PIXI.Container,g.soundManager.x=704,g.soundManager.y=576,g.soundManager.zOrder=-4;var e=new PIXI.Sprite(PIXI.loader.resources["assets/music.png"].texture);e.enabled=!0,(0,i.default)(e,0,0,(function(){e.enabled?e.setTexture(PIXI.loader.resources["assets/nomusic.png"].texture):e.setTexture(PIXI.loader.resources["assets/music.png"].texture),e.enabled=!e.enabled}));var t=new PIXI.Sprite(s.default.rectangle(64,64,"#00f"));(0,i.default)(t,64,0,(function(){console.log("sfx")})),g.soundManager.addChild(e),g.soundManager.addChild(t),g.all.addChild(g.soundManager);var r=new c("start",!0),n=new PIXI.Sprite(PIXI.loader.resources["assets/titlescreen.png"].texture);r.addChild(n);var a=new PIXI.Sprite(PIXI.loader.resources["assets/start.png"].texture);r.addChild(a),(0,i.default)(a,288,384,(function(){g.manager.show("level")}));for(var o=new c("level",!0),u=function(e){for(var t=function(t){var r=new PIXI.Sprite(PIXI.loader.resources["assets/level-1.png"].texture);o.addChild(r),(0,i.default)(r,128*e+128,128*t+128,(function(){g.level=new g.newLevel(e+5*t)}))},r=0;r<2;r++)t(r)},d=0;d<5;d++)u(d);var f=new PIXI.Sprite(PIXI.loader.resources["assets/back.png"].texture);o.addChild(f),(0,i.default)(f,0,0,(function(){g.manager.show("start")}));var h=new PIXI.Sprite(PIXI.loader.resources["assets/back.png"].texture);(0,i.default)(h,0,0,(function(){g.manager.show("start"),g.level.kill()}));var p=new c("death",!1),y=new PIXI.Sprite(s.default.rectangle(384,256,"#000"));y.x=416-y.width/2,y.y=320-y.height/2,p.zOrder=-4,p.addChild(y),p.addChild(h);var x=new c("victory",!1),m=new PIXI.Sprite(s.default.rectangle(384,256,"#fff"));m.x=416-m.width/2,m.y=320-m.height/2,x.zOrder=-4,x.addChild(m),x.addChild(h)};var s=a(r(0)),i=a(r(2));function a(e){return e&&e.__esModule?e:{default:e}}function o(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}var l=function(){function e(){o(this,e),this.menus=[]}return n(e,[{key:"show",value:function(e){this.hide(),this.menus.forEach((function(t){t.name===e&&(t.visible=!0,g.soundManager.visible=t.sound)})),g.renderer.render(g.all)}},{key:"hide",value:function(){this.menus.forEach((function(e){e.visible=!1}))}},{key:"push",value:function(e){this.menus.push(e)}}]),e}(),c=function(e){function t(e,r){o(this,t);var n=function(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}(this,(t.__proto__||Object.getPrototypeOf(t)).call(this));return n.name=e,n.sound=r,g.manager.push(n),g.all.addChild(n),n}return function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}(t,PIXI.Container),t}()},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var n=function(){function e(e,t){for(var r=0;r<t.length;r++){var n=t[r];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}return function(t,r,n){return r&&e(t.prototype,r),n&&e(t,n),t}}(),s=o(r(0)),i=o(r(1)),a=o(r(2));function o(e){return e&&e.__esModule?e:{default:e}}var l=function(){function e(){var t=this;!function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}(this,e);var r=new PIXI.Sprite(s.default.rectangle(832,640,"rgba(44, 62, 80,0.7)"));r.visible=!1;var n=new PIXI.Text("Game paused",{font:"52px Pixel",fill:"white"});n.anchor.x=.5,n.x=416,n.y=200,r.addChild(n),r.zOrder=-3,this.obj=r,this.allow=!0,this.veto=!1,g.all.addChild(this.obj);var i=new PIXI.Sprite(s.default.rectangle(320,128,"#000"));(0,a.default)(i,256,320,(function(){g.level.kill(),t.veto=!0,console.log(t)})),this.obj.addChild(i)}return n(e,[{key:"handle",value:function(e,t){var r=this;function n(){r.veto||(e.start(),r.obj.visible=!1,g.soundManager.visible=!1,t.zIndex=500,g.all.updateLayersOrder())}function s(){r.veto||(r.allow=!0)}i.default.check(80,(function(){r.allow&&(console.log("SHOW"),r.obj.visible=!0,g.soundManager.visible=!0,r.obj.zIndex=-3,g.all.updateLayersOrder(),r.allow=!1,g.renderer.render(g.stage),e.stop(),i.default.waitUp(80,(function(){i.default.waitDown(80,n),i.default.waitUp(80,s)})))}))}}]),e}();t.default=l},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var n,s="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},i=function(){function e(e,t){for(var r=0;r<t.length;r++){var n=t[r];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}return function(t,r,n){return r&&e(t.prototype,r),n&&e(t,n),t}}(),a=r(0),o=(n=a)&&n.__esModule?n:{default:n};function l(e){var t=new PIXI.Sprite(PIXI.loader.resources["assets/snake-"+e+".png"].texture);return t.scale.x=.5,t.scale.y=.5,t.anchor.x=.5,t.anchor.y=.5,t.x=-432,t.y=-336,g.stage.addChild(t),"head"!==e&&"tail"!==e||(t.zIndex=0),t.segmentType=e,t}var c=function(){function e(){!function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}(this,e),this.exit=!1,this.locations=[{x:g.maze.snake.x,y:g.maze.snake.y},{x:g.maze.snake.x,y:g.maze.snake.y},{x:g.maze.snake.x,y:g.maze.snake.y}],this.sprites=[],this.gems=[],this.sprites.push(new l("head")),this.sprites.push(new l("body")),this.sprites.push(new l("tail")),g.stage.y+=320-this.sprites[0].worldTransform.ty,g.stage.x+=416-this.sprites[0].worldTransform.tx,this.counter=new PIXI.Container,this.counter.zOrder=-2,this.counter.x=704,this.counter.y=544,this.counter.addChild(new PIXI.Sprite(o.default.rectangle(128,96,"rgba(44, 62, 80,0.7)"))),this.counter.rules={current:0,max:25};for(var t=0;t<3;t++){var r=new PIXI.Sprite(PIXI.loader.resources["assets/gem-"+(t+1)+".png"].texture);r.scale.x=.5,r.scale.y=.5,r.x=8+40*t,r.y=8,this.counter.addChild(r)}var n=new PIXI.Text("00",{font:"52px pixelmono",fill:"white"});n.y=52,n.x=8,this.counter.display=n,this.counter.addChild(n);var s=new PIXI.Text("/"+(this.counter.rules.max<10?"0"+this.counter.rules.max:this.counter.rules.max),{font:"30px pixelmono",fill:"white"});s.x=n.width+16,s.y=52,this.counter.addChild(s),g.all.addChild(this.counter),"normal"===g.maze.mode?(this.fruit(),this.fruit(),this.fruit()):(this.exit=!0,this.exitSprite=new PIXI.Sprite(PIXI.loader.resources["assets/rainbow.json"].textures["rainbow1.png"]),this.exitSprite.cycle=1,this.exitSprite.x=32*g.maze.end.x,this.exitSprite.y=32*g.maze.end.y,this.exitSprite.scale.x=1/6,this.exitSprite.scale.y=1/6,this.exitSprite.coord=g.maze.end,this.exitSprite.zIndex=1,g.stage.addChild(this.exitSprite)),this.direction=g.maze.snake.direction}return i(e,[{key:"move",value:function(e,t,r){for(var n=this.locations.length-1;n>0;n--)this.locations[n]=Object.assign({},this.locations[n-1]);this.locations[0].x+=e,this.locations[0].y-=t,this.sprites[0].rotation=(t/2+e/2+(0!=e?.5:0)+.5)*Math.PI;for(var s=0;s<this.sprites.length;s++){var i=this.locations[s-1],a=this.locations[s],o=this.locations[s+1];if(this.sprites[s].x=32*a.x+16,this.sprites[s].y=32*a.y+16,0!==s){if("tail"===this.sprites[s].segmentType)for(var l=1;a.x===i.x&&a.y===i.y;)l++,i=this.locations[s-l];var c=i.x-a.x,u=a.y-i.y;this.sprites[s].rotation=(u/2+c/2+(0!=c?.5:0)+.5)*Math.PI}if("body"===this.sprites[s].segmentType)if(this.sprites[s].visible=!(this.locations[this.locations.length-1].x===this.locations[s].x&&this.locations[this.locations.length-1].y===this.locations[s].y),a.x===i.x&&i.x===o.x||a.y===i.y&&i.y===o.y)this.sprites[s].setTexture(PIXI.loader.resources["assets/snake-body.png"].texture);else{var d=[a.x-i.x,a.y-i.y],f=[o.x-a.x,o.y-a.y],h=!1;[[[0,1],[1,0]],[[1,0],[0,-1]],[[0,-1],[-1,0]],[[-1,0],[0,1]]].forEach((function(e){d.equals(e[0])&&f.equals(e[1])&&(h=!0)})),h&&(this.sprites[s].rotation+=.5*Math.PI),this.sprites[s].setTexture(PIXI.loader.resources["assets/snake-corner.png"].texture)}}this.collide()}},{key:"eat",value:function(){var e=this,t=new l("body");if(this.sprites.splice(this.sprites.length-1,0,t),this.locations.splice(this.locations.length-1,0,this.locations[this.locations.length-2]),t.x=32*(this.locations.length-1).x,t.y=32*(this.locations.length-1).y,this.layer(),this.counter.rules.current++,this.counter.display.text=this.counter.rules.current<10?"0"+this.counter.rules.current:this.counter.rules.current,this.counter.rules.current==this.counter.rules.max){for(var r=e.gems.length-1;r>=0;r--)g.stage.removeChild(e.gems[r]),e.gems.splice(r,1);!function t(){var r={x:Math.floor(g.maze.data[0].length*Math.random()),y:Math.floor(g.maze.data.length*Math.random())};e.locations.every((function(e){return!(e.x===r.x&&e.y===r.y)}))&&2===g.maze.data[r.y][r.x]?(e.exit=!0,e.exitSprite=new PIXI.Sprite(PIXI.loader.resources["assets/rainbow.json"].textures["rainbow1.png"]),e.exitSprite.cycle=1,e.exitSprite.x=32*r.x,e.exitSprite.y=32*r.y,console.log(r),e.exitSprite.scale.x=1/6,e.exitSprite.scale.y=1/6,e.exitSprite.coord=r,e.exitSprite.zIndex=1,g.stage.addChild(e.exitSprite)):t()}()}}},{key:"layer",value:function(){for(var e=0;e<this.sprites.length;e++)this.sprites[e].zIndex=1;g.stage.updateLayersOrder()}},{key:"collide",value:function(){for(var e=this,t=this,r=!1,n=!1,i=1;i<this.locations.length;i++)this.locations[0].x===this.locations[i].x&&this.locations[0].y===this.locations[i].y&&(r=!0);if(null!=g.maze.data[this.locations[0].y]&&1===g.maze.data[this.locations[0].y][this.locations[0].x]&&(r=!0),null==g.maze.data[this.locations[0].y]||"object"!==s(g.maze.data[this.locations[0].y][this.locations[0].x]))return r&&(n=!0,g.level.end("death")),this.counter.rules.current!=this.counter.rules.max&&this.gems.forEach((function(r){e.locations[0].x===r.coord.x&&e.locations[0].y===r.coord.y&&(t.gems.splice(t.gems.indexOf(r),1),g.stage.removeChild(r),t.fruit(),t.eat())})),this.exit&&(this.exitSprite.cycle++,this.exitSprite.cycle%=8,this.exitSprite.setTexture(PIXI.loader.resources["assets/rainbow.json"].textures["rainbow"+this.exitSprite.cycle+".png"]),this.locations[0].x===this.exitSprite.coord.x&&this.locations[0].y===this.exitSprite.coord.y&&(n=!0,g.level.end("victory"))),n;var a=g.maze.data[this.locations[0].y][this.locations[0].x],o=void 0;switch(g.maze.data.forEach((function(e){e.forEach((function(e){e.id===a.target&&(o=e)}))})),console.log(o),this.locations[0].x=o.x,this.locations[0].y=o.y,this.direction=o.direction,o.direction){case"left":this.move(-1,0);break;case"right":this.move(1,0);break;case"up":this.move(0,-1);break;case"down":this.move(0,1)}}},{key:"fruit",value:function(){var e=this;!function t(){var r={x:Math.floor(g.maze.data[0].length*Math.random()),y:Math.floor(g.maze.data.length*Math.random())};if(e.locations.every((function(e){return!(e.x===r.x&&e.y===r.y)}))&&e.gems.every((function(e){return!(e.coord.x===r.x&&e.coord.y===r.y)}))&&2===g.maze.data[r.y][r.x]){var n=new PIXI.Sprite(PIXI.loader.resources["assets/gem-"+Math.ceil(3*Math.random())+".png"].texture);n.x=32*r.x,n.y=32*r.y,n.scale.x=.5,n.scale.y=.5,n.coord=r,n.zIndex=1,e.gems.push(n),g.stage.addChild(n)}else t()}()}}]),e}();t.default=c},function(e,t,r){"use strict";var n="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e};e.exports=function(e,t){for(var s=0;s<e.length;s++)e[s].forEach((function(i,a){var o,l,c,u,d,f,h,g,p,y,x=e[s][a];if("object"===(void 0===x?"undefined":n(x)))(x=new PIXI.Sprite(r(0).rectangle(32,32,"#fff"))).x=32*a,x.y=32*s,t.addChild(x);else switch(x){case" ":case 0:case 2:break;case 1:(x=new PIXI.Sprite(r(11)((o=a,c=1===e[l=s][o-1],u=e[l-1]&&1===e[l-1][o],d=1===e[l][o+1],f=e[l+1]&&1===e[l+1][o],h=e[l-1]&&1===e[l-1][o-1],g=e[l-1]&&1===e[l-1][o+1],p=e[l+1]&&1===e[l+1][o+1],y=e[l+1]&&1===e[l+1][o-1],[c&u?+h:0,+u||0,d&u?+g:0,+c,+d,c&f?+y:0,+f||0,d&f?+p:0])))).x=32*a,x.y=32*s,t.addChild(x)}}))}},function(e,t,r){"use strict";e.exports=function(e,t){for(var n=r(0),s=r(12),i=n.canvas(32,32),a="011112\n3    4\n3    4\n3    4\n3    4\n566667".split("\n").map((function(e){return e.split("")})),o=0;o<6;o++)for(var l=0;l<6;l++)null===e?i.ctx.fillStyle="#18212b":0===e[a[Math.floor(l)][Math.floor(o)]]?i.ctx.fillStyle="#"+s("006600",-5*Math.random()):i.ctx.fillStyle="#"+s("006600",10*Math.random()+5),i.ctx.fillRect(5.333*o,5.333*l,6,6);return PIXI.Texture.fromCanvas(i.canvas)}},function(e,t,r){"use strict";e.exports=function(e,t){var r=parseInt(e,16),n=Math.round(2.55*t),s=(r>>16)+n,i=(r>>8&255)+n,a=(255&r)+n;return(16777216+65536*(s<255?s<1?0:s:255)+256*(i<255?i<1?0:i:255)+(a<255?a<1?0:a:255)).toString(16).slice(1)}}]);
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = "./snakemaze/src/index.ts");
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ "./snakemaze/src/components/buildSnake.ts":
+/*!************************************************!*\
+  !*** ./snakemaze/src/components/buildSnake.ts ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+exports.__esModule = true;
+var shapes_1 = __webpack_require__(/*! ../drawing/shapes */ "./snakemaze/src/drawing/shapes.ts");
+var segment = /** @class */ (function (_super) {
+    __extends(segment, _super);
+    function segment(type) {
+        var _this = 
+        //Layering for segments, positioning, etc.
+        _super.call(this, PIXI.loader.resources["assets/snake-" + type + ".png"].texture) || this;
+        _this.scale.x = 0.5;
+        _this.scale.y = 0.5;
+        _this.anchor.x = 0.5;
+        _this.anchor.y = 0.5;
+        _this.x = -16 - 416;
+        _this.y = -16 - 320;
+        g.stage.addChild(_this);
+        if (type === "head" || type === "tail") {
+            _this.zIndex = 0;
+        }
+        _this.segmentType = type;
+        return _this;
+    }
+    return segment;
+}(PIXI.Sprite));
+var default_1 = /** @class */ (function () {
+    function default_1() {
+        this.exit = false;
+        this.locations = [
+            { x: g.maze.snake.x, y: g.maze.snake.y },
+            { x: g.maze.snake.x, y: g.maze.snake.y },
+            { x: g.maze.snake.x, y: g.maze.snake.y }
+        ];
+        this.sprites = [];
+        this.gems = [];
+        this.sprites.push(new segment("head"));
+        this.sprites.push(new segment("body"));
+        this.sprites.push(new segment("tail"));
+        g.stage.y += 320 - this.sprites[0].worldTransform.ty;
+        g.stage.x += 416 - this.sprites[0].worldTransform.tx;
+        this.counter = new PIXI.Container();
+        this.counter.zOrder = -2;
+        this.counter.x = 832 - 32 * 4;
+        this.counter.y = 640 - 32 * 3;
+        this.counter.addChild(new PIXI.Sprite(shapes_1["default"].rectangle(128, 96, "rgba(44, 62, 80,0.7)")));
+        this.counter.rules = {
+            "current": 0,
+            "max": 25
+        };
+        //Generate icons for the counter
+        for (var i = 0; i < 3; i++) {
+            var icon = new PIXI.Sprite(PIXI.loader.resources["assets/gem-" + (i + 1) + ".png"].texture);
+            icon.scale.x = 0.5;
+            icon.scale.y = 0.5;
+            icon.x = 8 + i * 40;
+            icon.y = 8;
+            this.counter.addChild(icon);
+        }
+        var count = new PIXI.Text("00", {
+            font: "52px pixelmono",
+            fill: "white"
+        });
+        count.y = 52;
+        count.x = 8;
+        this.counter.display = count;
+        this.counter.addChild(count);
+        var total = new PIXI.Text("/" + (this.counter.rules.max < 10 ? "0" + this.counter.rules.max : this.counter.rules.max), {
+            font: "30px pixelmono",
+            fill: "white"
+        });
+        total.x = count.width + 16;
+        total.y = 52;
+        this.counter.addChild(total);
+        g.all.addChild(this.counter);
+        if (g.maze.mode === "normal") {
+            this.fruit();
+            this.fruit();
+            this.fruit();
+        }
+        else {
+            this.exit = true;
+            this.exitSprite = new PIXI.Sprite(PIXI.loader.resources["assets/rainbow.json"].textures["rainbow1.png"]);
+            this.exitSprite.cycle = 1;
+            this.exitSprite.x = g.maze.end.x * 32;
+            this.exitSprite.y = g.maze.end.y * 32;
+            this.exitSprite.scale.x = 1 / 6;
+            this.exitSprite.scale.y = 1 / 6;
+            this.exitSprite.coord = g.maze.end;
+            this.exitSprite.zIndex = 1;
+            g.stage.addChild(this.exitSprite);
+        }
+        this.direction = g.maze.snake.direction;
+    }
+    default_1.prototype.move = function (x, y, portal) {
+        for (var i = this.locations.length - 1; i > 0; i--) {
+            this.locations[i] = Object.assign({}, this.locations[i - 1]);
+        }
+        this.locations[0].x += x;
+        this.locations[0].y -= y;
+        this.sprites[0].rotation = (y / 2 + x / 2 + (x != 0 ? 0.5 : 0) + .5) * Math.PI;
+        for (var i = 0; i < this.sprites.length; i++) {
+            //Define location variables
+            var p = this.locations[i - 1]; //previous
+            var c = this.locations[i]; //current
+            var a = this.locations[i + 1]; //after
+            //Position segments based on location
+            this.sprites[i].x = c.x * 32 + 16;
+            this.sprites[i].y = c.y * 32 + 16;
+            //Calculate location based on the direction of motion
+            if (i !== 0) {
+                if (this.sprites[i].segmentType === "tail") {
+                    var ct = 1;
+                    while (c.x === p.x && c.y === p.y) {
+                        ct++;
+                        p = this.locations[i - ct];
+                    }
+                }
+                var x_1 = (p.x - c.x);
+                var y_1 = (c.y - p.y);
+                this.sprites[i].rotation = (y_1 / 2 + x_1 / 2 + (x_1 != 0 ? 0.5 : 0) + .5) * Math.PI;
+            }
+            //An array of right turn coordinates
+            var right = [
+                [
+                    [0, 1],
+                    [1, 0]
+                ],
+                [
+                    [1, 0],
+                    [0, -1]
+                ],
+                [
+                    [0, -1],
+                    [-1, 0]
+                ],
+                [
+                    [-1, 0],
+                    [0, 1]
+                ]
+            ];
+            //If a body segment...
+            if (this.sprites[i].segmentType === "body") {
+                this.sprites[i].visible = !(this.locations[this.locations.length - 1].x === this.locations[i].x && this.locations[this.locations.length - 1].y === this.locations[i].y);
+                //Test for corners, if not a corner, become a body segment
+                if (c.x === p.x && p.x === a.x || c.y === p.y && p.y === a.y) {
+                    this.sprites[i].setTexture(PIXI.loader.resources["assets/snake-body.png"].texture);
+                }
+                else {
+                    //Check for right corners by finding comparison between values
+                    var compOne = [c.x - p.x, c.y - p.y];
+                    var compTwo = [a.x - c.x, a.y - c.y];
+                    var rightBool = false;
+                    //Loop through right turns...
+                    right.forEach(function (val) {
+                        if (compOne.equals(val[0]) && compTwo.equals(val[1])) {
+                            rightBool = true;
+                        }
+                    });
+                    //If there is a right turn, rotate accordingly
+                    if (rightBool) {
+                        this.sprites[i].rotation += Math.PI * .5;
+                    }
+                    //Since this is a corner apply the corner texture
+                    this.sprites[i].setTexture(PIXI.loader.resources["assets/snake-corner.png"].texture);
+                }
+            }
+        }
+        this.collide();
+    };
+    default_1.prototype.eat = function () {
+        var a = this;
+        var piece = new segment("body");
+        this.sprites.splice(this.sprites.length - 1, 0, piece);
+        this.locations.splice(this.locations.length - 1, 0, this.locations[this.locations.length - 2]);
+        piece.x = (this.locations.length - 1).x * 32;
+        piece.y = (this.locations.length - 1).y * 32;
+        this.layer();
+        this.counter.rules.current++;
+        this.counter.display.text = this.counter.rules.current < 10 ? "0" + this.counter.rules.current : this.counter.rules.current;
+        if (this.counter.rules.current == this.counter.rules.max) {
+            var len = a.gems.length;
+            for (var i = len - 1; i >= 0; i--) {
+                g.stage.removeChild(a.gems[i]);
+                a.gems.splice(i, 1);
+            }
+            function check() {
+                var spawn = {
+                    x: Math.floor(g.maze.data[0].length * Math.random()),
+                    y: Math.floor(g.maze.data.length * Math.random())
+                };
+                var safe = a.locations.every(function (val) {
+                    return !(val.x === spawn.x && val.y === spawn.y);
+                }) && g.maze.data[spawn.y][spawn.x] === 2;
+                if (safe) {
+                    a.exit = true;
+                    a.exitSprite = new PIXI.Sprite(PIXI.loader.resources["assets/rainbow.json"].textures["rainbow1.png"]);
+                    a.exitSprite.cycle = 1;
+                    a.exitSprite.x = spawn.x * 32;
+                    a.exitSprite.y = spawn.y * 32;
+                    console.log(spawn);
+                    a.exitSprite.scale.x = 1 / 6;
+                    a.exitSprite.scale.y = 1 / 6;
+                    a.exitSprite.coord = spawn;
+                    a.exitSprite.zIndex = 1;
+                    g.stage.addChild(a.exitSprite);
+                }
+                else {
+                    check();
+                }
+            }
+            check();
+        }
+    };
+    default_1.prototype.layer = function () {
+        for (var i = 0; i < this.sprites.length; i++) {
+            this.sprites[i].zIndex = 1;
+        }
+        g.stage.updateLayersOrder();
+    };
+    default_1.prototype.collide = function () {
+        var _this = this;
+        var a = this;
+        var death = false;
+        var collide = false;
+        for (var i = 1; i < this.locations.length; i++) {
+            if (this.locations[0].x === this.locations[i].x && this.locations[0].y === this.locations[i].y) {
+                death = true;
+            }
+        }
+        if (g.maze.data[this.locations[0].y] != undefined && g.maze.data[this.locations[0].y][this.locations[0].x] === 1) {
+            death = true;
+        }
+        if (g.maze.data[this.locations[0].y] != undefined && typeof g.maze.data[this.locations[0].y][this.locations[0].x] === "object") {
+            var portal_1 = g.maze.data[this.locations[0].y][this.locations[0].x];
+            var target_1;
+            g.maze.data.forEach(function (val) {
+                val.forEach(function (m) {
+                    if (m.id === portal_1.target) {
+                        target_1 = m;
+                    }
+                });
+            });
+            console.log(target_1);
+            this.locations[0].x = target_1.x;
+            this.locations[0].y = target_1.y;
+            this.direction = target_1.direction;
+            switch (target_1.direction) {
+                case "left":
+                    this.move(-1, 0);
+                    ;
+                    break;
+                case "right":
+                    this.move(1, 0);
+                    break;
+                case "up":
+                    this.move(0, -1);
+                    break;
+                case "down":
+                    this.move(0, 1);
+                    break;
+            }
+            return;
+        }
+        if (death) {
+            //TODO = HANDLE DEATH OF THE SNAKE WITH A DEATH SCREEN
+            collide = true;
+            g.level.end("death");
+        }
+        if (this.counter.rules.current != this.counter.rules.max) {
+            this.gems.forEach(function (gem) {
+                if (_this.locations[0].x === gem.coord.x && _this.locations[0].y === gem.coord.y) {
+                    a.gems.splice(a.gems.indexOf(gem), 1);
+                    g.stage.removeChild(gem);
+                    a.fruit();
+                    a.eat();
+                }
+            });
+        }
+        if (this.exit) {
+            this.exitSprite.cycle++;
+            this.exitSprite.cycle %= 8;
+            this.exitSprite.setTexture(PIXI.loader.resources["assets/rainbow.json"].textures["rainbow" + this.exitSprite.cycle + ".png"]);
+            if (this.locations[0].x === this.exitSprite.coord.x && this.locations[0].y === this.exitSprite.coord.y) {
+                //TODO = WIN SCREEN
+                collide = true;
+                g.level.end("victory");
+            }
+        }
+        return collide;
+    };
+    default_1.prototype.fruit = function () {
+        var a = this;
+        function check() {
+            var spawn = {
+                x: Math.floor(g.maze.data[0].length * Math.random()),
+                y: Math.floor(g.maze.data.length * Math.random())
+            };
+            var safe = a.locations.every(function (val) {
+                return !(val.x === spawn.x && val.y === spawn.y);
+            }) && a.gems.every(function (val) {
+                return !(val.coord.x === spawn.x && val.coord.y === spawn.y);
+            })
+                && g.maze.data[spawn.y][spawn.x] === 2;
+            if (safe) {
+                var gem = new PIXI.Sprite(PIXI.loader.resources["assets/gem-" + Math.ceil(Math.random() * 3) + ".png"].texture);
+                gem.x = spawn.x * 32;
+                gem.y = spawn.y * 32;
+                //
+                gem.scale.x = 0.5;
+                gem.scale.y = 0.5;
+                //
+                gem.coord = spawn;
+                gem.zIndex = 1;
+                a.gems.push(gem);
+                g.stage.addChild(gem);
+            }
+            else {
+                check();
+            }
+        }
+        check();
+    };
+    return default_1;
+}());
+exports["default"] = default_1;
+
+
+/***/ }),
+
+/***/ "./snakemaze/src/components/button.ts":
+/*!********************************************!*\
+  !*** ./snakemaze/src/components/button.ts ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+exports.__esModule = true;
+function default_1(sprite, x, y, func) {
+    sprite.buttonMode = true;
+    sprite.interactive = true;
+    sprite.x = x;
+    sprite.y = y;
+    sprite.on('click', function () { func(); g.renderer.render(g.all); });
+}
+exports["default"] = default_1;
+
+
+/***/ }),
+
+/***/ "./snakemaze/src/components/menu.ts":
+/*!******************************************!*\
+  !*** ./snakemaze/src/components/menu.ts ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+exports.__esModule = true;
+var MenuManager = /** @class */ (function () {
+    function MenuManager() {
+        this.menus = [];
+    }
+    MenuManager.prototype.show = function (menuName) {
+        this.hide();
+        this.menus.forEach(function (val) {
+            if (val.name === menuName) {
+                val.visible = true;
+                g.soundManager.visible = val.sound;
+            }
+        });
+        g.renderer.render(g.all);
+    };
+    MenuManager.prototype.hide = function () {
+        this.menus.forEach(function (val) {
+            val.visible = false;
+        });
+    };
+    MenuManager.prototype.push = function (menu) {
+        this.menus.push(menu);
+    };
+    return MenuManager;
+}());
+var Menu = /** @class */ (function (_super) {
+    __extends(Menu, _super);
+    function Menu(name, sound) {
+        var _this = _super.call(this) || this;
+        _this.name = name;
+        _this.sound = sound;
+        g.manager.push(_this);
+        g.all.addChild(_this);
+        return _this;
+    }
+    return Menu;
+}(PIXI.Container));
+var shapes_1 = __webpack_require__(/*! ../drawing/shapes */ "./snakemaze/src/drawing/shapes.ts");
+var button_1 = __webpack_require__(/*! ./button */ "./snakemaze/src/components/button.ts");
+var SoundManager = /** @class */ (function (_super) {
+    __extends(SoundManager, _super);
+    function SoundManager() {
+        var _this = _super.call(this) || this;
+        _this.x = 832 - 128;
+        _this.y = 640 - 64;
+        _this.zOrder = -4;
+        return _this;
+    }
+    return SoundManager;
+}(PIXI.Container));
+var SoundMenu = /** @class */ (function (_super) {
+    __extends(SoundMenu, _super);
+    function SoundMenu(x, y, textureOn, textureOff) {
+        var _this = _super.call(this, textureOn) || this;
+        _this.enabled = true;
+        button_1["default"](_this, 0, 0, function () {
+            if (this.enabled) {
+                this.setTexture(textureOn);
+            }
+            else {
+                this.setTexture(textureOff);
+            }
+            this.enabled = !this.enabled;
+        });
+        return _this;
+    }
+    return SoundMenu;
+}(PIXI.Sprite));
+function default_1() {
+    console.log("FABRICATI ONSs");
+    g.manager = new MenuManager();
+    // -- HANDLE MUSIC --
+    g.soundManager = new SoundManager();
+    g.soundManager.addChild(new SoundMenu(0, 0, PIXI.loader.resources["assets/music.png"].texture, PIXI.loader.resources["assets/nomusic.png"].texture));
+    g.soundManager.addChild(new SoundMenu(64, 0, shapes_1["default"].rectangle(64, 64, "#00f"), shapes_1["default"].rectangle(64, 64, "#0ff")));
+    g.all.addChild(g.soundManager);
+    // -- START SCREEN --
+    var startScreen = new Menu("start", true);
+    var background = new PIXI.Sprite(PIXI.loader.resources["assets/titlescreen.png"].texture);
+    startScreen.addChild(background);
+    var start = new PIXI.Sprite(PIXI.loader.resources["assets/start.png"].texture);
+    startScreen.addChild(start);
+    button_1["default"](start, 64 * 4 + 32, 64 * 6, function () {
+        g.manager.show("level");
+    });
+    // -- LEVEL SELECT --
+    var levelSelect = new Menu("level", true);
+    var _loop_1 = function (i) {
+        var _loop_2 = function (j) {
+            var lev = new PIXI.Sprite(PIXI.loader.resources["assets/level-1.png"].texture);
+            levelSelect.addChild(lev);
+            button_1["default"](lev, i * 128 + 128, j * 128 + 128, function () {
+                g.level = new g.newLevel(i + j * 5);
+            });
+        };
+        for (var j = 0; j < 2; j++) {
+            _loop_2(j);
+        }
+    };
+    for (var i = 0; i < 5; i++) {
+        _loop_1(i);
+    }
+    // -- QUIT BUTTON --
+    var exit = new PIXI.Sprite(PIXI.loader.resources["assets/back.png"].texture);
+    levelSelect.addChild(exit);
+    button_1["default"](exit, 0, 0, function () {
+        g.manager.show("start");
+    });
+    // -- MENU TO SHOW ON DEATH --
+    //TODO
+    var exit2 = new PIXI.Sprite(PIXI.loader.resources["assets/back.png"].texture);
+    button_1["default"](exit2, 0, 0, function () {
+        g.manager.show("start");
+        g.level.kill();
+    });
+    var deathMenu = new Menu("death", false);
+    var deathBase = new PIXI.Sprite(shapes_1["default"].rectangle(64 * 6, 64 * 4, "#000"));
+    deathBase.x = 832 / 2 - deathBase.width / 2;
+    deathBase.y = 640 / 2 - deathBase.height / 2;
+    deathMenu.zOrder = -4;
+    deathMenu.addChild(deathBase);
+    deathMenu.addChild(exit2);
+    var victoryMenu = new Menu("victory", false);
+    var victoryBase = new PIXI.Sprite(shapes_1["default"].rectangle(64 * 6, 64 * 4, "#fff"));
+    victoryBase.x = 832 / 2 - victoryBase.width / 2;
+    victoryBase.y = 640 / 2 - victoryBase.height / 2;
+    victoryMenu.zOrder = -4;
+    victoryMenu.addChild(victoryBase);
+    victoryMenu.addChild(exit2);
+}
+exports["default"] = default_1;
+
+
+/***/ }),
+
+/***/ "./snakemaze/src/components/pause.ts":
+/*!*******************************************!*\
+  !*** ./snakemaze/src/components/pause.ts ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+exports.__esModule = true;
+var shapes_1 = __webpack_require__(/*! ../drawing/shapes */ "./snakemaze/src/drawing/shapes.ts");
+var key_press_1 = __webpack_require__(/*! ../utilities/key-press */ "./snakemaze/src/utilities/key-press.ts");
+var button_1 = __webpack_require__(/*! ./button */ "./snakemaze/src/components/button.ts");
+var default_1 = /** @class */ (function () {
+    function default_1() {
+        var _this = this;
+        var a = this;
+        var pauseScreen = new PIXI.Sprite(shapes_1["default"].rectangle(832, 640, "rgba(44, 62, 80,0.7)"));
+        pauseScreen.visible = false;
+        var text = new PIXI.Text("Game paused", {
+            font: "52px Pixel",
+            fill: "white"
+        });
+        text.anchor.x = 0.5;
+        text.x = 416;
+        text.y = 200;
+        pauseScreen.addChild(text);
+        pauseScreen.zOrder = -3;
+        this.obj = pauseScreen;
+        this.allow = true;
+        this.veto = false;
+        g.all.addChild(this.obj);
+        var abort = new PIXI.Sprite(shapes_1["default"].rectangle(64 * 5, 64 * 2, "#000"));
+        button_1["default"](abort, 4 * 64, 5 * 64, function () {
+            g.level.kill();
+            _this.veto = true;
+            console.log(_this);
+        });
+        this.obj.addChild(abort);
+    }
+    default_1.prototype.handle = function (obj, background) {
+        var a = this;
+        function wait() {
+            if (!a.veto) {
+                obj.start();
+                a.obj.visible = false;
+                g.soundManager.visible = false;
+                background.zIndex = 500;
+                g.all.updateLayersOrder();
+            }
+        }
+        function allow() {
+            if (!a.veto) {
+                a.allow = true;
+            }
+        }
+        key_press_1["default"].check(80, function () {
+            if (a.allow) {
+                console.log("SHOW");
+                a.obj.visible = true;
+                g.soundManager.visible = true;
+                //background.zIndex = -2;
+                a.obj.zIndex = -3;
+                g.all.updateLayersOrder();
+                a.allow = false;
+                g.renderer.render(g.stage);
+                obj.stop();
+                key_press_1["default"].waitUp(80, function () {
+                    key_press_1["default"].waitDown(80, wait);
+                    key_press_1["default"].waitUp(80, allow);
+                });
+            }
+        });
+    };
+    ;
+    return default_1;
+}());
+exports["default"] = default_1;
+;
+
+
+/***/ }),
+
+/***/ "./snakemaze/src/drawing/shapes.ts":
+/*!*****************************************!*\
+  !*** ./snakemaze/src/drawing/shapes.ts ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+exports.__esModule = true;
+exports["default"] = new function () {
+    var a = this;
+    this.renderer = "";
+    this.canvas = function (width, height) {
+        var canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        var ctx = canvas.getContext("2d");
+        return {
+            "canvas": canvas,
+            "ctx": ctx
+        };
+    };
+    this.rectangle = function (width, height, color) {
+        var b = a.canvas(width, height);
+        b.ctx.fillStyle = color;
+        b.ctx.fillRect(0, 0, width, height);
+        return PIXI.Texture.fromCanvas(b.canvas);
+    };
+    this.circle = function (radius, color) {
+        var b = a.canvas(radius * 2, radius * 2);
+        b.ctx.fillStyle = color;
+        b.ctx.beginPath();
+        b.ctx.arc(radius, radius, radius, 0, 2 * Math.PI);
+        b.ctx.fill();
+        return PIXI.Texture.fromCanvas(b.canvas);
+    };
+}();
+
+
+/***/ }),
+
+/***/ "./snakemaze/src/index.ts":
+/*!********************************!*\
+  !*** ./snakemaze/src/index.ts ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+//glpnasfasfasfsafsa
+//Initialize a global value g
+exports.__esModule = true;
+//Utilities
+var key_press_1 = __webpack_require__(/*! ./utilities/key-press */ "./snakemaze/src/utilities/key-press.ts");
+__webpack_require__(/*! ./utilities/equals */ "./snakemaze/src/utilities/equals.ts");
+var fps_1 = __webpack_require__(/*! ./utilities/fps */ "./snakemaze/src/utilities/fps.ts");
+//Level
+var levels_1 = __webpack_require__(/*! ./level/levels */ "./snakemaze/src/level/levels.ts");
+//Components
+var menu_1 = __webpack_require__(/*! ./components/menu */ "./snakemaze/src/components/menu.ts");
+var pause_1 = __webpack_require__(/*! ./components/pause */ "./snakemaze/src/components/pause.ts");
+var buildSnake_1 = __webpack_require__(/*! ./components/buildSnake */ "./snakemaze/src/components/buildSnake.ts");
+//Tile rendering
+var map_1 = __webpack_require__(/*! ./tile-rendering/map */ "./snakemaze/src/tile-rendering/map.ts");
+console.log("initialize");
+Number.prototype.mod = function (n) {
+    return ((this % n) + n) % n;
+};
+key_press_1["default"].listen();
+window.g = {};
+g.renderer = PIXI.autoDetectRenderer(832, 640);
+g.renderer.backgroundColor = 0x444444;
+g.all = new PIXI.Container();
+document.body.appendChild(g.renderer.view);
+PIXI.loader.add("assets/snake-head.png").add("assets/rainbow.json").add("assets/snake-body.png").add("assets/snake-corner.png").add("assets/snake-tail.png").add("assets/grass.png").add("assets/flowers-1.png").add("assets/flowers-2.png").add("assets/rock.png").add("assets/gem-1.png").add("assets/gem-2.png").add("assets/gem-3.png").add("assets/level-1.png").add("assets/titlescreen.png").add("assets/start.png").add("assets/back.png").add("assets/music.png").add("assets/nomusic.png").load(fonts);
+console.log("breaaak");
+function fonts() {
+    WebFont.load({
+        custom: {
+            families: ['Pixel', 'pixelmono'],
+            urls: ["/stylesheet.css"]
+        },
+        active: function (e) {
+            console.log("font loaded!");
+            // now start setting up your PixiJS (or canvas) stuff!
+            setup();
+        }
+    });
+}
+function setup() {
+    //Build guidelines
+    var textures = [
+        PIXI.loader.resources["assets/grass.png"].texture,
+        PIXI.loader.resources["assets/flowers-1.png"].texture,
+        PIXI.loader.resources["assets/flowers-2.png"].texture,
+        PIXI.loader.resources["assets/rock.png"].texture
+    ];
+    //Button is a function that creates an interactive sprite at a certain position, and provide a callback
+    menu_1["default"]();
+    console.log(g.manager);
+    g.manager.show("start"); //set to level for debug
+    g.all.updateLayersOrder = function () {
+        g.all.children.sort(function (a, b) {
+            a.zOrder = a.zOrder || 0;
+            b.zOrder = b.zOrder || 0;
+            return b.zOrder - a.zOrder;
+        });
+    };
+    g.newLevel = function (num) {
+        if (levels_1["default"][num] == undefined)
+            return;
+        //maze
+        g.maze = levels_1["default"][num];
+        //stage
+        g.stage = new PIXI.Container();
+        g.stage.zOrder = -1;
+        g.all.addChild(g.stage);
+        g.stage.updateLayersOrder = function () {
+            g.stage.children.sort(function (a, b) {
+                a.zIndex = a.zIndex || 0;
+                b.zIndex = b.zIndex || 0;
+                return b.zIndex - a.zIndex;
+            });
+        };
+        //give kill function
+        this.kill = function () {
+            loop.stop();
+            g.level.endLoop.stop();
+            g.all.removeChild(g.stage);
+            g.all.removeChild(snake.counter);
+            g.all.removeChild(pause.obj);
+            g.manager.show("level");
+        };
+        this.end = function (condition) {
+            //Either "victory" or "death"
+            //Jam controls, explode snake
+            loop.stop();
+            //Create a new loop with no controls
+            var n = 0;
+            snake.counter.xvel = 0;
+            g.level.endLoop = new fps_1["default"](function (frames, self) {
+                //make the portal continue to animate
+                if (snake.exit && frames % 10 === 0) {
+                    snake.exitSprite.cycle++;
+                    snake.exitSprite.cycle %= 8;
+                    snake.exitSprite.setTexture(PIXI.loader.resources["assets/rainbow.json"].textures["rainbow" + snake.exitSprite.cycle + ".png"]);
+                }
+                if (snake.sprites.length - 1 == n) {
+                    snake.counter.xvel += 0.1;
+                    snake.counter.x += snake.counter.xvel;
+                }
+                if (frames % 10 === 0) {
+                    if (snake.sprites.length - 1 == n) {
+                        snake.sprites[n].tint = "0x000";
+                        g.manager.show("death");
+                    }
+                    else {
+                        do {
+                            snake.sprites[n].tint = "0x000";
+                            n++;
+                        } while (snake.locations[n].x === snake.locations[n + 1].x && snake.locations[n].y === snake.locations[n + 1].y);
+                    }
+                }
+                if (!isNaN(snake.sprites[n].worldTransform.ty) && !isNaN(snake.sprites[n].worldTransform.tx)) {
+                    g.stage.y += (320 - snake.sprites[n].worldTransform.ty) / 40;
+                    g.stage.x += (416 - snake.sprites[n].worldTransform.tx) / 40;
+                }
+                background.children.forEach(function (val) {
+                    val.y = (val.orig.y * 64 + g.stage.y).mod(640 + 64) - g.stage.y - 64;
+                    val.x = (val.orig.x * 64 + g.stage.x).mod(832 + 64) - g.stage.x - 64;
+                });
+                tiles.children.forEach(function (val) {
+                    val.visible = !(val.x + g.stage.x < -32 || val.x + g.stage.x > 864 || val.y + g.stage.y < -32 || val.y + g.stage.y > 672);
+                });
+                g.renderer.render(g.all);
+            });
+        };
+        //Create a pause menu
+        var pause = new pause_1["default"]();
+        //Hide the sound controls
+        g.soundManager.visible = false;
+        //Build the background, which is like the grass and such
+        var bias = [80, 90, 100, 104];
+        var background = new PIXI.Container();
+        background.zIndex = 500;
+        for (var i = -2; i < 26; i++) {
+            for (var j = -2; j < 20; j++) {
+                var rand = Math.random() * bias[bias.length - 1];
+                var x = new PIXI.Sprite(textures[bias.indexOf(bias.filter(function (val) {
+                    return rand < val;
+                })[0])]);
+                x.scale.x = 0.5;
+                x.scale.y = 0.5;
+                x.x = i * 32;
+                x.y = j * 32;
+                x.orig = {
+                    "x": i / 2,
+                    "y": j / 2
+                };
+                background.addChild(x);
+            }
+        }
+        var tiles = new PIXI.Container();
+        tiles.zIndex = -1;
+        g.stage.addChild(tiles);
+        map_1["default"](g.maze.data, tiles);
+        g.stage.addChild(background);
+        var snake = new buildSnake_1["default"]();
+        snake.layer();
+        var direction = snake.direction;
+        var predirection = snake.direction;
+        g.all.updateLayersOrder();
+        var start = 1;
+        //Start by moving the snake to allow instantaneous snake positioning
+        for (var i = 0; i < 2; i++) {
+            switch (levels_1["default"][num].snake.direction) {
+                case "r":
+                    snake.move(1, 0);
+                    break;
+                case "l":
+                    snake.move(-1, 0);
+                    break;
+                case "u":
+                    snake.move(0, 1);
+                    break;
+                case "d":
+                    snake.move(0, -1);
+                    break;
+            }
+        }
+        //snake.move(0,0);
+        //hide menus
+        g.manager.hide();
+        g.stage.y = -snake.sprites[0].y + 320;
+        g.stage.x = -snake.sprites[0].x + 416;
+        var countdown = new PIXI.Text("3", {
+            font: "52px Pixel",
+            fill: "white"
+        });
+        g.all.addChild(countdown);
+        countdown.y = 320;
+        countdown.x = 416;
+        var loop = new fps_1["default"](function (frames, self) {
+            g.stage.y += (320 - snake.sprites[0].worldTransform.ty) / (40 - (+(Math.abs(320 - snake.sprites[0].worldTransform.ty) > 640)) * 39);
+            g.stage.x += (416 - snake.sprites[0].worldTransform.tx) / (40 - (+(Math.abs(416 - snake.sprites[0].worldTransform.tx) > 832)) * 39);
+            background.children.forEach(function (val) {
+                val.y = (val.orig.y * 64 + g.stage.y).mod(640 + 64) - g.stage.y - 64;
+                val.x = (val.orig.x * 64 + g.stage.x).mod(832 + 64) - g.stage.x - 64;
+            });
+            tiles.children.forEach(function (val) {
+                val.visible = !(val.x + g.stage.x < -32 || val.x + g.stage.x > 864 || val.y + g.stage.y < -32 || val.y + g.stage.y > 672);
+            });
+            if (frames % 8 == 0 && frames > 180) {
+                pause.handle(self, background);
+                key_press_1["default"].check([65, 37], function () {
+                    //Left
+                    if (direction == "u" || direction == "d" && predirection != "l") {
+                        predirection = "l";
+                    }
+                });
+                key_press_1["default"].check([68, 39], function () {
+                    //Right
+                    if (direction == "u" || direction == "d" && predirection != "r") {
+                        predirection = "r";
+                    }
+                });
+                key_press_1["default"].check([87, 38], function () {
+                    //Up
+                    if (direction == "r" || direction == "l" && predirection != "u") {
+                        predirection = "u";
+                    }
+                });
+                key_press_1["default"].check([83, 40], function () {
+                    //Down
+                    if (direction == "r" || direction == "l" && predirection != "d") {
+                        predirection = "d";
+                    }
+                });
+                direction = predirection;
+                switch (direction) {
+                    case "l":
+                        snake.move(-1, 0);
+                        break;
+                    case "r":
+                        snake.move(1, 0);
+                        break;
+                    case 'u':
+                        snake.move(0, 1);
+                        break;
+                    case 'd':
+                        snake.move(0, -1);
+                }
+            }
+            else {
+                if (Math.ceil(3 - frames / 60) === 0) {
+                    countdown.visible = false;
+                }
+                else {
+                    countdown.setText(Math.ceil(3 - frames / 60));
+                }
+            }
+            g.renderer.render(g.all);
+        });
+        return this;
+    };
+}
+
+
+/***/ }),
+
+/***/ "./snakemaze/src/level/levels.ts":
+/*!***************************************!*\
+  !*** ./snakemaze/src/level/levels.ts ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+exports.__esModule = true;
+exports["default"] = [{
+        "mode": "normal",
+        "snake": {
+            "x": 16,
+            "y": 2,
+            "direction": "r"
+        },
+        "data": [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        ]
+    }, {
+        "mode": "normal",
+        "snake": {
+            "x": 14,
+            "y": 6,
+            "direction": "u"
+        },
+        "data": [
+            [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 0, 0, 0, 0],
+            [0, 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 0, 0, 0],
+            [1, 1, 1, 1, 2, 2, 2, 1, 1, 1, 1, 1, 1, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 1, 1, 1, 1],
+            [1, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 1],
+            [1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 1],
+            [1, 2, 2, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 2, 2, 1],
+            [1, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 1],
+            [1, 2, 2, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 2, 2, 1],
+            [1, 2, 2, 1, 2, 2, 1, 1, 1, 1, 2, 2, 1, 2, 2, 1, 2, 2, 1, 1, 1, 1, 2, 2, 1, 2, 2, 1],
+            [1, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 1],
+            [1, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 1],
+            [1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 2, 2, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1],
+            [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0]
+        ]
+    }, {
+        "mode": "normal",
+        "snake": {
+            "x": 12,
+            "y": 76,
+            "direction": "l"
+        },
+        "data": [
+            [1, {
+                    "x": 1,
+                    "y": 0,
+                    "id": "2",
+                    "target": "1",
+                    "direction": "u"
+                }, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2],
+            [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+            [2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2],
+            [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+            [2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, {
+                    "x": 10,
+                    "y": 74,
+                    "id": "1",
+                    "target": "2",
+                    "direction": "d"
+                }, 1]
+        ]
+    }, {
+        "mode": "crash",
+        "snake": {
+            "x": 2,
+            "y": 16,
+            "direction": "u"
+        },
+        "end": {
+            "x": 2,
+            "y": 18
+        },
+        "data": [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
+            [0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
+            [0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1],
+            [0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1],
+            [0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1],
+            [0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1],
+            [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1],
+            [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        ],
+        "fruit": []
+    }, {
+        "mode": "normal",
+        "snake": {
+            "x": 2,
+            "y": 16,
+            "direction": "r"
+        },
+        "data": [
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 0],
+            [0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0],
+            [0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0],
+            [0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 2, 1, 1, 2, 2, 1, 2, 1, 1, 2, 2, 2, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 2, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 2, 2, 2, 2, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2, 1, 2, 2, 1, 1, 2, 2, 2, 1, 1, 2, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [1, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [1, 1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1],
+            [0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [0, 0, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [0, 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 1],
+            [0, 0, 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 2, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [0, 0, 0, 0, 0, 0, 1, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 2, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 2, 1, 1, 1, 1, 2, 2, 1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 1, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 2, 1, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 2, 2, 2, 2, 2, 2, 1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 1, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 1, 2, 2, 1, 2, 2, 2, 1, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 1, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 1, 2, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        ]
+    }, {
+        "mode": "normal",
+        "snake": {
+            "x": 1,
+            "y": 7,
+            "direction": "r"
+        },
+        "end": {
+            "x": -15,
+            "y": -2
+        },
+        "data": [
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 1, 1, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0],
+            [0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0],
+            [0, 1, 2, 2, 2, 2, 2, 2, 1, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1],
+            [1, 2, 2, 1, 1, 1, 1, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0],
+            [1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0],
+            [1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0],
+            [1, 2, 2, 1, 1, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0],
+            [0, 1, 2, 2, 2, 2, 2, 2, 1, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0],
+            [0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        ]
+    }];
+
+
+/***/ }),
+
+/***/ "./snakemaze/src/tile-rendering/dirt.ts":
+/*!**********************************************!*\
+  !*** ./snakemaze/src/tile-rendering/dirt.ts ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+exports.__esModule = true;
+var shapes_1 = __webpack_require__(/*! ../drawing/shapes */ "./snakemaze/src/drawing/shapes.ts");
+var lighten_1 = __webpack_require__(/*! ./lighten */ "./snakemaze/src/tile-rendering/lighten.ts");
+function default_1(x, dbg) {
+    var canvas = shapes_1["default"].canvas(32, 32);
+    var condition = false;
+    //5d2e0d
+    //228B22
+    //x,y,width,height
+    var bounds = "011112\n3    4\n3    4\n3    4\n3    4\n566667".split("\n").map(function (val) {
+        return val.split("");
+    });
+    for (var i = 0; i < 6; i++) {
+        for (var j = 0; j < 6; j++) {
+            if (x === null) {
+                canvas.ctx.fillStyle = "#18212b";
+            }
+            else {
+                if (x[bounds[Math.floor(j)][Math.floor(i)]] === 0) {
+                    //Grass
+                    canvas.ctx.fillStyle = "#" + (lighten_1["default"]("006600", Math.random() * -5));
+                }
+                else {
+                    //Not Grass
+                    canvas.ctx.fillStyle = "#" + (lighten_1["default"]("006600", Math.random() * 10 + 5));
+                }
+            }
+            canvas.ctx.fillRect(i * 5.333, j * 5.333, 6, 6);
+        }
+    }
+    return PIXI.Texture.fromCanvas(canvas.canvas);
+}
+exports["default"] = default_1;
+
+
+/***/ }),
+
+/***/ "./snakemaze/src/tile-rendering/lighten.ts":
+/*!*************************************************!*\
+  !*** ./snakemaze/src/tile-rendering/lighten.ts ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+exports.__esModule = true;
+function default_1(color, percent) {
+    var num = parseInt(color, 16), amt = Math.round(2.55 * percent), R = (num >> 16) + amt, B = (num >> 8 & 0x00FF) + amt, G = (num & 0x0000FF) + amt;
+    return (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 + (B < 255 ? B < 1 ? 0 : B : 255) * 0x100 + (G < 255 ? G < 1 ? 0 : G : 255)).toString(16).slice(1);
+}
+exports["default"] = default_1;
+;
+
+
+/***/ }),
+
+/***/ "./snakemaze/src/tile-rendering/map.ts":
+/*!*********************************************!*\
+  !*** ./snakemaze/src/tile-rendering/map.ts ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+exports.__esModule = true;
+var shapes_1 = __webpack_require__(/*! ../drawing/shapes */ "./snakemaze/src/drawing/shapes.ts");
+var dirt_1 = __webpack_require__(/*! ./dirt */ "./snakemaze/src/tile-rendering/dirt.ts");
+function default_1(arr, tiles) {
+    //Map size is 20 blocks tall and 32 wide
+    //0 is grass 1 is dirt
+    function getName(x, y) {
+        var l = arr[y][x - 1] === 1, t = arr[y - 1] && arr[y - 1][x] === 1, r = arr[y][x + 1] === 1, b = arr[y + 1] && arr[y + 1][x] === 1, tl = arr[y - 1] && arr[y - 1][x - 1] === 1, tr = arr[y - 1] && arr[y - 1][x + 1] === 1, br = arr[y + 1] && arr[y + 1][x + 1] === 1, bl = arr[y + 1] && arr[y + 1][x - 1] === 1;
+        return [
+            (l && t ? +tl : 0), +t || 0, (r && t ? +tr : 0),
+            +l, +r,
+            (l && b ? +bl : 0), +b || 0, (r && b ? +br : 0)
+        ];
+    }
+    var debug = [];
+    for (var i = 0; i < arr.length; i++) {
+        arr[i].forEach(function (cel, j) {
+            var cell = arr[i][j];
+            if (typeof cell === "object") {
+                cell = new PIXI.Sprite(shapes_1["default"].rectangle(32, 32, "#fff"));
+                cell.x = j * 32;
+                cell.y = i * 32;
+                tiles.addChild(cell);
+            }
+            else {
+                switch (cell) {
+                    case " ":
+                    case 0:
+                    case 2:
+                        break;
+                    case 1:
+                        //PIXI.loader.resources["assets/tile.png"].texture
+                        cell = new PIXI.Sprite(dirt_1["default"](getName(j, i)));
+                        cell.x = j * 32;
+                        cell.y = i * 32;
+                        tiles.addChild(cell);
+                        break;
+                }
+            }
+        });
+    }
+}
+exports["default"] = default_1;
+;
+
+
+/***/ }),
+
+/***/ "./snakemaze/src/utilities/equals.ts":
+/*!*******************************************!*\
+  !*** ./snakemaze/src/utilities/equals.ts ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// Warn if overriding existing method
+if (Array.prototype.equals)
+    console.warn("Overriding existing Array.prototype.equals. Possible causes: New API defines the method, there's a framework conflict or you've got double inclusions in your code.");
+// attach the .equals method to Array's prototype to call it on any array
+Array.prototype.equals = function (array) {
+    // if the other array is a falsy value, return
+    if (!array)
+        return false;
+    // compare lengths - can save a lot of time 
+    if (this.length != array.length)
+        return false;
+    for (var i = 0, l = this.length; i < l; i++) {
+        // Check if we have nested arrays
+        if (this[i] instanceof Array && array[i] instanceof Array) {
+            // recurse into the nested arrays
+            if (!this[i].equals(array[i]))
+                return false;
+        }
+        else if (this[i] != array[i]) {
+            // Warning - two different object instances will never be equal: {x:20} != {x:20}
+            return false;
+        }
+    }
+    return true;
+};
+// Hide method from for-in loops
+Object.defineProperty(Array.prototype, "equals", { enumerable: false });
+
+
+/***/ }),
+
+/***/ "./snakemaze/src/utilities/fps.ts":
+/*!****************************************!*\
+  !*** ./snakemaze/src/utilities/fps.ts ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+exports.__esModule = true;
+var default_1 = /** @class */ (function () {
+    function default_1(cb) {
+        this.going = true;
+        this.ct = 0;
+        this.cb = cb;
+        this.draw();
+    }
+    default_1.prototype.start = function () {
+        this.going = true;
+        requestAnimationFrame(this.draw);
+    };
+    default_1.prototype.resume = function () {
+        this.start();
+    };
+    default_1.prototype.toggle = function () {
+        this.going = !this.going;
+    };
+    default_1.prototype.stop = function () {
+        this.going = false;
+    };
+    default_1.prototype.pause = function () {
+        this.stop();
+    };
+    default_1.prototype.restart = function () {
+        this.ct = 0;
+    };
+    default_1.prototype.draw = function () {
+        console.log("------");
+        console.log(this.going);
+        console.log(this);
+        if (this.going) {
+            requestAnimationFrame(this.draw);
+            this.ct++;
+            this.cb(this.ct, this);
+        }
+    };
+    return default_1;
+}());
+exports["default"] = default_1;
+
+
+/***/ }),
+
+/***/ "./snakemaze/src/utilities/key-press.ts":
+/*!**********************************************!*\
+  !*** ./snakemaze/src/utilities/key-press.ts ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+exports.__esModule = true;
+exports["default"] = new /** @class */ (function () {
+    function class_1() {
+        this.listen = function () {
+            var a = this;
+            document.onkeydown = function (e) {
+                e = e || window.event;
+                e = e.which || e.keyCode || 0;
+                if (a.map.indexOf(e) == -1) {
+                    a.map.push(e);
+                }
+                a.tethers.forEach(function (tether, index) {
+                    if (tether.type == "down") {
+                        if (e === tether.key) {
+                            tether.func();
+                            if (!tether.perma)
+                                a.tethers.splice(index, 1);
+                        }
+                    }
+                });
+            };
+            document.onkeyup = function (e) {
+                e = e || window.event;
+                e = e.which || e.keyCode || 0;
+                // use e.keyCode
+                if (a.map.indexOf(e) != -1) {
+                    a.map.splice(a.map.indexOf(e), 1);
+                }
+                a.tethers.forEach(function (tether, index) {
+                    if (tether.type == "up") {
+                        if (e === tether.key) {
+                            tether.func();
+                            if (!tether.perma)
+                                a.tethers.splice(index, 1);
+                        }
+                    }
+                });
+            };
+        };
+        var a = this;
+        this.map = [];
+        this.tethers = [];
+    }
+    class_1.prototype.check = function (key, callback, not) {
+        var a = this;
+        if (typeof key != "object") {
+            key = [key];
+        }
+        for (var i = 0; i < key.length; i++) {
+            if (a.map.indexOf(key[i]) != -1) {
+                callback();
+                i = key.length;
+                return;
+            }
+        }
+        if (not !== undefined) {
+            not();
+        }
+    };
+    ;
+    class_1.prototype.waitUp = function (key, func, perma) {
+        var a = this;
+        if (perma === undefined) {
+            perma = false;
+        }
+        a.tethers.push({
+            "key": key,
+            "func": func,
+            "type": "up",
+            "perma": perma
+        });
+    };
+    ;
+    class_1.prototype.waitDown = function (key, func, perma) {
+        var a = this;
+        if (perma === undefined) {
+            perma = false;
+        }
+        a.tethers.push({
+            "key": key,
+            "func": func,
+            "type": "down",
+            "perma": perma
+        });
+    };
+    ;
+    return class_1;
+}())();
+
+
+/***/ })
+
+/******/ });
 //# sourceMappingURL=bundle.js.map

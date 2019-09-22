@@ -1,4 +1,4 @@
-import shapes from "../drawing/shapes.js";
+import shapes from "../drawing/shapes";
 class segment extends PIXI.Sprite {
     segmentType:string;
     zIndex:number;
@@ -19,7 +19,7 @@ class segment extends PIXI.Sprite {
         this.segmentType = type;    
     }
 }
-export default class buildSnake {
+export default class{
     exit: boolean
     sprites: Array<PIXI.Sprite>;
     counter: PIXI.Container;
