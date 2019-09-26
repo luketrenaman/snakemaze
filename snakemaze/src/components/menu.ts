@@ -129,7 +129,7 @@ export default function(){
     victoryBase.y = 640 / 2 - victoryBase.height / 2
     victoryMenu.zOrder = -4;
     victoryMenu.addChild(victoryBase);
-    victoryMenu.addChild(exit2);
+    //victoryMenu.addChild(exit2);
 
   
 }

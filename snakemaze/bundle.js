@@ -110,9 +110,10 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var shapes_1 = __webpack_require__(/*! ../drawing/shapes */ "./snakemaze/src/drawing/shapes.ts");
-var segment = /** @class */ (function (_super) {
-    __extends(segment, _super);
-    function segment(type) {
+var key_press_1 = __webpack_require__(/*! ../utilities/key-press */ "./snakemaze/src/utilities/key-press.ts");
+var Segment = /** @class */ (function (_super) {
+    __extends(Segment, _super);
+    function Segment(type) {
         var _this = 
         //Layering for segments, positioning, etc.
         _super.call(this, PIXI.loader.resources["assets/snake-" + type + ".png"].texture) || this;
@@ -129,7 +130,47 @@ var segment = /** @class */ (function (_super) {
         _this.segmentType = type;
         return _this;
     }
-    return segment;
+    return Segment;
+}(PIXI.Sprite));
+var Counter = /** @class */ (function (_super) {
+    __extends(Counter, _super);
+    function Counter() {
+        var _this = _super.call(this, shapes_1["default"].rectangle(128, 96, "rgba(44, 62, 80,0.7)")) || this;
+        _this.zOrder = -2;
+        _this.x = 832 - 32 * 4; //position in bottom right
+        _this.y = 640 - 32 * 3; //position in bottom right
+        _this.rules = {
+            "current": 0,
+            "max": 25
+        };
+        //Generate icons for the counter
+        for (var i = 0; i < 3; i++) {
+            var icon = new PIXI.Sprite(PIXI.loader.resources["assets/gem-" + (i + 1) + ".png"].texture);
+            icon.scale.x = 0.5;
+            icon.scale.y = 0.5;
+            icon.x = 8 + i * 40;
+            icon.y = 8;
+            _this.addChild(icon);
+        } //add gems
+        var display = new PIXI.Text("00", {
+            font: "52px pixelmono",
+            fill: "white"
+        });
+        display.y = 52;
+        display.x = 8;
+        _this.display = display;
+        _this.addChild(display);
+        var total = new PIXI.Text("/" + (_this.rules.max < 10 ? "0" + _this.rules.max : _this.rules.max), {
+            font: "30px pixelmono",
+            fill: "white"
+        });
+        total.x = display.width + 16;
+        total.y = 52;
+        _this.addChild(total);
+        g.all.addChild(_this);
+        return _this;
+    }
+    return Counter;
 }(PIXI.Sprite));
 var default_1 = /** @class */ (function () {
     function default_1() {
@@ -141,45 +182,12 @@ var default_1 = /** @class */ (function () {
         ];
         this.sprites = [];
         this.gems = [];
-        this.sprites.push(new segment("head"));
-        this.sprites.push(new segment("body"));
-        this.sprites.push(new segment("tail"));
+        this.sprites.push(new Segment("head"));
+        this.sprites.push(new Segment("body"));
+        this.sprites.push(new Segment("tail"));
         g.stage.y += 320 - this.sprites[0].worldTransform.ty;
         g.stage.x += 416 - this.sprites[0].worldTransform.tx;
-        this.counter = new PIXI.Container();
-        this.counter.zOrder = -2;
-        this.counter.x = 832 - 32 * 4;
-        this.counter.y = 640 - 32 * 3;
-        this.counter.addChild(new PIXI.Sprite(shapes_1["default"].rectangle(128, 96, "rgba(44, 62, 80,0.7)")));
-        this.counter.rules = {
-            "current": 0,
-            "max": 25
-        };
-        //Generate icons for the counter
-        for (var i = 0; i < 3; i++) {
-            var icon = new PIXI.Sprite(PIXI.loader.resources["assets/gem-" + (i + 1) + ".png"].texture);
-            icon.scale.x = 0.5;
-            icon.scale.y = 0.5;
-            icon.x = 8 + i * 40;
-            icon.y = 8;
-            this.counter.addChild(icon);
-        }
-        var count = new PIXI.Text("00", {
-            font: "52px pixelmono",
-            fill: "white"
-        });
-        count.y = 52;
-        count.x = 8;
-        this.counter.display = count;
-        this.counter.addChild(count);
-        var total = new PIXI.Text("/" + (this.counter.rules.max < 10 ? "0" + this.counter.rules.max : this.counter.rules.max), {
-            font: "30px pixelmono",
-            fill: "white"
-        });
-        total.x = count.width + 16;
-        total.y = 52;
-        this.counter.addChild(total);
-        g.all.addChild(this.counter);
+        this.counter = new Counter();
         if (g.maze.mode === "normal") {
             this.fruit();
             this.fruit();
@@ -198,8 +206,38 @@ var default_1 = /** @class */ (function () {
             g.stage.addChild(this.exitSprite);
         }
         this.direction = g.maze.snake.direction;
+        this.predirection = this.direction;
+        var a = this;
+        key_press_1["default"].waitDown([65, 37], function () {
+            console.log("left");
+            //Left
+            if (a.direction == "u" || a.direction == "d" && a.predirection != "l") {
+                a.predirection = "l";
+            }
+        }, true);
+        key_press_1["default"].waitDown([68, 39], function () {
+            console.log("right");
+            //Right
+            if (a.direction == "u" || a.direction == "d" && a.predirection != "r") {
+                a.predirection = "r";
+            }
+        }, true);
+        key_press_1["default"].waitDown([87, 38], function () {
+            console.log("up");
+            //Up
+            if (a.direction == "r" || a.direction == "l" && a.predirection != "u") {
+                a.predirection = "u";
+            }
+        }, true);
+        key_press_1["default"].waitDown([83, 40], function () {
+            console.log("down");
+            //Down
+            if (a.direction == "r" || a.direction == "l" && a.predirection != "d") {
+                a.predirection = "d";
+            }
+        }, true);
     }
-    default_1.prototype.move = function (x, y, portal) {
+    default_1.prototype.move = function (x, y) {
         for (var i = this.locations.length - 1; i > 0; i--) {
             this.locations[i] = Object.assign({}, this.locations[i - 1]);
         }
@@ -277,7 +315,7 @@ var default_1 = /** @class */ (function () {
     };
     default_1.prototype.eat = function () {
         var a = this;
-        var piece = new segment("body");
+        var piece = new Segment("body");
         this.sprites.splice(this.sprites.length - 1, 0, piece);
         this.locations.splice(this.locations.length - 1, 0, this.locations[this.locations.length - 2]);
         piece.x = (this.locations.length - 1).x * 32;
@@ -607,7 +645,7 @@ function default_1() {
     victoryBase.y = 640 / 2 - victoryBase.height / 2;
     victoryMenu.zOrder = -4;
     victoryMenu.addChild(victoryBase);
-    victoryMenu.addChild(exit2);
+    //victoryMenu.addChild(exit2);
 }
 exports["default"] = default_1;
 
@@ -623,16 +661,29 @@ exports["default"] = default_1;
 
 "use strict";
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 exports.__esModule = true;
 var shapes_1 = __webpack_require__(/*! ../drawing/shapes */ "./snakemaze/src/drawing/shapes.ts");
 var key_press_1 = __webpack_require__(/*! ../utilities/key-press */ "./snakemaze/src/utilities/key-press.ts");
 var button_1 = __webpack_require__(/*! ./button */ "./snakemaze/src/components/button.ts");
-var default_1 = /** @class */ (function () {
+var default_1 = /** @class */ (function (_super) {
+    __extends(default_1, _super);
     function default_1() {
-        var _this = this;
-        var a = this;
-        var pauseScreen = new PIXI.Sprite(shapes_1["default"].rectangle(832, 640, "rgba(44, 62, 80,0.7)"));
-        pauseScreen.visible = false;
+        var _this = _super.call(this, shapes_1["default"].rectangle(832, 640, "rgba(44, 62, 80,0.7)")) || this;
+        var a = _this;
+        _this.visible = false;
         var text = new PIXI.Text("Game paused", {
             font: "52px Pixel",
             fill: "white"
@@ -640,26 +691,26 @@ var default_1 = /** @class */ (function () {
         text.anchor.x = 0.5;
         text.x = 416;
         text.y = 200;
-        pauseScreen.addChild(text);
-        pauseScreen.zOrder = -3;
-        this.obj = pauseScreen;
-        this.allow = true;
-        this.veto = false;
-        g.all.addChild(this.obj);
+        _this.addChild(text);
+        _this.zOrder = -3;
+        _this.allow = true;
+        _this.veto = false;
+        g.all.addChild(_this);
         var abort = new PIXI.Sprite(shapes_1["default"].rectangle(64 * 5, 64 * 2, "#000"));
         button_1["default"](abort, 4 * 64, 5 * 64, function () {
             g.level.kill();
             _this.veto = true;
             console.log(_this);
         });
-        this.obj.addChild(abort);
+        _this.addChild(abort);
+        return _this;
     }
-    default_1.prototype.handle = function (obj, background) {
+    default_1.prototype.handle = function (gameloop, background) {
         var a = this;
         function wait() {
             if (!a.veto) {
-                obj.start();
-                a.obj.visible = false;
+                gameloop.start();
+                a.visible = false;
                 g.soundManager.visible = false;
                 background.zIndex = 500;
                 g.all.updateLayersOrder();
@@ -673,14 +724,14 @@ var default_1 = /** @class */ (function () {
         key_press_1["default"].check(80, function () {
             if (a.allow) {
                 console.log("SHOW");
-                a.obj.visible = true;
+                a.visible = true;
                 g.soundManager.visible = true;
                 //background.zIndex = -2;
-                a.obj.zIndex = -3;
+                a.zIndex = -3;
                 g.all.updateLayersOrder();
                 a.allow = false;
                 g.renderer.render(g.stage);
-                obj.stop();
+                gameloop.stop();
                 key_press_1["default"].waitUp(80, function () {
                     key_press_1["default"].waitDown(80, wait);
                     key_press_1["default"].waitUp(80, allow);
@@ -690,7 +741,7 @@ var default_1 = /** @class */ (function () {
     };
     ;
     return default_1;
-}());
+}(PIXI.Sprite));
 exports["default"] = default_1;
 ;
 
@@ -908,8 +959,6 @@ function setup() {
         g.stage.addChild(background);
         var snake = new buildSnake_1["default"]();
         snake.layer();
-        var direction = snake.direction;
-        var predirection = snake.direction;
         g.all.updateLayersOrder();
         var start = 1;
         //Start by moving the snake to allow instantaneous snake positioning
@@ -953,32 +1002,10 @@ function setup() {
             });
             if (frames % 8 == 0 && frames > 180) {
                 pause.handle(self, background);
-                key_press_1["default"].check([65, 37], function () {
-                    //Left
-                    if (direction == "u" || direction == "d" && predirection != "l") {
-                        predirection = "l";
-                    }
-                });
-                key_press_1["default"].check([68, 39], function () {
-                    //Right
-                    if (direction == "u" || direction == "d" && predirection != "r") {
-                        predirection = "r";
-                    }
-                });
-                key_press_1["default"].check([87, 38], function () {
-                    //Up
-                    if (direction == "r" || direction == "l" && predirection != "u") {
-                        predirection = "u";
-                    }
-                });
-                key_press_1["default"].check([83, 40], function () {
-                    //Down
-                    if (direction == "r" || direction == "l" && predirection != "d") {
-                        predirection = "d";
-                    }
-                });
-                direction = predirection;
-                switch (direction) {
+                //TODO CHECK LOCATION
+                snake.direction = snake.predirection;
+                console.log(snake.direction);
+                switch (snake.direction) {
                     case "l":
                         snake.move(-1, 0);
                         break;
@@ -1305,7 +1332,9 @@ exports["default"] = [{
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         ]
-    }];
+    },
+    { "mode": "normal", "snake": { "x": 1, "y": 2, "direction": "r" }, "end": { "x": -14, "y": -10 }, "data": [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1], [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1], [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1], [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1], [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1], [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1], [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1], [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1], [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]], "fruit": [[1, 1], [2, 1], [3, 1], [4, 1], [5, 1], [6, 1], [7, 1], [8, 1], [9, 1], [10, 1], [11, 1], [1, 2], [2, 2], [3, 2], [4, 2], [5, 2], [6, 2], [7, 2], [8, 2], [9, 2], [10, 2], [11, 2], [1, 3], [2, 3], [3, 3], [4, 3], [5, 3], [6, 3], [7, 3], [8, 3], [9, 3], [10, 3], [11, 3], [1, 4], [2, 4], [3, 4], [4, 4], [5, 4], [6, 4], [7, 4], [8, 4], [9, 4], [10, 4], [11, 4], [1, 5], [2, 5], [3, 5], [4, 5], [5, 5], [6, 5], [7, 5], [8, 5], [9, 5], [10, 5], [11, 5], [1, 6], [2, 6], [3, 6], [4, 6], [5, 6], [6, 6], [7, 6], [8, 6], [9, 6], [10, 6], [11, 6], [1, 7], [2, 7], [3, 7], [4, 7], [5, 7], [6, 7], [7, 7], [8, 7], [9, 7], [10, 7], [11, 7], [1, 8], [2, 8], [3, 8], [4, 8], [5, 8], [6, 8], [7, 8], [8, 8], [9, 8], [10, 8], [11, 8]] }
+];
 
 
 /***/ }),
@@ -1322,7 +1351,7 @@ exports["default"] = [{
 exports.__esModule = true;
 var shapes_1 = __webpack_require__(/*! ../drawing/shapes */ "./snakemaze/src/drawing/shapes.ts");
 var lighten_1 = __webpack_require__(/*! ./lighten */ "./snakemaze/src/tile-rendering/lighten.ts");
-function default_1(x, dbg) {
+function default_1(x) {
     var canvas = shapes_1["default"].canvas(32, 32);
     var condition = false;
     //5d2e0d
@@ -1593,27 +1622,37 @@ exports["default"] = new /** @class */ (function () {
     ;
     class_1.prototype.waitUp = function (key, func, perma) {
         var a = this;
+        if (typeof key != "object") {
+            key = [key];
+        }
         if (perma === undefined) {
             perma = false;
         }
-        a.tethers.push({
-            "key": key,
-            "func": func,
-            "type": "up",
-            "perma": perma
+        key.forEach(function (keys) {
+            a.tethers.push({
+                "key": keys,
+                "func": func,
+                "type": "up",
+                "perma": perma
+            });
         });
     };
     ;
     class_1.prototype.waitDown = function (key, func, perma) {
         var a = this;
+        if (typeof key != "object") {
+            key = [key];
+        }
         if (perma === undefined) {
             perma = false;
         }
-        a.tethers.push({
-            "key": key,
-            "func": func,
-            "type": "down",
-            "perma": perma
+        key.forEach(function (keys) {
+            a.tethers.push({
+                "key": keys,
+                "func": func,
+                "type": "down",
+                "perma": perma
+            });
         });
     };
     ;

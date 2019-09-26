@@ -155,10 +155,9 @@ function setup() {
 		g.stage.addChild(tiles);
 		tileRender(g.maze.data, tiles);
 		g.stage.addChild(background);
-		let snake = new buildSnake()
+		let snake = new buildSnake();
 		snake.layer();
-		let direction = snake.direction;
-		let predirection = snake.direction;
+
 		g.all.updateLayersOrder();
 		let start = 1;
 		//Start by moving the snake to allow instantaneous snake positioning
@@ -202,32 +201,10 @@ function setup() {
 			})
 			if (frames % 8 == 0 && frames > 180) {
 				pause.handle(self, background);
-				key.check([65, 37], function() {
-					//Left
-					if (direction == "u" || direction == "d" && predirection != "l") {
-						predirection = "l"
-					}
-				});
-				key.check([68, 39], function() {
-					//Right
-					if (direction == "u" || direction == "d" && predirection != "r") {
-						predirection = "r"
-					}
-				});
-				key.check([87, 38], function() {
-					//Up
-					if (direction == "r" || direction == "l" && predirection != "u") {
-						predirection = "u"
-					}
-				});
-				key.check([83, 40], function() {
-					//Down
-					if (direction == "r" || direction == "l" && predirection != "d") {
-						predirection = "d"
-					}
-				});
-				direction = predirection;
-				switch (direction) {
+				//TODO CHECK LOCATION
+				snake.direction = snake.predirection;
+				console.log(snake.direction)
+				switch (snake.direction) {
 					case "l":
 						snake.move(-1, 0);
 						break;

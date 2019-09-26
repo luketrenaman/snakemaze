@@ -1,5 +1,7 @@
 import shapes from "../drawing/shapes";
-class segment extends PIXI.Sprite {
+import { TextStyleOptions } from "pixi.js";
+import key from "../utilities/key-press";
+class Segment extends PIXI.Sprite {
     segmentType:string;
     zIndex:number;
 
@@ -19,9 +21,49 @@ class segment extends PIXI.Sprite {
         this.segmentType = type;    
     }
 }
+class Counter extends PIXI.Sprite{
+    zOrder:number;
+    rules:object;
+    display:PIXI.Text;
+    constructor(){
+        super(shapes.rectangle(128, 96, "rgba(44, 62, 80,0.7)"))
+        this.zOrder = -2;
+        this.x = 832 - 32 * 4; //position in bottom right
+        this.y = 640 - 32* 3; //position in bottom right
+        this.rules = {
+            "current":0,
+            "max":25
+        }
+        //Generate icons for the counter
+        for(let i = 0;i<3;i++){
+            let icon = new PIXI.Sprite(PIXI.loader.resources["assets/gem-"+(i+1)+".png"].texture);
+            icon.scale.x = 0.5;
+            icon.scale.y = 0.5;
+            icon.x = 8 + i * 40;
+            icon.y = 8;
+            this.addChild(icon);
+        } //add gems
+        let display = new PIXI.Text("00", {
+            font: "52px pixelmono",
+            fill: "white"
+        } as TextStyleOptions);
+        display.y = 52;
+        display.x = 8;
+        this.display = display;
+        this.addChild(display);
+        let total = new PIXI.Text("/" + (this.rules.max < 10 ? "0" + this.rules.max : this.rules.max), {
+            font: "30px pixelmono",
+            fill: "white"
+        } as TextStyleOptions)
+        total.x = display.width + 16;
+        total.y = 52;
+        this.addChild(total);
+        g.all.addChild(this);
+    }
+}
 export default class{
     exit: boolean
-    sprites: Array<PIXI.Sprite>;
+    sprites: Array<Segment>;
     counter: PIXI.Container;
     locations: Array<object>;
     constructor() {
@@ -33,45 +75,12 @@ export default class{
         ]
         this.sprites = [];
         this.gems = [];
-        this.sprites.push(new segment("head"));
-        this.sprites.push(new segment("body"));
-        this.sprites.push(new segment("tail"));
+        this.sprites.push(new Segment("head"));
+        this.sprites.push(new Segment("body"));
+        this.sprites.push(new Segment("tail"));
         g.stage.y += 320 - this.sprites[0].worldTransform.ty;
         g.stage.x += 416 - this.sprites[0].worldTransform.tx;
-        this.counter = new PIXI.Container();
-        this.counter.zOrder = -2;
-        this.counter.x = 832 - 32 * 4
-        this.counter.y = 640 - 32 * 3;
-        this.counter.addChild(new PIXI.Sprite(shapes.rectangle(128, 96, "rgba(44, 62, 80,0.7)")))
-        this.counter.rules = {
-            "current": 0,
-            "max": 25
-        }
-        //Generate icons for the counter
-        for(let i = 0;i<3;i++){
-            let icon = new PIXI.Sprite(PIXI.loader.resources["assets/gem-"+(i+1)+".png"].texture);
-            icon.scale.x = 0.5;
-            icon.scale.y = 0.5;
-            icon.x = 8 + i * 40;
-            icon.y = 8;
-            this.counter.addChild(icon);
-        }
-        let count = new PIXI.Text("00", {
-            font: "52px pixelmono",
-            fill: "white"
-        });
-        count.y = 52;
-        count.x = 8;
-        this.counter.display = count;
-        this.counter.addChild(count);
-        let total = new PIXI.Text("/" + (this.counter.rules.max < 10 ? "0" + this.counter.rules.max : this.counter.rules.max), {
-            font: "30px pixelmono",
-            fill: "white"
-        })
-        total.x = count.width + 16;
-        total.y = 52;
-        this.counter.addChild(total);
-        g.all.addChild(this.counter);
+        this.counter = new Counter();
         if(g.maze.mode === "normal"){
             this.fruit()
             this.fruit()
@@ -90,8 +99,38 @@ export default class{
             g.stage.addChild(this.exitSprite);
         }
         this.direction = g.maze.snake.direction
+        this.predirection = this.direction
+        let a = this;
+        key.waitDown([65, 37], function() {
+            console.log("left")
+            //Left
+            if (a.direction == "u" || a.direction == "d" && a.predirection != "l") {
+                a.predirection = "l"
+            }
+        },true);
+        key.waitDown([68, 39], function() {
+            console.log("right")
+            //Right
+            if (a.direction == "u" || a.direction == "d" && a.predirection != "r") {
+                a.predirection = "r"
+            }
+        },true);
+        key.waitDown([87, 38], function() {
+            console.log("up")
+            //Up
+            if (a.direction == "r" || a.direction == "l" && a.predirection != "u") {
+                a.predirection = "u"
+            }
+        },true);
+        key.waitDown([83, 40], function() {
+            console.log("down")
+            //Down
+            if (a.direction == "r" || a.direction == "l" && a.predirection != "d") {
+                a.predirection = "d"
+            }
+        },true);
     }
-    move(x, y,portal) {
+    move(x, y) {
         for (let i = this.locations.length - 1; i > 0; i--) {
             this.locations[i] = Object.assign({},this.locations[i - 1])
         }
@@ -169,7 +208,7 @@ export default class{
     }
     eat() {
         let a = this;
-        let piece = new segment("body");
+        let piece = new Segment("body");
         this.sprites.splice(this.sprites.length - 1, 0, piece);
         this.locations.splice(this.locations.length - 1, 0, this.locations[this.locations.length - 2]);
         piece.x = (this.locations.length-1).x*32;

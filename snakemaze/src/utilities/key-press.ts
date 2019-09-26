@@ -1,3 +1,10 @@
+interface Tether {
+    key: number;
+    func:Function;
+    type:string;
+    perma:boolean;
+}
+
 export default new class{
     map:Array<number>;
     tethers:Array<Object>;
@@ -14,7 +21,7 @@ export default new class{
             if (a.map.indexOf(e) == -1) {
                 a.map.push(e);
             }
-            a.tethers.forEach(function(tether, index) {
+            a.tethers.forEach(function(tether:Tether, index:number) {
                 if (tether.type == "down") {
                     if (e === tether.key) {
                         tether.func();
@@ -30,7 +37,7 @@ export default new class{
             if (a.map.indexOf(e) != -1) {
                 a.map.splice(a.map.indexOf(e), 1);
             }
-            a.tethers.forEach(function(tether:object, index) {
+            a.tethers.forEach(function(tether:Tether, index:number) {
                 if (tether.type == "up") {
                     if (e === tether.key) {
                         tether.func();
@@ -40,7 +47,7 @@ export default new class{
             });
         };
     };
-    check(key, callback, not?) {
+    check(key, callback:Function, not?) {
         var a = this;
         if (typeof key != "object") {
             key = [key];
@@ -56,28 +63,38 @@ export default new class{
             not();
         }
     };
-    waitUp(key, func, perma) {
+    waitUp(key, func, perma?) {
         var a = this;
+        if(typeof key != "object"){
+            key = [key]
+        }
         if (perma === undefined) {
             perma = false;
         }
-        a.tethers.push({
-            "key": key,
-            "func": func,
-            "type": "up",
-            "perma": perma
-        });
+        key.forEach(function(keys){
+            a.tethers.push({
+                "key": keys,
+                "func": func,
+                "type": "up",
+                "perma": perma
+            });
+        })
     };
-    waitDown(key, func, perma) {
+    waitDown(key, func, perma?) {
         var a = this;
+        if(typeof key != "object"){
+            key = [key]
+        }
         if (perma === undefined) {
             perma = false;
         }
-        a.tethers.push({
-            "key": key,
-            "func": func,
-            "type": "down",
-            "perma": perma
-        });
+        key.forEach(function(keys){
+            a.tethers.push({
+                "key": keys,
+                "func": func,
+                "type": "down",
+                "perma": perma
+            });
+        })
     };
 }();

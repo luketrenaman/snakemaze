@@ -1,6 +1,6 @@
 import shapes from "../drawing/shapes";
 import lighten from "./lighten";
-export default function(x,dbg) {
+export default function(x) {
     var canvas = shapes.canvas(32, 32);
     var condition = false;
     //5d2e0d
