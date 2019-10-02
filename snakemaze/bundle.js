@@ -132,6 +132,7 @@ var Segment = /** @class */ (function (_super) {
     }
     return Segment;
 }(PIXI.Sprite));
+var ab = new PIXI.Sprite(shapes_1["default"].rectangle(128, 96, "rgba(44, 62, 80,0.7)"));
 var Counter = /** @class */ (function (_super) {
     __extends(Counter, _super);
     function Counter() {
@@ -140,8 +141,8 @@ var Counter = /** @class */ (function (_super) {
         _this.x = 832 - 32 * 4; //position in bottom right
         _this.y = 640 - 32 * 3; //position in bottom right
         _this.rules = {
-            "current": 0,
-            "max": 25
+            current: 0,
+            max: 25
         };
         //Generate icons for the counter
         for (var i = 0; i < 3; i++) {
@@ -174,6 +175,7 @@ var Counter = /** @class */ (function (_super) {
 }(PIXI.Sprite));
 var default_1 = /** @class */ (function () {
     function default_1() {
+        var _this = this;
         this.exit = false;
         this.locations = [
             { x: g.maze.snake.x, y: g.maze.snake.y },
@@ -205,38 +207,44 @@ var default_1 = /** @class */ (function () {
             this.exitSprite.zIndex = 1;
             g.stage.addChild(this.exitSprite);
         }
+        ;
         this.direction = g.maze.snake.direction;
         this.predirection = this.direction;
         var a = this;
         key_press_1["default"].waitDown([65, 37], function () {
             console.log("left");
             //Left
-            if (a.direction == "u" || a.direction == "d" && a.predirection != "l") {
-                a.predirection = "l";
+            if (_this.direction == "u" || _this.direction == "d" && _this.predirection != "l") {
+                _this.predirection = "l";
             }
+            ;
         }, true);
         key_press_1["default"].waitDown([68, 39], function () {
             console.log("right");
             //Right
-            if (a.direction == "u" || a.direction == "d" && a.predirection != "r") {
-                a.predirection = "r";
+            if (_this.direction == "u" || _this.direction == "d" && _this.predirection != "r") {
+                _this.predirection = "r";
             }
+            ;
         }, true);
         key_press_1["default"].waitDown([87, 38], function () {
             console.log("up");
             //Up
-            if (a.direction == "r" || a.direction == "l" && a.predirection != "u") {
-                a.predirection = "u";
+            if (_this.direction == "r" || _this.direction == "l" && _this.predirection != "u") {
+                _this.predirection = "u";
             }
+            ;
         }, true);
         key_press_1["default"].waitDown([83, 40], function () {
             console.log("down");
             //Down
-            if (a.direction == "r" || a.direction == "l" && a.predirection != "d") {
-                a.predirection = "d";
+            if (_this.direction == "r" || _this.direction == "l" && _this.predirection != "d") {
+                _this.predirection = "d";
             }
+            ;
         }, true);
     }
+    ;
     default_1.prototype.move = function (x, y) {
         for (var i = this.locations.length - 1; i > 0; i--) {
             this.locations[i] = Object.assign({}, this.locations[i - 1]);
@@ -306,11 +314,15 @@ var default_1 = /** @class */ (function () {
                     if (rightBool) {
                         this.sprites[i].rotation += Math.PI * .5;
                     }
+                    ;
                     //Since this is a corner apply the corner texture
                     this.sprites[i].setTexture(PIXI.loader.resources["assets/snake-corner.png"].texture);
                 }
+                ;
             }
+            ;
         }
+        ;
         this.collide();
     };
     default_1.prototype.eat = function () {
@@ -322,7 +334,7 @@ var default_1 = /** @class */ (function () {
         piece.y = (this.locations.length - 1).y * 32;
         this.layer();
         this.counter.rules.current++;
-        this.counter.display.text = this.counter.rules.current < 10 ? "0" + this.counter.rules.current : this.counter.rules.current;
+        this.counter.display.text = (this.counter.rules.current < 10 ? "0" + this.counter.rules.current : this.counter.rules.current);
         if (this.counter.rules.current == this.counter.rules.max) {
             var len = a.gems.length;
             for (var i = len - 1; i >= 0; i--) {
@@ -822,7 +834,8 @@ key_press_1["default"].listen();
 window.g = {};
 g.renderer = PIXI.autoDetectRenderer(832, 640);
 g.renderer.backgroundColor = 0x444444;
-g.all = new PIXI.Container();
+var all = new PIXI.Container();
+exports.all = all;
 document.body.appendChild(g.renderer.view);
 PIXI.loader.add("assets/snake-head.png").add("assets/rainbow.json").add("assets/snake-body.png").add("assets/snake-corner.png").add("assets/snake-tail.png").add("assets/grass.png").add("assets/flowers-1.png").add("assets/flowers-2.png").add("assets/rock.png").add("assets/gem-1.png").add("assets/gem-2.png").add("assets/gem-3.png").add("assets/level-1.png").add("assets/titlescreen.png").add("assets/start.png").add("assets/back.png").add("assets/music.png").add("assets/nomusic.png").load(fonts);
 console.log("breaaak");
@@ -903,12 +916,12 @@ function setup() {
                 }
                 if (frames % 10 === 0) {
                     if (snake.sprites.length - 1 == n) {
-                        snake.sprites[n].tint = "0x000";
+                        snake.sprites[n].tint = 0x000;
                         g.manager.show("death");
                     }
                     else {
                         do {
-                            snake.sprites[n].tint = "0x000";
+                            snake.sprites[n].tint = 0x000;
                             n++;
                         } while (snake.locations[n].x === snake.locations[n + 1].x && snake.locations[n].y === snake.locations[n + 1].y);
                     }

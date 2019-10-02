@@ -21,9 +21,14 @@ class Segment extends PIXI.Sprite {
         this.segmentType = type;    
     }
 }
+interface rules{
+    current:number,
+    max:number
+}
+let ab = new PIXI.Sprite(shapes.rectangle(128, 96, "rgba(44, 62, 80,0.7)"));
 class Counter extends PIXI.Sprite{
     zOrder:number;
-    rules:object;
+    rules:rules;
     display:PIXI.Text;
     constructor(){
         super(shapes.rectangle(128, 96, "rgba(44, 62, 80,0.7)"))
@@ -31,9 +36,9 @@ class Counter extends PIXI.Sprite{
         this.x = 832 - 32 * 4; //position in bottom right
         this.y = 640 - 32* 3; //position in bottom right
         this.rules = {
-            "current":0,
-            "max":25
-        }
+            current:0,
+            max:25
+        } as rules;
         //Generate icons for the counter
         for(let i = 0;i<3;i++){
             let icon = new PIXI.Sprite(PIXI.loader.resources["assets/gem-"+(i+1)+".png"].texture);
@@ -54,25 +59,32 @@ class Counter extends PIXI.Sprite{
         let total = new PIXI.Text("/" + (this.rules.max < 10 ? "0" + this.rules.max : this.rules.max), {
             font: "30px pixelmono",
             fill: "white"
-        } as TextStyleOptions)
+        } as TextStyleOptions);
         total.x = display.width + 16;
         total.y = 52;
         this.addChild(total);
         g.all.addChild(this);
     }
 }
+interface location{
+    x:number;
+    y:number;
+}
 export default class{
+    gems:Array<PIXI.Sprite>;
     exit: boolean
     sprites: Array<Segment>;
-    counter: PIXI.Container;
-    locations: Array<object>;
+    counter: Counter;
+    locations: Array<location>;
+    direction: string;
+    predirection:string;
     constructor() {
         this.exit = false;
         this.locations = [
             {x:g.maze.snake.x, y:g.maze.snake.y},
             {x:g.maze.snake.x, y:g.maze.snake.y},
             {x:g.maze.snake.x, y:g.maze.snake.y}
-        ]
+        ];
         this.sprites = [];
         this.gems = [];
         this.sprites.push(new Segment("head"));
@@ -82,9 +94,9 @@ export default class{
         g.stage.x += 416 - this.sprites[0].worldTransform.tx;
         this.counter = new Counter();
         if(g.maze.mode === "normal"){
-            this.fruit()
-            this.fruit()
-            this.fruit()
+            this.fruit();
+            this.fruit();
+            this.fruit();
         }
         else{
             this.exit = true;
@@ -97,42 +109,42 @@ export default class{
             this.exitSprite.coord = g.maze.end;
             this.exitSprite.zIndex = 1;
             g.stage.addChild(this.exitSprite);
-        }
-        this.direction = g.maze.snake.direction
-        this.predirection = this.direction
+        };
+        this.direction = g.maze.snake.direction;
+        this.predirection = this.direction;
         let a = this;
-        key.waitDown([65, 37], function() {
+        key.waitDown([65, 37], () => {
             console.log("left")
             //Left
-            if (a.direction == "u" || a.direction == "d" && a.predirection != "l") {
-                a.predirection = "l"
-            }
+            if (this.direction == "u" || this.direction == "d" && this.predirection != "l") {
+                this.predirection = "l";
+            };
         },true);
-        key.waitDown([68, 39], function() {
-            console.log("right")
+        key.waitDown([68, 39], () => {
+            console.log("right");
             //Right
-            if (a.direction == "u" || a.direction == "d" && a.predirection != "r") {
-                a.predirection = "r"
-            }
+            if (this.direction == "u" || this.direction == "d" && this.predirection != "r") {
+                this.predirection = "r";
+            };
         },true);
-        key.waitDown([87, 38], function() {
+        key.waitDown([87, 38], () => {
             console.log("up")
             //Up
-            if (a.direction == "r" || a.direction == "l" && a.predirection != "u") {
-                a.predirection = "u"
-            }
+            if (this.direction == "r" || this.direction == "l" && this.predirection != "u") {
+                this.predirection = "u";
+            };
         },true);
-        key.waitDown([83, 40], function() {
+        key.waitDown([83, 40], () => {
             console.log("down")
             //Down
-            if (a.direction == "r" || a.direction == "l" && a.predirection != "d") {
-                a.predirection = "d"
-            }
+            if (this.direction == "r" || this.direction == "l" && this.predirection != "d") {
+                this.predirection = "d";
+            };
         },true);
-    }
+    };
     move(x, y) {
         for (let i = this.locations.length - 1; i > 0; i--) {
-            this.locations[i] = Object.assign({},this.locations[i - 1])
+            this.locations[i] = Object.assign({},this.locations[i - 1]);
         }
         this.locations[0].x += x;
         this.locations[0].y -= y;
@@ -143,20 +155,20 @@ export default class{
                 let c = this.locations[i]; //current
                 let a = this.locations[i + 1]; //after
                 //Position segments based on location
-                this.sprites[i].x = c.x * 32 + 16
-                this.sprites[i].y = c.y * 32 + 16
+                this.sprites[i].x = c.x * 32 + 16;
+                this.sprites[i].y = c.y * 32 + 16;
                 //Calculate location based on the direction of motion
                 if (i !== 0) {
                     if (this.sprites[i].segmentType === "tail") {
                         let ct = 1;
                         while (c.x === p.x && c.y === p.y) {
-                            ct++
+                            ct++;
                             p = this.locations[i - ct];
                         }
                     }
                     let x = (p.x - c.x);
                     let y = (c.y - p.y);
-                    this.sprites[i].rotation = (y / 2 + x / 2 + (x != 0 ? 0.5 : 0) + .5) * Math.PI
+                    this.sprites[i].rotation = (y / 2 + x / 2 + (x != 0 ? 0.5 : 0) + .5) * Math.PI;
                 }
                 //An array of right turn coordinates
                 var right = [
@@ -182,7 +194,7 @@ export default class{
                     this.sprites[i].visible = !(this.locations[this.locations.length - 1].x === this.locations[i].x && this.locations[this.locations.length - 1].y === this.locations[i].y)
                     //Test for corners, if not a corner, become a body segment
                     if (c.x === p.x && p.x === a.x || c.y === p.y && p.y === a.y) {
-                        this.sprites[i].setTexture(PIXI.loader.resources["assets/snake-body.png"].texture)
+                        this.sprites[i].setTexture(PIXI.loader.resources["assets/snake-body.png"].texture);
                     } else {
                         //Check for right corners by finding comparison between values
                         var compOne = [c.x - p.x, c.y - p.y];
@@ -193,17 +205,17 @@ export default class{
                             if (compOne.equals(val[0]) && compTwo.equals(val[1])) {
                                 rightBool = true;
                             }
-                        })
+                        });
                         //If there is a right turn, rotate accordingly
                         if (rightBool) {
-                            this.sprites[i].rotation += Math.PI * .5
-                        }
+                            this.sprites[i].rotation += Math.PI * .5;
+                        };
                         //Since this is a corner apply the corner texture
-                        this.sprites[i].setTexture(PIXI.loader.resources["assets/snake-corner.png"].texture)
-                    }
-                }
+                        this.sprites[i].setTexture(PIXI.loader.resources["assets/snake-corner.png"].texture);
+                    };
+                };
             
-            }
+            };
         this.collide();
     }
     eat() {
@@ -215,7 +227,7 @@ export default class{
         piece.y = (this.locations.length-1).y*32;
         this.layer();
         this.counter.rules.current++;
-        this.counter.display.text = this.counter.rules.current < 10 ? "0" + this.counter.rules.current : this.counter.rules.current;
+        this.counter.display.text = <string>(this.counter.rules.current < 10 ? "0" + this.counter.rules.current : this.counter.rules.current);
         if (this.counter.rules.current == this.counter.rules.max) {
             let len = a.gems.length
             for (let i = len - 1; i >= 0; i--) {

@@ -13,15 +13,17 @@ import pauseConstructor from "./components/pause";
 import buildSnake from "./components/buildSnake";
 //Tile rendering
 import tileRender from "./tile-rendering/map";
+import { TextStyleOptions } from "pixi.js";
 console.log("initialize")
 Number.prototype.mod = function(n) {
 	return ((this % n) + n) % n;
 }; 
 key.listen(); 
-window.g = {};
+(<any>window).g = {} as globalController
 g.renderer = PIXI.autoDetectRenderer(832, 640);
 g.renderer.backgroundColor = 0x444444;
-g.all = new PIXI.Container();
+let all = new PIXI.Container();
+export { all };
 document.body.appendChild(g.renderer.view)
 PIXI.loader.add("assets/snake-head.png").add("assets/rainbow.json").add("assets/snake-body.png").add("assets/snake-corner.png").add("assets/snake-tail.png").add("assets/grass.png").add("assets/flowers-1.png").add("assets/flowers-2.png").add("assets/rock.png").add("assets/gem-1.png").add("assets/gem-2.png").add("assets/gem-3.png").add("assets/level-1.png").add("assets/titlescreen.png").add("assets/start.png").add("assets/back.png").add("assets/music.png").add("assets/nomusic.png").load(fonts);
 console.log("breaaak");
@@ -102,11 +104,11 @@ function setup() {
 				}
 				if (frames % 10 === 0) {
 					if (snake.sprites.length - 1 == n) {
-						snake.sprites[n].tint = "0x000";
+						snake.sprites[n].tint = 0x000;
 						g.manager.show("death");
 					} else {
 						do {
-							snake.sprites[n].tint = "0x000";
+							snake.sprites[n].tint = 0x000;
 							n++
 						} while (snake.locations[n].x === snake.locations[n + 1].x && snake.locations[n].y === snake.locations[n + 1].y)
 					}
@@ -185,7 +187,7 @@ function setup() {
 		let countdown = new PIXI.Text("3", {
 			font: "52px Pixel",
 			fill: "white"
-		});
+		} as TextStyleOptions);
 		g.all.addChild(countdown);
 		countdown.y = 320;
 		countdown.x = 416;
