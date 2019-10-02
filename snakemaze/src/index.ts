@@ -19,11 +19,10 @@ Number.prototype.mod = function(n) {
 	return ((this % n) + n) % n;
 }; 
 key.listen(); 
-(<any>window).g = {} as globalController
+window.g = {} as globalController;
 g.renderer = PIXI.autoDetectRenderer(832, 640);
 g.renderer.backgroundColor = 0x444444;
-let all = new PIXI.Container();
-export { all };
+g.all = new PIXI.Container();
 document.body.appendChild(g.renderer.view)
 PIXI.loader.add("assets/snake-head.png").add("assets/rainbow.json").add("assets/snake-body.png").add("assets/snake-corner.png").add("assets/snake-tail.png").add("assets/grass.png").add("assets/flowers-1.png").add("assets/flowers-2.png").add("assets/rock.png").add("assets/gem-1.png").add("assets/gem-2.png").add("assets/gem-3.png").add("assets/level-1.png").add("assets/titlescreen.png").add("assets/start.png").add("assets/back.png").add("assets/music.png").add("assets/nomusic.png").load(fonts);
 console.log("breaaak");
