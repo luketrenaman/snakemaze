@@ -826,17 +826,18 @@ var pause_1 = __webpack_require__(/*! ./components/pause */ "./snakemaze/src/com
 var buildSnake_1 = __webpack_require__(/*! ./components/buildSnake */ "./snakemaze/src/components/buildSnake.ts");
 //Tile rendering
 var map_1 = __webpack_require__(/*! ./tile-rendering/map */ "./snakemaze/src/tile-rendering/map.ts");
+var pixi_1 = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module 'pixi'"); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 console.log("initialize");
 Number.prototype.mod = function (n) {
     return ((this % n) + n) % n;
 };
 key_press_1["default"].listen();
 window.g = {};
-g.renderer = PIXI.autoDetectRenderer(832, 640);
+g.renderer = pixi_1.PIXI.autoDetectRenderer(832, 640);
 g.renderer.backgroundColor = 0x444444;
-g.all = new PIXI.Container();
+g.all = new pixi_1.PIXI.Container();
 document.body.appendChild(g.renderer.view);
-PIXI.loader.add("assets/snake-head.png").add("assets/rainbow.json").add("assets/snake-body.png").add("assets/snake-corner.png").add("assets/snake-tail.png").add("assets/grass.png").add("assets/flowers-1.png").add("assets/flowers-2.png").add("assets/rock.png").add("assets/gem-1.png").add("assets/gem-2.png").add("assets/gem-3.png").add("assets/level-1.png").add("assets/titlescreen.png").add("assets/start.png").add("assets/back.png").add("assets/music.png").add("assets/nomusic.png").load(fonts);
+pixi_1.PIXI.loader.add("assets/snake-head.png").add("assets/rainbow.json").add("assets/snake-body.png").add("assets/snake-corner.png").add("assets/snake-tail.png").add("assets/grass.png").add("assets/flowers-1.png").add("assets/flowers-2.png").add("assets/rock.png").add("assets/gem-1.png").add("assets/gem-2.png").add("assets/gem-3.png").add("assets/level-1.png").add("assets/titlescreen.png").add("assets/start.png").add("assets/back.png").add("assets/music.png").add("assets/nomusic.png").load(fonts);
 console.log("breaaak");
 function fonts() {
     WebFont.load({
@@ -854,10 +855,10 @@ function fonts() {
 function setup() {
     //Build guidelines
     var textures = [
-        PIXI.loader.resources["assets/grass.png"].texture,
-        PIXI.loader.resources["assets/flowers-1.png"].texture,
-        PIXI.loader.resources["assets/flowers-2.png"].texture,
-        PIXI.loader.resources["assets/rock.png"].texture
+        pixi_1.PIXI.loader.resources["assets/grass.png"].texture,
+        pixi_1.PIXI.loader.resources["assets/flowers-1.png"].texture,
+        pixi_1.PIXI.loader.resources["assets/flowers-2.png"].texture,
+        pixi_1.PIXI.loader.resources["assets/rock.png"].texture
     ];
     //Button is a function that creates an interactive sprite at a certain position, and provide a callback
     menu_1["default"]();
@@ -876,7 +877,7 @@ function setup() {
         //maze
         g.maze = levels_1["default"][num];
         //stage
-        g.stage = new PIXI.Container();
+        g.stage = new pixi_1.PIXI.Container();
         g.stage.zOrder = -1;
         g.all.addChild(g.stage);
         g.stage.updateLayersOrder = function () {
@@ -907,7 +908,7 @@ function setup() {
                 if (snake.exit && frames % 10 === 0) {
                     snake.exitSprite.cycle++;
                     snake.exitSprite.cycle %= 8;
-                    snake.exitSprite.setTexture(PIXI.loader.resources["assets/rainbow.json"].textures["rainbow" + snake.exitSprite.cycle + ".png"]);
+                    snake.exitSprite.setTexture(pixi_1.PIXI.loader.resources["assets/rainbow.json"].textures["rainbow" + snake.exitSprite.cycle + ".png"]);
                 }
                 if (snake.sprites.length - 1 == n) {
                     snake.counter.xvel += 0.1;
@@ -945,12 +946,12 @@ function setup() {
         g.soundManager.visible = false;
         //Build the background, which is like the grass and such
         var bias = [80, 90, 100, 104];
-        var background = new PIXI.Container();
+        var background = new pixi_1.PIXI.Container();
         background.zIndex = 500;
         for (var i = -2; i < 26; i++) {
             for (var j = -2; j < 20; j++) {
                 var rand = Math.random() * bias[bias.length - 1];
-                var x = new PIXI.Sprite(textures[bias.indexOf(bias.filter(function (val) {
+                var x = new pixi_1.PIXI.Sprite(textures[bias.indexOf(bias.filter(function (val) {
                     return rand < val;
                 })[0])]);
                 x.scale.x = 0.5;
@@ -964,7 +965,7 @@ function setup() {
                 background.addChild(x);
             }
         }
-        var tiles = new PIXI.Container();
+        var tiles = new pixi_1.PIXI.Container();
         tiles.zIndex = -1;
         g.stage.addChild(tiles);
         map_1["default"](g.maze.data, tiles);
@@ -995,7 +996,7 @@ function setup() {
         g.manager.hide();
         g.stage.y = -snake.sprites[0].y + 320;
         g.stage.x = -snake.sprites[0].x + 416;
-        var countdown = new PIXI.Text("3", {
+        var countdown = new pixi_1.PIXI.Text("3", {
             font: "52px Pixel",
             fill: "white"
         });

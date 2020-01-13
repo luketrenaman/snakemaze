@@ -1,8 +1,15 @@
-import { Sprite } from "pixi.js";
-import { Container } from "pixi.js";
+interface Sprite extends PIXI.Sprite{
+    setTexture:Function;
+}
+interface Container extends PIXI.Container{
+    zIndex:number;
+    zOrder:number;
+    updateLayersOrder:Function;
+}
 interface globalController{
-    all:PIXI.Container;
-    stage:PIXI.Container;
+    soundManager:any;
+    all:Container;
+    stage:Container;
     renderer:any; //good
     newLevel:Function;
     maze:any; //CLARIFY
@@ -11,15 +18,3 @@ interface globalController{
 }
 declare var g: globalController;
 declare var WebFont: any;
-
-interface spr extends PIXI.Sprite{
-    setTexture:Function;
-}
-interface ctr extends PIXI.Container{
-    zIndex:number;
-    zOrder:number;
-}
-interface PIXI{
-   Sprite:spr;
-   Container:ctr;
-}

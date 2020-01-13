@@ -14,6 +14,7 @@ import buildSnake from "./components/buildSnake";
 //Tile rendering
 import tileRender from "./tile-rendering/map";
 import { TextStyleOptions } from "pixi.js";
+import {PIXI, Sprite} from "pixi";
 console.log("initialize")
 Number.prototype.mod = function(n) {
 	return ((this % n) + n) % n;
