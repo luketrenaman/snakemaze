@@ -618,16 +618,25 @@ function default_1() {
     var levelSelect = new Menu("level", true);
     var _loop_1 = function (i) {
         var _loop_2 = function (j) {
-            var lev = new PIXI.Sprite(PIXI.loader.resources["assets/level-1.png"].texture);
+            var lev = new PIXI.Sprite(PIXI.loader.resources["assets/background-incomplete.png"].texture);
             levelSelect.addChild(lev);
             button_1["default"](lev, i * 128 + 128, j * 128 + 128, function () {
                 g.level = new g.newLevel(i + j * 5);
             });
+            text = new PIXI.Text(i + j * 5, {
+                font: "48px Pixel",
+                fill: "white"
+            });
+            text.anchor.x = 0.5;
+            text.x = 32;
+            text.y = 8;
+            lev.addChild(text);
         };
         for (var j = 0; j < 2; j++) {
             _loop_2(j);
         }
     };
+    var text;
     for (var i = 0; i < 5; i++) {
         _loop_1(i);
     }
@@ -717,11 +726,12 @@ var default_1 = /** @class */ (function (_super) {
         _this.addChild(abort);
         return _this;
     }
-    default_1.prototype.handle = function (gameloop, background) {
+    default_1.prototype.handle = function (renderloop, gameloop, background) {
         var a = this;
         function wait() {
             if (!a.veto) {
                 gameloop.start();
+                renderloop.start();
                 a.visible = false;
                 g.soundManager.visible = false;
                 background.zIndex = 500;
@@ -744,6 +754,7 @@ var default_1 = /** @class */ (function (_super) {
                 a.allow = false;
                 g.renderer.render(g.stage);
                 gameloop.stop();
+                renderloop.stop();
                 key_press_1["default"].waitUp(80, function () {
                     key_press_1["default"].waitDown(80, wait);
                     key_press_1["default"].waitUp(80, allow);
@@ -818,6 +829,7 @@ exports.__esModule = true;
 var key_press_1 = __webpack_require__(/*! ./utilities/key-press */ "./snakemaze/src/utilities/key-press.ts");
 __webpack_require__(/*! ./utilities/equals */ "./snakemaze/src/utilities/equals.ts");
 var fps_1 = __webpack_require__(/*! ./utilities/fps */ "./snakemaze/src/utilities/fps.ts");
+var gametick_1 = __webpack_require__(/*! ./utilities/gametick */ "./snakemaze/src/utilities/gametick.ts");
 //Level
 var levels_1 = __webpack_require__(/*! ./level/levels */ "./snakemaze/src/level/levels.ts");
 //Components
@@ -826,19 +838,16 @@ var pause_1 = __webpack_require__(/*! ./components/pause */ "./snakemaze/src/com
 var buildSnake_1 = __webpack_require__(/*! ./components/buildSnake */ "./snakemaze/src/components/buildSnake.ts");
 //Tile rendering
 var map_1 = __webpack_require__(/*! ./tile-rendering/map */ "./snakemaze/src/tile-rendering/map.ts");
-var pixi_1 = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module 'pixi'"); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
-console.log("initialize");
 Number.prototype.mod = function (n) {
     return ((this % n) + n) % n;
 };
 key_press_1["default"].listen();
 window.g = {};
-g.renderer = pixi_1.PIXI.autoDetectRenderer(832, 640);
+g.renderer = PIXI.autoDetectRenderer(832, 640);
 g.renderer.backgroundColor = 0x444444;
-g.all = new pixi_1.PIXI.Container();
+g.all = new PIXI.Container();
 document.body.appendChild(g.renderer.view);
-pixi_1.PIXI.loader.add("assets/snake-head.png").add("assets/rainbow.json").add("assets/snake-body.png").add("assets/snake-corner.png").add("assets/snake-tail.png").add("assets/grass.png").add("assets/flowers-1.png").add("assets/flowers-2.png").add("assets/rock.png").add("assets/gem-1.png").add("assets/gem-2.png").add("assets/gem-3.png").add("assets/level-1.png").add("assets/titlescreen.png").add("assets/start.png").add("assets/back.png").add("assets/music.png").add("assets/nomusic.png").load(fonts);
-console.log("breaaak");
+PIXI.loader.add("assets/background-incomplete.png").add("assets/background-complete.png").add("assets/snake-head.png").add("assets/rainbow.json").add("assets/snake-body.png").add("assets/snake-corner.png").add("assets/snake-tail.png").add("assets/grass.png").add("assets/flowers-1.png").add("assets/flowers-2.png").add("assets/rock.png").add("assets/gem-1.png").add("assets/gem-2.png").add("assets/gem-3.png").add("assets/level-1.png").add("assets/titlescreen.png").add("assets/start.png").add("assets/back.png").add("assets/music.png").add("assets/nomusic.png").load(fonts);
 function fonts() {
     WebFont.load({
         custom: {
@@ -846,7 +855,6 @@ function fonts() {
             urls: ["/stylesheet.css"]
         },
         active: function (e) {
-            console.log("font loaded!");
             // now start setting up your PixiJS (or canvas) stuff!
             setup();
         }
@@ -855,14 +863,13 @@ function fonts() {
 function setup() {
     //Build guidelines
     var textures = [
-        pixi_1.PIXI.loader.resources["assets/grass.png"].texture,
-        pixi_1.PIXI.loader.resources["assets/flowers-1.png"].texture,
-        pixi_1.PIXI.loader.resources["assets/flowers-2.png"].texture,
-        pixi_1.PIXI.loader.resources["assets/rock.png"].texture
+        PIXI.loader.resources["assets/grass.png"].texture,
+        PIXI.loader.resources["assets/flowers-1.png"].texture,
+        PIXI.loader.resources["assets/flowers-2.png"].texture,
+        PIXI.loader.resources["assets/rock.png"].texture
     ];
     //Button is a function that creates an interactive sprite at a certain position, and provide a callback
     menu_1["default"]();
-    console.log(g.manager);
     g.manager.show("start"); //set to level for debug
     g.all.updateLayersOrder = function () {
         g.all.children.sort(function (a, b) {
@@ -877,7 +884,7 @@ function setup() {
         //maze
         g.maze = levels_1["default"][num];
         //stage
-        g.stage = new pixi_1.PIXI.Container();
+        g.stage = new PIXI.Container();
         g.stage.zOrder = -1;
         g.all.addChild(g.stage);
         g.stage.updateLayersOrder = function () {
@@ -890,6 +897,7 @@ function setup() {
         //give kill function
         this.kill = function () {
             loop.stop();
+            gameTick.stop();
             g.level.endLoop.stop();
             g.all.removeChild(g.stage);
             g.all.removeChild(snake.counter);
@@ -900,6 +908,7 @@ function setup() {
             //Either "victory" or "death"
             //Jam controls, explode snake
             loop.stop();
+            gameTick.stop();
             //Create a new loop with no controls
             var n = 0;
             snake.counter.xvel = 0;
@@ -908,7 +917,7 @@ function setup() {
                 if (snake.exit && frames % 10 === 0) {
                     snake.exitSprite.cycle++;
                     snake.exitSprite.cycle %= 8;
-                    snake.exitSprite.setTexture(pixi_1.PIXI.loader.resources["assets/rainbow.json"].textures["rainbow" + snake.exitSprite.cycle + ".png"]);
+                    snake.exitSprite.setTexture(PIXI.loader.resources["assets/rainbow.json"].textures["rainbow" + snake.exitSprite.cycle + ".png"]);
                 }
                 if (snake.sprites.length - 1 == n) {
                     snake.counter.xvel += 0.1;
@@ -946,12 +955,12 @@ function setup() {
         g.soundManager.visible = false;
         //Build the background, which is like the grass and such
         var bias = [80, 90, 100, 104];
-        var background = new pixi_1.PIXI.Container();
+        var background = new PIXI.Container();
         background.zIndex = 500;
         for (var i = -2; i < 26; i++) {
             for (var j = -2; j < 20; j++) {
                 var rand = Math.random() * bias[bias.length - 1];
-                var x = new pixi_1.PIXI.Sprite(textures[bias.indexOf(bias.filter(function (val) {
+                var x = new PIXI.Sprite(textures[bias.indexOf(bias.filter(function (val) {
                     return rand < val;
                 })[0])]);
                 x.scale.x = 0.5;
@@ -965,7 +974,7 @@ function setup() {
                 background.addChild(x);
             }
         }
-        var tiles = new pixi_1.PIXI.Container();
+        var tiles = new PIXI.Container();
         tiles.zIndex = -1;
         g.stage.addChild(tiles);
         map_1["default"](g.maze.data, tiles);
@@ -996,28 +1005,18 @@ function setup() {
         g.manager.hide();
         g.stage.y = -snake.sprites[0].y + 320;
         g.stage.x = -snake.sprites[0].x + 416;
-        var countdown = new pixi_1.PIXI.Text("3", {
+        var countdown = new PIXI.Text("3", {
             font: "52px Pixel",
             fill: "white"
         });
         g.all.addChild(countdown);
         countdown.y = 320;
         countdown.x = 416;
-        var loop = new fps_1["default"](function (frames, self) {
-            g.stage.y += (320 - snake.sprites[0].worldTransform.ty) / (40 - (+(Math.abs(320 - snake.sprites[0].worldTransform.ty) > 640)) * 39);
-            g.stage.x += (416 - snake.sprites[0].worldTransform.tx) / (40 - (+(Math.abs(416 - snake.sprites[0].worldTransform.tx) > 832)) * 39);
-            background.children.forEach(function (val) {
-                val.y = (val.orig.y * 64 + g.stage.y).mod(640 + 64) - g.stage.y - 64;
-                val.x = (val.orig.x * 64 + g.stage.x).mod(832 + 64) - g.stage.x - 64;
-            });
-            tiles.children.forEach(function (val) {
-                val.visible = !(val.x + g.stage.x < -32 || val.x + g.stage.x > 864 || val.y + g.stage.y < -32 || val.y + g.stage.y > 672);
-            });
-            if (frames % 8 == 0 && frames > 180) {
-                pause.handle(self, background);
+        console.log("brop");
+        var gameTick = new gametick_1["default"](function (frames, self) {
+            if (frames > 24) {
                 //TODO CHECK LOCATION
                 snake.direction = snake.predirection;
-                console.log(snake.direction);
                 switch (snake.direction) {
                     case "l":
                         snake.move(-1, 0);
@@ -1033,13 +1032,31 @@ function setup() {
                 }
             }
             else {
-                if (Math.ceil(3 - frames / 60) === 0) {
+                if (Math.ceil(3 - frames / 8) === 0) {
                     countdown.visible = false;
                 }
                 else {
-                    countdown.setText(Math.ceil(3 - frames / 60));
+                    countdown.setText(Math.ceil(3 - frames / 8));
                 }
             }
+        }, 130);
+        var diff;
+        var then = Date.now();
+        var loop = new fps_1["default"](function (frames, self) {
+            diff = (Date.now() - then) / 1000;
+            console.log(diff);
+            then = Date.now();
+            pause.handle(self, gameTick, background);
+            //
+            g.stage.y += diff * 100 * (320 - snake.sprites[0].worldTransform.ty) / (40 - (+(Math.abs(320 - snake.sprites[0].worldTransform.ty) > 640)) * 39);
+            g.stage.x += diff * 100 * (416 - snake.sprites[0].worldTransform.tx) / (40 - (+(Math.abs(416 - snake.sprites[0].worldTransform.tx) > 832)) * 39);
+            background.children.forEach(function (val) {
+                val.y = (val.orig.y * 64 + g.stage.y).mod(640 + 64) - g.stage.y - 64;
+                val.x = (val.orig.x * 64 + g.stage.x).mod(832 + 64) - g.stage.x - 64;
+            });
+            tiles.children.forEach(function (val) {
+                val.visible = !(val.x + g.stage.x < -32 || val.x + g.stage.x > 864 || val.y + g.stage.y < -32 || val.y + g.stage.y > 672);
+            });
             g.renderer.render(g.all);
         });
         return this;
@@ -1522,43 +1539,91 @@ Object.defineProperty(Array.prototype, "equals", { enumerable: false });
 
 "use strict";
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 exports.__esModule = true;
-var default_1 = /** @class */ (function () {
+var timer_ts_1 = __webpack_require__(/*! ./timer.ts */ "./snakemaze/src/utilities/timer.ts");
+var default_1 = /** @class */ (function (_super) {
+    __extends(default_1, _super);
     function default_1(cb) {
-        var _this = this;
-        this.draw = function () {
+        var _this = _super.call(this, cb) || this;
+        _this.draw = function () {
             if (_this.going) {
                 requestAnimationFrame(_this.draw);
                 _this.ct++;
                 _this.cb(_this.ct, _this);
             }
         };
-        this.going = true;
-        this.ct = 0;
-        this.cb = cb;
-        this.draw();
+        _this.draw();
+        return _this;
     }
     default_1.prototype.start = function () {
         this.going = true;
         requestAnimationFrame(this.draw);
     };
-    default_1.prototype.resume = function () {
-        this.start();
+    return default_1;
+}(timer_ts_1["default"]));
+exports["default"] = default_1;
+
+
+/***/ }),
+
+/***/ "./snakemaze/src/utilities/gametick.ts":
+/*!*********************************************!*\
+  !*** ./snakemaze/src/utilities/gametick.ts ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
     };
-    default_1.prototype.toggle = function () {
-        this.going = !this.going;
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    default_1.prototype.stop = function () {
-        this.going = false;
-    };
-    default_1.prototype.pause = function () {
-        this.stop();
-    };
-    default_1.prototype.restart = function () {
-        this.ct = 0;
+})();
+exports.__esModule = true;
+var timer_ts_1 = __webpack_require__(/*! ./timer.ts */ "./snakemaze/src/utilities/timer.ts");
+var default_1 = /** @class */ (function (_super) {
+    __extends(default_1, _super);
+    function default_1(cb, delay) {
+        var _this = _super.call(this, cb) || this;
+        _this.draw = function () {
+            if (_this.going) {
+                setTimeout(_this.draw, _this.delay);
+                _this.ct++;
+                _this.cb(_this.ct, _this);
+            }
+        };
+        _this.delay = delay;
+        _this.draw();
+        return _this;
+    }
+    default_1.prototype.start = function () {
+        this.going = true;
+        setTimeout(this.draw, this.delay);
     };
     return default_1;
-}());
+}(timer_ts_1["default"]));
 exports["default"] = default_1;
 
 
@@ -1671,6 +1736,45 @@ exports["default"] = new /** @class */ (function () {
     ;
     return class_1;
 }())();
+
+
+/***/ }),
+
+/***/ "./snakemaze/src/utilities/timer.ts":
+/*!******************************************!*\
+  !*** ./snakemaze/src/utilities/timer.ts ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+exports.__esModule = true;
+var default_1 = /** @class */ (function () {
+    function default_1(cb) {
+        this.going = true;
+        this.ct = 0;
+        this.cb = cb;
+    }
+    //start
+    default_1.prototype.resume = function () {
+        this.start();
+    };
+    default_1.prototype.toggle = function () {
+        this.going = !this.going;
+    };
+    default_1.prototype.stop = function () {
+        this.going = false;
+    };
+    default_1.prototype.pause = function () {
+        this.stop();
+    };
+    default_1.prototype.restart = function () {
+        this.ct = 0;
+    };
+    return default_1;
+}());
+exports["default"] = default_1;
 
 
 /***/ })

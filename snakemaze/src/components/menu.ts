@@ -90,13 +90,21 @@ export default function(){
     for(let i = 0;i < 5;i++){
         for(let j = 0;j < 2;j++){
             
-            let lev = new PIXI.Sprite(PIXI.loader.resources["assets/level-1.png"].texture)
+            let lev = new PIXI.Sprite(PIXI.loader.resources["assets/background-incomplete.png"].texture)
             levelSelect.addChild(lev);
             button(
                 lev, i * 128 + 128, j * 128 + 128, function () {
                     g.level = new g.newLevel(i + j * 5);
                 }
-                )
+            )
+            var text = new PIXI.Text(i + j*5, {
+                font: "48px Pixel",
+                fill: "white"
+            } as TextStyleOptions);
+            text.anchor.x = 0.5;
+            text.x = 32;
+            text.y = 8;
+            lev.addChild(text);
         }
     }
     // -- QUIT BUTTON --

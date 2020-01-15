@@ -35,11 +35,12 @@ export default class extends PIXI.Sprite{
             })
         this.addChild(abort);
     }
-    handle(gameloop:fps,background) {
+    handle(renderloop:fps,gameloop:fps,background) {
         let a = this;
         function wait() {
             if(!a.veto){
                 gameloop.start();
+                renderloop.start();
                 a.visible = false;
                 g.soundManager.visible = false;
                 background.zIndex = 500;
@@ -63,6 +64,7 @@ export default class extends PIXI.Sprite{
                 a.allow = false;
                 g.renderer.render(g.stage);
                 gameloop.stop();
+                renderloop.stop();
                 key.waitUp(80, function() {
                     key.waitDown(80, wait);
                     key.waitUp(80, allow);

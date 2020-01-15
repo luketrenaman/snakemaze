@@ -4,17 +4,18 @@ export default class extends Timer{
     ct:number;
     cb:Function;
 
-    constructor(cb:(ct:number,obj:Object) => (void)){
+    constructor(cb:(ct:number,obj:Object) => (void),delay:Number){
         super(cb);
+        this.delay = delay;
         this.draw();
     }
     start(){
         this.going = true;
-        requestAnimationFrame(this.draw);
+        setTimeout(this.draw,this.delay);
     }
     draw=()=>{
         if (this.going) {
-            requestAnimationFrame(this.draw);
+            setTimeout(this.draw,this.delay);
             this.ct++
             this.cb(this.ct,this);
         }
