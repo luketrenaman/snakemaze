@@ -100,8 +100,13 @@ function setup() {
 					snake.counter.xvel += 0.1;
 					snake.counter.x += snake.counter.xvel;
 				}
-				if (frames % 10 === 0) {
-					if (snake.sprites.length - 1 == n) {
+				if (frames % 10 === 0 && snake.sprites.length - 1 !== n){
+					g.stage.removeChild(snake.sprites[n]);
+					n++
+					snake.checkMove();
+				}
+				/*if (frames % 10 === 0) {
+					if (snake.sprites.length - 1 === n) {
 						snake.sprites[n].tint = 0x000;
 						g.manager.show("death");
 					} else {
@@ -110,7 +115,7 @@ function setup() {
 							n++
 						} while (snake.locations[n].x === snake.locations[n + 1].x && snake.locations[n].y === snake.locations[n + 1].y)
 					}
-				}
+				}*/
 				if (!isNaN(snake.sprites[n].worldTransform.ty) && !isNaN(snake.sprites[n].worldTransform.tx)) {
 					g.stage.y += (320 - snake.sprites[n].worldTransform.ty) / 40;
 					g.stage.x += (416 - snake.sprites[n].worldTransform.tx) / 40;
@@ -194,20 +199,7 @@ function setup() {
 			if (frames > 24) {
 				
 				//TODO CHECK LOCATION
-				snake.direction = snake.predirection;
-				switch (snake.direction) {
-					case "l":
-						snake.move(-1, 0);
-						break;
-					case "r":
-						snake.move(1, 0);
-						break;
-					case 'u':
-						snake.move(0, 1);
-						break;
-					case 'd':
-						snake.move(0, -1);
-				}
+				snake.checkMove();
 			} else {
 				if (Math.ceil(3 - frames / 8) === 0) {
 					countdown.visible = false;

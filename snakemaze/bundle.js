@@ -176,6 +176,7 @@ var Counter = /** @class */ (function (_super) {
 var default_1 = /** @class */ (function () {
     function default_1() {
         var _this = this;
+        this.over = false;
         this.exit = false;
         this.locations = [
             { x: g.maze.snake.x, y: g.maze.snake.y },
@@ -419,10 +420,11 @@ var default_1 = /** @class */ (function () {
             }
             return;
         }
-        if (death) {
+        if (death && !this.over) {
             //TODO = HANDLE DEATH OF THE SNAKE WITH A DEATH SCREEN
             collide = true;
             g.level.end("death");
+            this.over = true;
         }
         if (this.counter.rules.current != this.counter.rules.max) {
             this.gems.forEach(function (gem) {
@@ -438,13 +440,30 @@ var default_1 = /** @class */ (function () {
             this.exitSprite.cycle++;
             this.exitSprite.cycle %= 8;
             this.exitSprite.setTexture(PIXI.loader.resources["assets/rainbow.json"].textures["rainbow" + this.exitSprite.cycle + ".png"]);
-            if (this.locations[0].x === this.exitSprite.coord.x && this.locations[0].y === this.exitSprite.coord.y) {
+            if (this.locations[0].x === this.exitSprite.coord.x && this.locations[0].y === this.exitSprite.coord.y && !this.over) {
                 //TODO = WIN SCREEN
                 collide = true;
                 g.level.end("victory");
+                this.over = true;
             }
         }
         return collide;
+    };
+    default_1.prototype.checkMove = function () {
+        this.direction = this.predirection;
+        switch (this.direction) {
+            case "l":
+                this.move(-1, 0);
+                break;
+            case "r":
+                this.move(1, 0);
+                break;
+            case 'u':
+                this.move(0, 1);
+                break;
+            case 'd':
+                this.move(0, -1);
+        }
     };
     default_1.prototype.fruit = function () {
         var a = this;
@@ -923,18 +942,22 @@ function setup() {
                     snake.counter.xvel += 0.1;
                     snake.counter.x += snake.counter.xvel;
                 }
-                if (frames % 10 === 0) {
-                    if (snake.sprites.length - 1 == n) {
+                if (frames % 10 === 0 && snake.sprites.length - 1 !== n) {
+                    g.stage.removeChild(snake.sprites[n]);
+                    n++;
+                    snake.checkMove();
+                }
+                /*if (frames % 10 === 0) {
+                    if (snake.sprites.length - 1 === n) {
                         snake.sprites[n].tint = 0x000;
                         g.manager.show("death");
-                    }
-                    else {
+                    } else {
                         do {
                             snake.sprites[n].tint = 0x000;
-                            n++;
-                        } while (snake.locations[n].x === snake.locations[n + 1].x && snake.locations[n].y === snake.locations[n + 1].y);
+                            n++
+                        } while (snake.locations[n].x === snake.locations[n + 1].x && snake.locations[n].y === snake.locations[n + 1].y)
                     }
-                }
+                }*/
                 if (!isNaN(snake.sprites[n].worldTransform.ty) && !isNaN(snake.sprites[n].worldTransform.tx)) {
                     g.stage.y += (320 - snake.sprites[n].worldTransform.ty) / 40;
                     g.stage.x += (416 - snake.sprites[n].worldTransform.tx) / 40;
@@ -1016,20 +1039,7 @@ function setup() {
         var gameTick = new gametick_1["default"](function (frames, self) {
             if (frames > 24) {
                 //TODO CHECK LOCATION
-                snake.direction = snake.predirection;
-                switch (snake.direction) {
-                    case "l":
-                        snake.move(-1, 0);
-                        break;
-                    case "r":
-                        snake.move(1, 0);
-                        break;
-                    case 'u':
-                        snake.move(0, 1);
-                        break;
-                    case 'd':
-                        snake.move(0, -1);
-                }
+                snake.checkMove();
             }
             else {
                 if (Math.ceil(3 - frames / 8) === 0) {

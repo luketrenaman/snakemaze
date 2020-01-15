@@ -78,7 +78,9 @@ export default class{
     locations: Array<location>;
     direction: string;
     predirection:string;
+    over:boolean;
     constructor() {
+        this.over = false
         this.exit = false;
         this.locations = [
             {x:g.maze.snake.x, y:g.maze.snake.y},
@@ -310,11 +312,12 @@ export default class{
             }
             return;
         }
-        if (death) {
+        if (death && !this.over) {
             //TODO = HANDLE DEATH OF THE SNAKE WITH A DEATH SCREEN
 
             collide = true;
             g.level.end("death");
+            this.over = true;
         }
         if (this.counter.rules.current != this.counter.rules.max) {
             this.gems.forEach((gem)=> {
@@ -330,14 +333,31 @@ export default class{
             this.exitSprite.cycle++;
             this.exitSprite.cycle %= 8;
             this.exitSprite.setTexture(PIXI.loader.resources["assets/rainbow.json"].textures["rainbow" + this.exitSprite.cycle + ".png"]);
-            if (this.locations[0].x === this.exitSprite.coord.x && this.locations[0].y === this.exitSprite.coord.y) {
+            if (this.locations[0].x === this.exitSprite.coord.x && this.locations[0].y === this.exitSprite.coord.y && !this.over) {
                 //TODO = WIN SCREEN
                 collide = true;
                 g.level.end("victory")
+                this.over = true;
             }
         }
         return collide;
 
+    }
+    checkMove(){
+        this.direction = this.predirection;
+        switch (this.direction) {
+            case "l":
+                this.move(-1, 0);
+                break;
+            case "r":
+                this.move(1, 0);
+                break;
+            case 'u':
+                this.move(0, 1);
+                break;
+            case 'd':
+                this.move(0, -1);
+        }
     }
     fruit() {
         let a = this;
