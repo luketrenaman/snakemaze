@@ -1035,7 +1035,6 @@ function setup() {
         g.all.addChild(countdown);
         countdown.y = 320;
         countdown.x = 416;
-        console.log("brop");
         var gameTick = new gametick_1["default"](function (frames, self) {
             if (frames > 24) {
                 //TODO CHECK LOCATION
@@ -1052,14 +1051,54 @@ function setup() {
         }, 130);
         var diff;
         var then = Date.now();
+        function fixx(px) {
+            var x = levels_1["default"][num].data[0].length * 32;
+            if (px > 0 && px < -x + 832) {
+                console.log("x passes 2 tests");
+                console.log(" - " + px + "> 0");
+                console.log(" - " + px + "<" + (-x + 832));
+                return (-x + 832) / 2;
+            }
+            if (px > 0) {
+                console.log("x passes 1 test: " + px + "> 0");
+                return 0;
+            }
+            if (px < -x + 832) {
+                console.log("x passes 1 test: " + px + "<" + (-x + 832));
+                return -x + 832;
+            }
+            console.log("x passes 0 tests");
+            return px;
+        }
+        function fixy(py) {
+            var y = levels_1["default"][num].data.length * 32;
+            if (py > 0 && py < -y + 640) {
+                console.log("y passes 2 tests");
+                console.log(" - " + py + "> 0");
+                console.log(" - " + py + "<" + (-y + 640));
+                return (-y + 640) / 2;
+            }
+            if (py > 0) {
+                console.log("y passes 1 test: " + py + "> 0");
+                return 0;
+            }
+            if (py < -y + 640) {
+                console.log("y passes 1 test: " + py + "<" + (-y + 640));
+                return -y + 640;
+            }
+            console.log("y passes 0 tests");
+            return py;
+        }
         var loop = new fps_1["default"](function (frames, self) {
             diff = (Date.now() - then) / 1000;
-            console.log(diff);
             then = Date.now();
             pause.handle(self, gameTick, background);
             //
             g.stage.y += diff * 100 * (320 - snake.sprites[0].worldTransform.ty) / (40 - (+(Math.abs(320 - snake.sprites[0].worldTransform.ty) > 640)) * 39);
             g.stage.x += diff * 100 * (416 - snake.sprites[0].worldTransform.tx) / (40 - (+(Math.abs(416 - snake.sprites[0].worldTransform.tx) > 832)) * 39);
+            console.log("(" + Math.round(g.stage.x) + "," + Math.round(g.stage.y) + ")");
+            g.stage.y = fixy(g.stage.y);
+            g.stage.x = fixx(g.stage.x);
             background.children.forEach(function (val) {
                 val.y = (val.orig.y * 64 + g.stage.y).mod(640 + 64) - g.stage.y - 64;
                 val.x = (val.orig.x * 64 + g.stage.x).mod(832 + 64) - g.stage.x - 64;
@@ -1095,9 +1134,9 @@ exports["default"] = [{
         },
         "data": [
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
-            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
-            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+            [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+            [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
             [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
             [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
             [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1],
