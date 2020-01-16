@@ -115,35 +115,35 @@ export default class{
         this.direction = g.maze.snake.direction;
         this.predirection = this.direction;
         let a = this;
-        key.waitDown([65, 37], () => {
-            console.log("left")
-            //Left
-            if (this.direction == "u" || this.direction == "d" && this.predirection != "l") {
-                this.predirection = "l";
-            };
-        },true);
-        key.waitDown([68, 39], () => {
-            console.log("right");
-            //Right
-            if (this.direction == "u" || this.direction == "d" && this.predirection != "r") {
-                this.predirection = "r";
-            };
-        },true);
-        key.waitDown([87, 38], () => {
-            console.log("up")
-            //Up
-            if (this.direction == "r" || this.direction == "l" && this.predirection != "u") {
-                this.predirection = "u";
-            };
-        },true);
-        key.waitDown([83, 40], () => {
-            console.log("down")
-            //Down
-            if (this.direction == "r" || this.direction == "l" && this.predirection != "d") {
-                this.predirection = "d";
-            };
-        },true);
     };
+    shoop(){
+        for(i = 0; i < key.moveKeys.length;i++){
+            switch(key.moveKey[i]){
+                case "l":
+                    if (this.direction == "u" || this.direction == "d" && this.predirection != "l") {
+                        this.predirection = "l";
+                    };
+                    break;
+                case "r":
+                    if (this.direction == "u" || this.direction == "d" && this.predirection != "r") {
+                        this.predirection = "r";
+                    };
+                    break;
+                case "d":
+                    if (this.direction == "r" || this.direction == "l" && this.predirection != "d") {
+                        this.predirection = "d";
+                    };
+                    break;
+                case "u":
+                    if (this.direction == "r" || this.direction == "l" && this.predirection != "u") {
+                        this.predirection = "u";
+                    };
+                    break;
+                default:
+                    throw "what the heck is happening how did we get here why am i failing at programming :((";
+            }
+        }
+    }
     move(x, y) {
         for (let i = this.locations.length - 1; i > 0; i--) {
             this.locations[i] = Object.assign({},this.locations[i - 1]);
