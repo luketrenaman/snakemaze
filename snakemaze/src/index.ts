@@ -100,22 +100,26 @@ function setup() {
 					snake.counter.xvel += 0.1;
 					snake.counter.x += snake.counter.xvel;
 				}
-				if (frames % 10 === 0 && snake.sprites.length - 1 !== n){
-					g.stage.removeChild(snake.sprites[n]);
-					n++
-					snake.checkMove();
-				}
-				/*if (frames % 10 === 0) {
-					if (snake.sprites.length - 1 === n) {
-						snake.sprites[n].tint = 0x000;
-						g.manager.show("death");
-					} else {
-						do {
-							snake.sprites[n].tint = 0x000;
-							n++
-						} while (snake.locations[n].x === snake.locations[n + 1].x && snake.locations[n].y === snake.locations[n + 1].y)
+				if(condition === "victory"){
+					if (frames % 10 === 0 && snake.sprites.length - 1 !== n){
+						g.stage.removeChild(snake.sprites[n]);
+						n++
+						snake.checkMove();
 					}
-				}*/
+				}
+				if(condition === "death"){
+					if (frames % 10 === 0) {
+						if (snake.sprites.length - 1 === n) {
+							snake.sprites[n].tint = 0x000;
+							g.manager.show("death");
+						} else {
+							do {
+								snake.sprites[n].tint = 0x000;
+								n++
+							} while (snake.locations[n].x === snake.locations[n + 1].x && snake.locations[n].y === snake.locations[n + 1].y)
+						}
+					}
+				}
 				if (!isNaN(snake.sprites[n].worldTransform.ty) && !isNaN(snake.sprites[n].worldTransform.tx)) {
 					g.stage.y += (320 - snake.sprites[n].worldTransform.ty) / 40;
 					g.stage.x += (416 - snake.sprites[n].worldTransform.tx) / 40;
@@ -198,6 +202,7 @@ function setup() {
 			if (frames > 24) {
 				
 				//TODO CHECK LOCATION
+				snake.shoop();
 				snake.checkMove();
 			} else {
 				if (Math.ceil(3 - frames / 8) === 0) {
@@ -218,15 +223,9 @@ function setup() {
 				return (-x + 832)/2;
 			}
 			if(px > 0){
-				console.log("x passes 1 test: " + px + "> 0");
-				console.log("("+g.stage.x+","+g.stage.y+")")
-				console.log("x no pass test: " + px + "<" + (-x + 832));
 				return 0;
 			}
 			if(px < -x + 832){
-				console.log("x passes 1 test: " + px + "<" + (-x + 832));
-				console.log("("+g.stage.x+","+g.stage.y+")")
-				console.log("x no pass test: " + px + "> 0");
 				return -x + 832;
 			}
 			return px;
@@ -238,15 +237,9 @@ function setup() {
 				return (-y + 640)/2;
 			}
 			if(py > 0){
-				console.log("y passes 1 test: " + py + "> 0");
-				console.log("("+g.stage.x+","+g.stage.y+")")
-				console.log("y no pass test: " + py + "<" + (-y + 640));
 				return 0;
 			}
 			if(py < -y + 640){
-				console.log("y passes 1 test: " + py + "<" + (-y + 640));
-				console.log("("+g.stage.x+","+g.stage.y+")")
-				console.log("y no pass test: " + py + "> 0");
 				return -y + 640; 
 			}
 			return py;

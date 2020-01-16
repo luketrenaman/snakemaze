@@ -175,6 +175,7 @@ var Counter = /** @class */ (function (_super) {
 }(PIXI.Sprite));
 var default_1 = /** @class */ (function () {
     function default_1() {
+        var _this = this;
         this.over = false;
         this.exit = false;
         this.locations = [
@@ -211,37 +212,62 @@ var default_1 = /** @class */ (function () {
         this.direction = g.maze.snake.direction;
         this.predirection = this.direction;
         var a = this;
+        key_press_1["default"].waitDown([65, 37], function () {
+            console.log("left");
+            //Left
+        }, true);
+        key_press_1["default"].waitDown([68, 39], function () {
+            console.log("right");
+            //Right
+        }, true);
+        key_press_1["default"].waitDown([87, 38], function () {
+            console.log("up");
+            //Up
+            if (_this.direction == "r" || _this.direction == "l" && _this.predirection != "u") {
+                _this.predirection = "u";
+            }
+            ;
+        }, true);
+        key_press_1["default"].waitDown([83, 40], function () {
+            console.log("down");
+            //Down
+        }, true);
     }
     ;
     default_1.prototype.shoop = function () {
-        for (i = 0; i < key_press_1["default"].moveKeys.length; i++) {
-            switch (key_press_1["default"].moveKey[i]) {
-                case "l":
+        for (var i = 0; i < key_press_1["default"].moveKeys.length; i++) {
+            console.log("bop");
+            switch (key_press_1["default"].moveKeys[i]) {
+                case 65:
+                case 37:
                     if (this.direction == "u" || this.direction == "d" && this.predirection != "l") {
                         this.predirection = "l";
                     }
                     ;
                     break;
-                case "r":
+                case 68:
+                case 39:
                     if (this.direction == "u" || this.direction == "d" && this.predirection != "r") {
                         this.predirection = "r";
                     }
                     ;
                     break;
-                case "d":
+                case 83:
+                case 40:
                     if (this.direction == "r" || this.direction == "l" && this.predirection != "d") {
                         this.predirection = "d";
                     }
                     ;
                     break;
-                case "u":
+                case 87:
+                case 38:
                     if (this.direction == "r" || this.direction == "l" && this.predirection != "u") {
                         this.predirection = "u";
                     }
                     ;
                     break;
                 default:
-                    throw "what the fuck is happening how did we get here why am i failing at programming :((";
+                    throw "what the heck is happening how did we get here why am i failing at programming :((";
             }
         }
     };
@@ -941,22 +967,27 @@ function setup() {
                     snake.counter.xvel += 0.1;
                     snake.counter.x += snake.counter.xvel;
                 }
-                if (frames % 10 === 0 && snake.sprites.length - 1 !== n) {
-                    g.stage.removeChild(snake.sprites[n]);
-                    n++;
-                    snake.checkMove();
-                }
-                /*if (frames % 10 === 0) {
-                    if (snake.sprites.length - 1 === n) {
-                        snake.sprites[n].tint = 0x000;
-                        g.manager.show("death");
-                    } else {
-                        do {
-                            snake.sprites[n].tint = 0x000;
-                            n++
-                        } while (snake.locations[n].x === snake.locations[n + 1].x && snake.locations[n].y === snake.locations[n + 1].y)
+                if (condition === "victory") {
+                    if (frames % 10 === 0 && snake.sprites.length - 1 !== n) {
+                        g.stage.removeChild(snake.sprites[n]);
+                        n++;
+                        snake.checkMove();
                     }
-                }*/
+                }
+                if (condition === "death") {
+                    if (frames % 10 === 0) {
+                        if (snake.sprites.length - 1 === n) {
+                            snake.sprites[n].tint = 0x000;
+                            g.manager.show("death");
+                        }
+                        else {
+                            do {
+                                snake.sprites[n].tint = 0x000;
+                                n++;
+                            } while (snake.locations[n].x === snake.locations[n + 1].x && snake.locations[n].y === snake.locations[n + 1].y);
+                        }
+                    }
+                }
                 if (!isNaN(snake.sprites[n].worldTransform.ty) && !isNaN(snake.sprites[n].worldTransform.tx)) {
                     g.stage.y += (320 - snake.sprites[n].worldTransform.ty) / 40;
                     g.stage.x += (416 - snake.sprites[n].worldTransform.tx) / 40;
@@ -1037,6 +1068,7 @@ function setup() {
         var gameTick = new gametick_1["default"](function (frames, self) {
             if (frames > 24) {
                 //TODO CHECK LOCATION
+                snake.shoop();
                 snake.checkMove();
             }
             else {
@@ -1059,15 +1091,9 @@ function setup() {
                 return (-x + 832) / 2;
             }
             if (px > 0) {
-                console.log("x passes 1 test: " + px + "> 0");
-                console.log("(" + g.stage.x + "," + g.stage.y + ")");
-                console.log("x no pass test: " + px + "<" + (-x + 832));
                 return 0;
             }
             if (px < -x + 832) {
-                console.log("x passes 1 test: " + px + "<" + (-x + 832));
-                console.log("(" + g.stage.x + "," + g.stage.y + ")");
-                console.log("x no pass test: " + px + "> 0");
                 return -x + 832;
             }
             return px;
@@ -1079,15 +1105,9 @@ function setup() {
                 return (-y + 640) / 2;
             }
             if (py > 0) {
-                console.log("y passes 1 test: " + py + "> 0");
-                console.log("(" + g.stage.x + "," + g.stage.y + ")");
-                console.log("y no pass test: " + py + "<" + (-y + 640));
                 return 0;
             }
             if (py < -y + 640) {
-                console.log("y passes 1 test: " + py + "<" + (-y + 640));
-                console.log("(" + g.stage.x + "," + g.stage.y + ")");
-                console.log("y no pass test: " + py + "> 0");
                 return -y + 640;
             }
             return py;
@@ -1698,7 +1718,18 @@ exports.__esModule = true;
 exports["default"] = new /** @class */ (function () {
     function class_1() {
         this.listen = function () {
+            var _this = this;
             var a = this;
+            var addMove = function (key) {
+                if (_this.moveKeys.indexOf(key) === -1) {
+                    _this.moveKeys.unshift(key);
+                }
+            };
+            var reMove = function (key) {
+                if (_this.moveKeys.indexOf(key) !== -1) {
+                    _this.moveKeys.splice(_this.moveKeys.indexOf(key), 1);
+                }
+            };
             document.onkeydown = function (e) {
                 e = e || window.event;
                 e = e.which || e.keyCode || 0;
@@ -1714,6 +1745,18 @@ exports["default"] = new /** @class */ (function () {
                         }
                     }
                 });
+                switch (e) {
+                    case 65:
+                    case 37:
+                    case 68:
+                    case 39:
+                    case 87:
+                    case 38:
+                    case 83:
+                    case 40:
+                        addMove(e);
+                        break;
+                }
             };
             document.onkeyup = function (e) {
                 e = e || window.event;
@@ -1731,11 +1774,24 @@ exports["default"] = new /** @class */ (function () {
                         }
                     }
                 });
+                switch (e) {
+                    case 65:
+                    case 37:
+                    case 68:
+                    case 39:
+                    case 87:
+                    case 38:
+                    case 83:
+                    case 40:
+                        reMove(e);
+                        break;
+                }
             };
         };
         var a = this;
         this.map = [];
         this.tethers = [];
+        this.moveKeys = [];
     }
     class_1.prototype.check = function (key, callback, not) {
         var a = this;

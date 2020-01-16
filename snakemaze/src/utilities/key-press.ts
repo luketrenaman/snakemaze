@@ -12,9 +12,20 @@ export default new class{
         var a = this;
         this.map = [];
         this.tethers = [];
+        this.moveKeys = [];
     }
     listen = function() {
         var a = this;
+        let addMove = (key:number) =>{
+            if(this.moveKeys.indexOf(key) === -1){
+                this.moveKeys.unshift(key);
+            }
+        }
+        let reMove = (key:number) => {
+            if(this.moveKeys.indexOf(key) !== -1){
+                this.moveKeys.splice(this.moveKeys.indexOf(key),1);
+            }
+        }
         document.onkeydown = function(e) {
             e = e || window.event;
             e = e.which || e.keyCode || 0;
@@ -29,6 +40,18 @@ export default new class{
                     }
                 }
             });
+            switch(e){
+                case 65:
+                case 37:
+                case 68:
+                case 39:
+                case 87:
+                case 38:
+                case 83:
+                case 40:
+                    addMove(e);
+                break;
+            }
         };
         document.onkeyup = function(e) {
             e = e || window.event;
@@ -45,6 +68,18 @@ export default new class{
                     }
                 }
             });
+            switch(e){
+                case 65:
+                case 37:
+                case 68:
+                case 39:
+                case 87:
+                case 38:
+                case 83:
+                case 40:
+                    reMove(e);
+                break;
+            }
         };
     };
     check(key, callback:Function, not?) {
