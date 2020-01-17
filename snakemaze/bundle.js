@@ -235,7 +235,6 @@ var default_1 = /** @class */ (function () {
         key_press_1["default"].mostRecentKey = null;
     };
     default_1.prototype.doop = function () {
-        console.log(key_press_1["default"].moveKeys);
         for (var i = 0; i <= key_press_1["default"].moveKeys.length; i++) {
             var x = void 0;
             if (i === key_press_1["default"].moveKeys.length) {
@@ -244,7 +243,6 @@ var default_1 = /** @class */ (function () {
             else {
                 x = key_press_1["default"].moveKeys[i];
             }
-            console.log(x);
             switch (x) {
                 case 65:
                 case 37:
@@ -576,12 +574,10 @@ var MenuManager = /** @class */ (function () {
     }
     MenuManager.prototype.show = function (menuName) {
         this.hide();
-        console.log(menuName);
         this.menus.forEach(function (val) {
             if (val.name === menuName) {
                 val.visible = true;
                 g.soundManager.visible = val.sound;
-                console.log(val.sound);
             }
         });
         g.renderer.render(g.all);
@@ -640,7 +636,6 @@ var SoundMenu = /** @class */ (function (_super) {
     return SoundMenu;
 }(PIXI.Sprite));
 function default_1() {
-    console.log("FABRICATI ONSs");
     g.manager = new MenuManager();
     // -- HANDLE MUSIC --
     g.soundManager = new SoundManager();
@@ -695,15 +690,26 @@ function default_1() {
         g.manager.show("start");
         g.level.kill();
     });
+    g.manager.loadReplay = function () {
+        //Set callback of below hamburgers
+    };
     var deathMenu = new Menu("death", false);
-    var deathBase = new PIXI.Sprite(shapes_1["default"].rectangle(64 * 6, 64 * 4, "#000"));
+    var deathBase = new PIXI.Sprite(shapes_1["default"].rectangle(64 * 6, 64 * 4, "rgba(0, 0, 0,0.7)"));
     deathBase.x = 832 / 2 - deathBase.width / 2;
     deathBase.y = 640 / 2 - deathBase.height / 2;
     deathMenu.zOrder = -4;
+    var youDied = new PIXI.Text("You died!", {
+        font: "52px Pixel",
+        fill: "white"
+    });
+    youDied.anchor.x = 0.5;
+    youDied.x = deathBase.width / 2;
+    youDied.y = 32;
+    deathBase.addChild(youDied);
     deathMenu.addChild(deathBase);
     deathMenu.addChild(exit2);
     var victoryMenu = new Menu("victory", false);
-    var victoryBase = new PIXI.Sprite(shapes_1["default"].rectangle(64 * 6, 64 * 4, "#fff"));
+    var victoryBase = new PIXI.Sprite(shapes_1["default"].rectangle(64 * 6, 64 * 4, "rgba(255, 255, 255,0.7)"));
     victoryBase.x = 832 / 2 - victoryBase.width / 2;
     victoryBase.y = 640 / 2 - victoryBase.height / 2;
     victoryMenu.zOrder = -4;
@@ -919,6 +925,7 @@ function setup() {
         });
     };
     g.newLevel = function (num) {
+        g.manager.loadReplay(num);
         if (levels_1["default"][num] == undefined)
             return;
         //maze

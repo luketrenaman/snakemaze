@@ -5,12 +5,10 @@ class MenuManager{
     }
     show(menuName:string){
         this.hide();
-        console.log(menuName)
         this.menus.forEach(function(val){
             if(val.name === menuName){
                 val.visible = true;
                 g.soundManager.visible = val.sound;
-                console.log(val.sound)
             }
         })
         g.renderer.render(g.all);
@@ -65,7 +63,6 @@ class SoundMenu extends PIXI.Sprite{
     }
 }
 export default function(){
-    console.log("FABRICATI ONSs");
     g.manager = new MenuManager();
     // -- HANDLE MUSIC --
     g.soundManager = new SoundManager();
@@ -126,15 +123,26 @@ export default function(){
             g.level.kill();
         }
     )
+    g.manager.loadReplay = function(){
+        //Set callback of below hamburgers
+    }
     let deathMenu = new Menu("death",false);
-    let deathBase = new PIXI.Sprite(shapes.rectangle(64*6,64*4,"#000"));
+    let deathBase = new PIXI.Sprite(shapes.rectangle(64*6,64*4,"rgba(0, 0, 0,0.7)"));
     deathBase.x = 832 /2 - deathBase.width / 2
     deathBase.y = 640 / 2 - deathBase.height / 2
     deathMenu.zOrder = -4;
+    let youDied = new PIXI.Text("You died!", {
+        font: "52px Pixel",
+        fill: "white"
+    } as TextStyleOptions);
+    youDied.anchor.x = 0.5;
+    youDied.x = deathBase.width / 2
+    youDied.y = 32;
+    deathBase.addChild(youDied);
     deathMenu.addChild(deathBase);
     deathMenu.addChild(exit2);
     let victoryMenu = new Menu("victory",false);
-    let victoryBase = new PIXI.Sprite(shapes.rectangle(64*6,64*4,"#fff"));
+    let victoryBase = new PIXI.Sprite(shapes.rectangle(64*6,64*4,"rgba(255, 255, 255,0.7)"));
     victoryBase.x = 832 /2 - victoryBase.width / 2
     victoryBase.y = 640 / 2 - victoryBase.height / 2
     victoryMenu.zOrder = -4;

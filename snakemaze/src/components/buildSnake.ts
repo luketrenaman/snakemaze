@@ -136,7 +136,6 @@ export default class{
         key.mostRecentKey = null;
     }
     doop(){
-        console.log(key.moveKeys);
         for(let i = 0; i <= key.moveKeys.length;i++){
             let x;
             if (i === key.moveKeys.length){
@@ -144,7 +143,6 @@ export default class{
             } else{
                 x = key.moveKeys[i];
             }
-            console.log(x);
             switch(x){
                 case 65:
                 case 37:

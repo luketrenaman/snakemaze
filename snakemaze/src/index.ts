@@ -57,7 +57,7 @@ function setup() {
 		});
 	};
 	g.newLevel = function(num) {
-		
+		g.manager.loadReplay(num);
 		if (levels[num] == undefined) return; 
 		//maze
 		g.maze = levels[num];
