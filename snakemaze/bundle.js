@@ -580,10 +580,12 @@ var MenuManager = /** @class */ (function () {
     }
     MenuManager.prototype.show = function (menuName) {
         this.hide();
+        console.log(menuName);
         this.menus.forEach(function (val) {
             if (val.name === menuName) {
                 val.visible = true;
                 g.soundManager.visible = val.sound;
+                console.log(val.sound);
             }
         });
         g.renderer.render(g.all);
@@ -616,8 +618,8 @@ var SoundManager = /** @class */ (function (_super) {
     __extends(SoundManager, _super);
     function SoundManager() {
         var _this = _super.call(this) || this;
-        _this.x = 832 - 128;
-        _this.y = 640 - 64;
+        _this.x = 832 - 128 - 16;
+        _this.y = 640 - 64 - 16;
         _this.zOrder = -4;
         return _this;
     }
@@ -629,7 +631,7 @@ var SoundMenu = /** @class */ (function (_super) {
         var _this = _super.call(this, textureOn) || this;
         _this.enabled = true;
         button_1["default"](_this, x, y, function () {
-            if (_this.enabled) {
+            if (!_this.enabled) {
                 _this.setTexture(textureOn);
             }
             else {
@@ -646,8 +648,8 @@ function default_1() {
     g.manager = new MenuManager();
     // -- HANDLE MUSIC --
     g.soundManager = new SoundManager();
-    g.soundManager.addChild(new SoundMenu(0, 0, PIXI.loader.resources["assets/music.png"].texture, PIXI.loader.resources["assets/nomusic.png"].texture));
-    g.soundManager.addChild(new SoundMenu(64, 0, shapes_1["default"].rectangle(64, 64, "#00f"), shapes_1["default"].rectangle(64, 64, "#0ff")));
+    g.soundManager.addChild(new SoundMenu(-4, 0, PIXI.loader.resources["assets/music.png"].texture, PIXI.loader.resources["assets/nomusic.png"].texture));
+    g.soundManager.addChild(new SoundMenu(64, 0, PIXI.loader.resources["assets/sound.png"].texture, PIXI.loader.resources["assets/nosound.png"].texture));
     g.all.addChild(g.soundManager);
     // -- START SCREEN --
     var startScreen = new Menu("start", true);
@@ -891,7 +893,7 @@ g.renderer = PIXI.autoDetectRenderer(832, 640);
 g.renderer.backgroundColor = 0x444444;
 g.all = new PIXI.Container();
 document.body.appendChild(g.renderer.view);
-PIXI.loader.add("assets/background-incomplete.png").add("assets/background-complete.png").add("assets/snake-head.png").add("assets/rainbow.json").add("assets/snake-body.png").add("assets/snake-corner.png").add("assets/snake-tail.png").add("assets/grass.png").add("assets/flowers-1.png").add("assets/flowers-2.png").add("assets/rock.png").add("assets/gem-1.png").add("assets/gem-2.png").add("assets/gem-3.png").add("assets/level-1.png").add("assets/titlescreen.png").add("assets/start.png").add("assets/back.png").add("assets/music.png").add("assets/nomusic.png").load(fonts);
+PIXI.loader.add("assets/sound.png").add("assets/nosound.png").add("assets/background-incomplete.png").add("assets/background-complete.png").add("assets/snake-head.png").add("assets/rainbow.json").add("assets/snake-body.png").add("assets/snake-corner.png").add("assets/snake-tail.png").add("assets/grass.png").add("assets/flowers-1.png").add("assets/flowers-2.png").add("assets/rock.png").add("assets/gem-1.png").add("assets/gem-2.png").add("assets/gem-3.png").add("assets/level-1.png").add("assets/titlescreen.png").add("assets/start.png").add("assets/back.png").add("assets/music.png").add("assets/nomusic.png").load(fonts);
 function fonts() {
     WebFont.load({
         custom: {
@@ -968,10 +970,15 @@ function setup() {
                     snake.counter.x += snake.counter.xvel;
                 }
                 if (condition === "victory") {
-                    if (frames % 10 === 0 && snake.sprites.length - 1 !== n) {
-                        g.stage.removeChild(snake.sprites[n]);
-                        n++;
-                        snake.checkMove();
+                    if (snake.sprites.length !== n - 1) {
+                        if (frames % 10 === 0) {
+                            g.stage.removeChild(snake.sprites[n]);
+                            snake.checkMove();
+                            n++;
+                        }
+                    }
+                    else {
+                        g.manager.show("victory");
                     }
                 }
                 if (condition === "death") {

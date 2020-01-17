@@ -5,10 +5,12 @@ class MenuManager{
     }
     show(menuName:string){
         this.hide();
+        console.log(menuName)
         this.menus.forEach(function(val){
             if(val.name === menuName){
                 val.visible = true;
                 g.soundManager.visible = val.sound;
+                console.log(val.sound)
             }
         })
         g.renderer.render(g.all);
@@ -40,8 +42,8 @@ class SoundManager extends PIXI.Container{
     zOrder:number;
     constructor(){
         super();
-        this.x = 832-128;
-        this.y = 640-64;
+        this.x = 832-128-16;
+        this.y = 640-64-16;
         this.zOrder = -4;
     }
 }
@@ -51,7 +53,7 @@ class SoundMenu extends PIXI.Sprite{
         super(textureOn);
         this.enabled = true;
         button(this, x, y, () => {
-                if (this.enabled) {
+                if (!this.enabled) {
                     this.setTexture(textureOn);
                 }
                 else {
@@ -67,14 +69,14 @@ export default function(){
     g.manager = new MenuManager();
     // -- HANDLE MUSIC --
     g.soundManager = new SoundManager();
-    g.soundManager.addChild(new SoundMenu(0,0,
+    g.soundManager.addChild(new SoundMenu(-4,0,
         PIXI.loader.resources["assets/music.png"].texture,
         PIXI.loader.resources["assets/nomusic.png"].texture)
     )
     g.soundManager.addChild(new SoundMenu(64,0,
-        shapes.rectangle(64,64,"#00f"),
-        shapes.rectangle(64,64,"#0ff"))
-    )
+        PIXI.loader.resources["assets/sound.png"].texture,
+        PIXI.loader.resources["assets/nosound.png"].texture)
+    );
     g.all.addChild(g.soundManager);
     // -- START SCREEN --
     let startScreen = new Menu("start",true);
@@ -138,6 +140,5 @@ export default function(){
     victoryMenu.zOrder = -4;
     victoryMenu.addChild(victoryBase);
     //victoryMenu.addChild(exit2);
-
   
 }
