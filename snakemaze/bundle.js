@@ -213,15 +213,12 @@ var default_1 = /** @class */ (function () {
         this.predirection = this.direction;
         var a = this;
         key_press_1["default"].waitDown([65, 37], function () {
-            console.log("left");
             //Left
         }, true);
         key_press_1["default"].waitDown([68, 39], function () {
-            console.log("right");
             //Right
         }, true);
         key_press_1["default"].waitDown([87, 38], function () {
-            console.log("up");
             //Up
             if (_this.direction == "r" || _this.direction == "l" && _this.predirection != "u") {
                 _this.predirection = "u";
@@ -229,14 +226,12 @@ var default_1 = /** @class */ (function () {
             ;
         }, true);
         key_press_1["default"].waitDown([83, 40], function () {
-            console.log("down");
             //Down
         }, true);
     }
     ;
     default_1.prototype.shoop = function () {
         for (var i = 0; i < key_press_1["default"].moveKeys.length; i++) {
-            console.log("bop");
             switch (key_press_1["default"].moveKeys[i]) {
                 case 65:
                 case 37:
@@ -381,7 +376,6 @@ var default_1 = /** @class */ (function () {
                     a.exitSprite.cycle = 1;
                     a.exitSprite.x = spawn.x * 32;
                     a.exitSprite.y = spawn.y * 32;
-                    console.log(spawn);
                     a.exitSprite.scale.x = 1 / 6;
                     a.exitSprite.scale.y = 1 / 6;
                     a.exitSprite.coord = spawn;
@@ -424,7 +418,6 @@ var default_1 = /** @class */ (function () {
                     }
                 });
             });
-            console.log(target_1);
             this.locations[0].x = target_1.x;
             this.locations[0].y = target_1.y;
             this.direction = target_1.direction;
@@ -767,7 +760,6 @@ var default_1 = /** @class */ (function (_super) {
         button_1["default"](abort, 4 * 64, 5 * 64, function () {
             g.level.kill();
             _this.veto = true;
-            console.log(_this);
         });
         _this.addChild(abort);
         return _this;
@@ -791,7 +783,6 @@ var default_1 = /** @class */ (function (_super) {
         }
         key_press_1["default"].check(80, function () {
             if (a.allow) {
-                console.log("SHOW");
                 a.visible = true;
                 g.soundManager.visible = true;
                 //background.zIndex = -2;
@@ -1029,7 +1020,7 @@ function setup() {
                         }
                     }
                 }
-                if (!isNaN(snake.sprites[n].worldTransform.ty) && !isNaN(snake.sprites[n].worldTransform.tx)) {
+                if (snake.sprites.length <= n - 1 || !isNaN(snake.sprites[n].worldTransform.ty) && !isNaN(snake.sprites[n].worldTransform.tx)) {
                     if (calcy) {
                         g.stage.y += diff * 100 * (320 - snake.sprites[n].worldTransform.ty) / (40 - (+(Math.abs(320 - snake.sprites[0].worldTransform.ty) > 640)) * 39);
                     }

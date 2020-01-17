@@ -31,7 +31,6 @@ export default class extends PIXI.Sprite{
         button(abort, 4 * 64, 5 * 64, () => {
                 g.level.kill();
                 this.veto = true;
-                console.log(this);
             })
         this.addChild(abort);
     }
@@ -55,7 +54,6 @@ export default class extends PIXI.Sprite{
         }
         key.check(80, function() {
             if (a.allow) {
-                console.log("SHOW");
                 a.visible = true;
                 g.soundManager.visible = true;
                 //background.zIndex = -2;

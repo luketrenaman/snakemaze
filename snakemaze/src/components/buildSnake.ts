@@ -116,29 +116,24 @@ export default class{
         this.predirection = this.direction;
         let a = this;
         key.waitDown([65, 37], () => {
-            console.log("left")
             //Left
         },true);
         key.waitDown([68, 39], () => {
-            console.log("right");
             //Right
         },true);
         key.waitDown([87, 38], () => {
-            console.log("up")
             //Up
             if (this.direction == "r" || this.direction == "l" && this.predirection != "u") {
                 this.predirection = "u";
             };
         },true);
         key.waitDown([83, 40], () => {
-            console.log("down")
             //Down
         },true);
     };
     shoop(){
         
         for(let i = 0; i < key.moveKeys.length;i++){
-            console.log("bop")
             switch(key.moveKeys[i]){
                 case 65:
                 case 37:
@@ -276,7 +271,6 @@ export default class{
                     a.exitSprite.cycle = 1;
                     a.exitSprite.x = spawn.x * 32;
                     a.exitSprite.y = spawn.y * 32;
-                    console.log(spawn)
                     a.exitSprite.scale.x = 1 / 6;
                     a.exitSprite.scale.y = 1 / 6;
                     a.exitSprite.coord = spawn;
@@ -317,7 +311,6 @@ export default class{
                     }
                 });
             });
-            console.log(target)
             this.locations[0].x = target.x;
             this.locations[0].y = target.y;
             this.direction = target.direction;

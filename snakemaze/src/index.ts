@@ -160,7 +160,7 @@ function setup() {
 						}
 					}
 				}
-				if (!isNaN(snake.sprites[n].worldTransform.ty) && !isNaN(snake.sprites[n].worldTransform.tx)) {
+				if (snake.sprites.length <= n-1 || !isNaN(snake.sprites[n].worldTransform.ty) && !isNaN(snake.sprites[n].worldTransform.tx)) {
 					if(calcy){
 						g.stage.y += diff * 100 * (320 - snake.sprites[n].worldTransform.ty) / (40 - (+(Math.abs(320 - snake.sprites[0].worldTransform.ty) > 640)) * 39);
 					}
