@@ -241,7 +241,7 @@ function setup() {
 			font: "52px Pixel",
 			fill: "white"
 		} as TextStyleOptions);
-		g.all.addChild(countdown);
+		g.stage.addChild(countdown);
 		countdown.y = 320;
 		countdown.x = 416;
 		let gameTick = new GameTick(function(frames,self){

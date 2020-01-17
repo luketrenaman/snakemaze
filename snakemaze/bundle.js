@@ -1103,7 +1103,7 @@ function setup() {
             font: "52px Pixel",
             fill: "white"
         });
-        g.all.addChild(countdown);
+        g.stage.addChild(countdown);
         countdown.y = 320;
         countdown.x = 416;
         var gameTick = new gametick_1["default"](function (frames, self) {
