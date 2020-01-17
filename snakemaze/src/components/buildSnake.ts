@@ -313,21 +313,8 @@ export default class{
             });
             this.locations[0].x = target.x;
             this.locations[0].y = target.y;
-            this.direction = target.direction;
-            switch(target.direction){
-                case "left":
-                this.move(-1,0);;
-                break;
-                case "right":
-                this.move(1,0);
-                break;
-                case "up":
-                this.move(0,-1);
-                break;
-                case "down":
-                this.move(0,1);
-                break;
-            }
+            this.predirection = target.direction;
+            this.checkMove();
             return;
         }
         if (death && !this.over) {

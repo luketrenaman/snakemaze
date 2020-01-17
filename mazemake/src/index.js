@@ -159,14 +159,6 @@ function alreadyFilled(x, y,arr){
             }
         })
         level.data = map;
-        level.fruit = [];
-        for(let i=0;i<level.data.length;i++){
-            for(let j=0;j<level.data[i].length;j++){
-                if(level.data[i][j] == 2){
-                    level.fruit.push([j,i]);
-                }
-            }
-        }
         console.log(JSON.stringify(level));
         text.innerHTML = JSON.stringify(level);
     })
