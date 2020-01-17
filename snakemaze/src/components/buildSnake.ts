@@ -132,35 +132,50 @@ export default class{
         },true);
     };
     shoop(){
-        
-        for(let i = 0; i < key.moveKeys.length;i++){
-            switch(key.moveKeys[i]){
+        this.doop()
+        key.mostRecentKey = null;
+    }
+    doop(){
+        console.log(key.moveKeys);
+        for(let i = 0; i <= key.moveKeys.length;i++){
+            let x;
+            if (i === key.moveKeys.length){
+                x = key.mostRecentKey;
+            } else{
+                x = key.moveKeys[i];
+            }
+            console.log(x);
+            switch(x){
                 case 65:
                 case 37:
                     if (this.direction == "u" || this.direction == "d" && this.predirection != "l") {
                         this.predirection = "l";
+                        return;
                     };
                     break;
                 case 68:
                 case 39:
                     if (this.direction == "u" || this.direction == "d" && this.predirection != "r") {
                         this.predirection = "r";
+                        return;
                     };
                     break;
                 case 83:
                 case 40:
                     if (this.direction == "r" || this.direction == "l" && this.predirection != "d") {
                         this.predirection = "d";
+                        return;
                     };
                     break;
                 case 87:
                 case 38:
                     if (this.direction == "r" || this.direction == "l" && this.predirection != "u") {
                         this.predirection = "u";
+                        return;
                     };
                     break;
                 default:
-                    throw "what the heck is happening how did we get here why am i failing at programming :((";
+                    //throw "what the heck is happening how did we get here why am i failing at programming :((";
             }
         }
     }

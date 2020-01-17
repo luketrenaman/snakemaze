@@ -231,12 +231,26 @@ var default_1 = /** @class */ (function () {
     }
     ;
     default_1.prototype.shoop = function () {
-        for (var i = 0; i < key_press_1["default"].moveKeys.length; i++) {
-            switch (key_press_1["default"].moveKeys[i]) {
+        this.doop();
+        key_press_1["default"].mostRecentKey = null;
+    };
+    default_1.prototype.doop = function () {
+        console.log(key_press_1["default"].moveKeys);
+        for (var i = 0; i <= key_press_1["default"].moveKeys.length; i++) {
+            var x = void 0;
+            if (i === key_press_1["default"].moveKeys.length) {
+                x = key_press_1["default"].mostRecentKey;
+            }
+            else {
+                x = key_press_1["default"].moveKeys[i];
+            }
+            console.log(x);
+            switch (x) {
                 case 65:
                 case 37:
                     if (this.direction == "u" || this.direction == "d" && this.predirection != "l") {
                         this.predirection = "l";
+                        return;
                     }
                     ;
                     break;
@@ -244,6 +258,7 @@ var default_1 = /** @class */ (function () {
                 case 39:
                     if (this.direction == "u" || this.direction == "d" && this.predirection != "r") {
                         this.predirection = "r";
+                        return;
                     }
                     ;
                     break;
@@ -251,6 +266,7 @@ var default_1 = /** @class */ (function () {
                 case 40:
                     if (this.direction == "r" || this.direction == "l" && this.predirection != "d") {
                         this.predirection = "d";
+                        return;
                     }
                     ;
                     break;
@@ -258,11 +274,12 @@ var default_1 = /** @class */ (function () {
                 case 38:
                     if (this.direction == "r" || this.direction == "l" && this.predirection != "u") {
                         this.predirection = "u";
+                        return;
                     }
                     ;
                     break;
                 default:
-                    throw "what the heck is happening how did we get here why am i failing at programming :((";
+                //throw "what the heck is happening how did we get here why am i failing at programming :((";
             }
         }
     };
@@ -1861,6 +1878,7 @@ exports["default"] = new /** @class */ (function () {
                     case 38:
                     case 83:
                     case 40:
+                        _this.mostRecentKey = e;
                         addMove(e);
                         break;
                 }
@@ -1899,6 +1917,7 @@ exports["default"] = new /** @class */ (function () {
         this.map = [];
         this.tethers = [];
         this.moveKeys = [];
+        this.mostRecentKey;
     }
     class_1.prototype.check = function (key, callback, not) {
         var a = this;

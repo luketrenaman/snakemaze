@@ -159,6 +159,7 @@ function alreadyFilled(x, y,arr){
             }
         })
         level.data = map;
+        level.mode = prompt("Pick a mode for the level. Ex: 'normal', 'crash'.");
         console.log(JSON.stringify(level));
         text.innerHTML = JSON.stringify(level);
     })
@@ -299,6 +300,7 @@ function alreadyFilled(x, y,arr){
                                 thing.id = prompt("Enter the id for the portal");
                                 thing.target = prompt("Enter the target id for the portal");
                                 thing.direction = prompt("Enter default direction for the portal");
+                                thing.setTexture(shapes.rectangle(30,30,"#ff0"));
                                 maze.push(thing);
                                 mouse = false;
                             }

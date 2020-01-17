@@ -8,11 +8,14 @@ interface Tether {
 export default new class{
     map:Array<number>;
     tethers:Array<Object>;
+    moveKeys:Array<Number>;
+    mostRecentKey:Number;
     constructor(){
         var a = this;
         this.map = [];
         this.tethers = [];
         this.moveKeys = [];
+        this.mostRecentKey;
     }
     listen = function() {
         var a = this;
@@ -26,7 +29,7 @@ export default new class{
                 this.moveKeys.splice(this.moveKeys.indexOf(key),1);
             }
         }
-        document.onkeydown = function(e) {
+        document.onkeydown = (e) => {
             e = e || window.event;
             e = e.which || e.keyCode || 0;
             if (a.map.indexOf(e) == -1) {
@@ -49,6 +52,7 @@ export default new class{
                 case 38:
                 case 83:
                 case 40:
+                    this.mostRecentKey = e;
                     addMove(e);
                 break;
             }
