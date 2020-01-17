@@ -242,8 +242,6 @@ function setup() {
 			fill: "white"
 		} as TextStyleOptions);
 		g.stage.addChild(countdown);
-		countdown.y = 320;
-		countdown.x = 416;
 		let gameTick = new GameTick(function(frames,self){
 			if (frames > 24) {
 				//TODO CHECK LOCATION
@@ -258,6 +256,8 @@ function setup() {
 			}
 		},130)
 		let loop = new fps(function(frames, self) {
+			countdown.x = -g.stage.x + 416;
+			countdown.y = -g.stage.y + 320;
 			diff = (Date.now() - then) / 1000;
 			then = Date.now();
 			pause.handle(self, gameTick,background);
