@@ -940,6 +940,38 @@ function setup() {
                 return b.zIndex - a.zIndex;
             });
         };
+        function fixx(px) {
+            var x = levels_1["default"][num].data[0].length * 32;
+            if (px > 0 && px < -x + 832) {
+                calcx = false;
+                return (-x + 832) / 2;
+            }
+            if (px > 0) {
+                return 0;
+            }
+            if (px < -x + 832) {
+                return -x + 832;
+            }
+            return px;
+        }
+        function fixy(py) {
+            var y = levels_1["default"][num].data.length * 32;
+            if (py > 0 && py < -y + 640) {
+                calcy = false;
+                return (-y + 640) / 2;
+            }
+            if (py > 0) {
+                return 0;
+            }
+            if (py < -y + 640) {
+                return -y + 640;
+            }
+            return py;
+        }
+        var diff;
+        var then = Date.now();
+        var calcx = true;
+        var calcy = true;
         //give kill function
         this.kill = function () {
             loop.stop();
@@ -959,6 +991,8 @@ function setup() {
             var n = 0;
             snake.counter.xvel = 0;
             g.level.endLoop = new fps_1["default"](function (frames, self) {
+                diff = (Date.now() - then) / 1000;
+                then = Date.now();
                 //make the portal continue to animate
                 if (snake.exit && frames % 10 === 0) {
                     snake.exitSprite.cycle++;
@@ -996,8 +1030,14 @@ function setup() {
                     }
                 }
                 if (!isNaN(snake.sprites[n].worldTransform.ty) && !isNaN(snake.sprites[n].worldTransform.tx)) {
-                    g.stage.y += (320 - snake.sprites[n].worldTransform.ty) / 40;
-                    g.stage.x += (416 - snake.sprites[n].worldTransform.tx) / 40;
+                    if (calcy) {
+                        g.stage.y += diff * 100 * (320 - snake.sprites[n].worldTransform.ty) / (40 - (+(Math.abs(320 - snake.sprites[0].worldTransform.ty) > 640)) * 39);
+                    }
+                    if (calcx) {
+                        g.stage.x += diff * 100 * (416 - snake.sprites[n].worldTransform.tx) / (40 - (+(Math.abs(416 - snake.sprites[0].worldTransform.tx) > 832)) * 39);
+                    }
+                    g.stage.y = fixy(g.stage.y);
+                    g.stage.x = fixx(g.stage.x);
                 }
                 background.children.forEach(function (val) {
                     val.y = (val.orig.y * 64 + g.stage.y).mod(640 + 64) - g.stage.y - 64;
@@ -1087,38 +1127,6 @@ function setup() {
                 }
             }
         }, 130);
-        var diff;
-        var then = Date.now();
-        var calcx = true;
-        var calcy = true;
-        function fixx(px) {
-            var x = levels_1["default"][num].data[0].length * 32;
-            if (px > 0 && px < -x + 832) {
-                calcx = false;
-                return (-x + 832) / 2;
-            }
-            if (px > 0) {
-                return 0;
-            }
-            if (px < -x + 832) {
-                return -x + 832;
-            }
-            return px;
-        }
-        function fixy(py) {
-            var y = levels_1["default"][num].data.length * 32;
-            if (py > 0 && py < -y + 640) {
-                calcy = false;
-                return (-y + 640) / 2;
-            }
-            if (py > 0) {
-                return 0;
-            }
-            if (py < -y + 640) {
-                return -y + 640;
-            }
-            return py;
-        }
         var loop = new fps_1["default"](function (frames, self) {
             diff = (Date.now() - then) / 1000;
             then = Date.now();
