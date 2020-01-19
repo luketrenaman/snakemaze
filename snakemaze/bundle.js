@@ -23055,19 +23055,18 @@ function default_1() {
     g.base.addChild(replay);
     g.base.addChild(next);
     var allowReplay = true;
-    g.manager.loadReplay = function (num) {
-        replay.on('click', function () {
-            if (allowReplay) {
-                allowReplay = false;
-                g.level.kill();
-                setTimeout(function () {
-                    g.level = new g.newLevel(num);
-                    allowReplay = true;
-                }, 50);
-            }
-        });
-        //Set callback of below hamburgers
-    };
+    replay.on('click', function () {
+        if (allowReplay) {
+            allowReplay = false;
+            g.level.kill();
+            setTimeout(function () {
+                g.level = g.newLevel(g.manager.num);
+                console.log(g.manager.num);
+                allowReplay = true;
+            }, 50);
+        }
+    });
+    //Set callback of below hamburgers
     var deathMenu = new Menu("death", false);
     deathMenu.zOrder = -4;
     var victoryMenu = new Menu("victory", false);
@@ -23108,7 +23107,6 @@ exports.__esModule = true;
 var shapes_1 = __webpack_require__(/*! ../drawing/shapes */ "./snakemaze/src/drawing/shapes.ts");
 var key_press_1 = __webpack_require__(/*! ../utilities/key-press */ "./snakemaze/src/utilities/key-press.ts");
 var button_1 = __webpack_require__(/*! ./button */ "./snakemaze/src/components/button.ts");
-var fps_1 = __webpack_require__(/*! ../utilities/fps */ "./snakemaze/src/utilities/fps.ts");
 var default_1 = /** @class */ (function (_super) {
     __extends(default_1, _super);
     function default_1() {
@@ -23133,53 +23131,52 @@ var default_1 = /** @class */ (function (_super) {
             g.manager.show("level");
             g.all.removeChild(_this);
             g.renderer.render(g.all);
+            _this = null;
         });
-        _this = null;
+        _this.addChild(abort);
         return _this;
     }
+    default_1.prototype.handle = function (renderloop, gameloop, background) {
+        var a = this;
+        function wait() {
+            if (!a.veto) {
+                gameloop.start();
+                renderloop.then = Date.now();
+                renderloop.start();
+                a.visible = false;
+                g.soundManager.visible = false;
+                background.zIndex = 500;
+                g.all.updateLayersOrder();
+            }
+        }
+        function allow() {
+            if (!a.veto) {
+                a.allow = true;
+            }
+        }
+        key_press_1["default"].check(80, function () {
+            if (a.allow) {
+                a.visible = true;
+                g.soundManager.visible = true;
+                //background.zIndex = -2;
+                a.zIndex = -3;
+                g.all.updateLayersOrder();
+                a.allow = false;
+                console.log("render");
+                g.renderer.render(g.all);
+                gameloop.stop();
+                renderloop.stop();
+                key_press_1["default"].waitUp(80, function () {
+                    key_press_1["default"].waitDown(80, wait);
+                    key_press_1["default"].waitUp(80, allow);
+                });
+            }
+        });
+    };
+    ;
     return default_1;
 }(PIXI.Sprite));
 exports["default"] = default_1;
-this.addChild(abort);
-handle(renderloop, fps_1["default"], gameloop, fps_1["default"], background);
-{
-    var a_1 = this;
-    function wait() {
-        if (!a_1.veto) {
-            gameloop.start();
-            renderloop.then = Date.now();
-            renderloop.start();
-            a_1.visible = false;
-            g.soundManager.visible = false;
-            background.zIndex = 500;
-            g.all.updateLayersOrder();
-        }
-    }
-    function allow() {
-        if (!a_1.veto) {
-            a_1.allow = true;
-        }
-    }
-    key_press_1["default"].check(80, function () {
-        if (a_1.allow) {
-            a_1.visible = true;
-            g.soundManager.visible = true;
-            //background.zIndex = -2;
-            a_1.zIndex = -3;
-            g.all.updateLayersOrder();
-            a_1.allow = false;
-            console.log("render");
-            g.renderer.render(g.all);
-            gameloop.stop();
-            renderloop.stop();
-            key_press_1["default"].waitUp(80, function () {
-                key_press_1["default"].waitDown(80, wait);
-                key_press_1["default"].waitUp(80, allow);
-            });
-        }
-    });
-}
-;
 ;
 
 
@@ -23321,7 +23318,7 @@ function setup() {
     g.newLevel = function (num) {
         Math.seedrandom(num.toString() + "snak");
         key_press_1["default"].mostRecentKey = null;
-        g.manager.loadReplay(num);
+        g.manager.num = num;
         if (levels_1["default"][num] == undefined)
             return;
         //maze

@@ -172,20 +172,19 @@ export default function(){
     g.base.addChild(replay);
     g.base.addChild(next);
     
-    let allowReplay = true;
-    g.manager.loadReplay = function(num){
-        replay.on('click',function(){
-            if(allowReplay){
-                allowReplay = false;
-                g.level.kill();
-                setTimeout(function(){
-                    g.level = new g.newLevel(num);
-                    allowReplay = true;
-                },50)
-            }
-        })
+let allowReplay = true;
+    replay.on('click',function(){
+        if(allowReplay){
+            allowReplay = false;
+            g.level.kill();
+            setTimeout(function(){
+                g.level = g.newLevel(g.manager.num);
+                console.log(g.manager.num);
+                allowReplay = true;
+            },50)
+        }
+    })
         //Set callback of below hamburgers
-    }
     let deathMenu = new Menu("death",false);
     deathMenu.zOrder = -4;
     let victoryMenu = new Menu("victory",false);

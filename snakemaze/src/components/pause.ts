@@ -32,7 +32,7 @@ export default class extends PIXI.Sprite{
                 g.level.kill();
                 g.manager.show("level");
                 g.all.removeChild(this);
-                g.renderer.render(g.all;)
+                g.renderer.render(g.all);
                 this = null;
             })
         this.addChild(abort);

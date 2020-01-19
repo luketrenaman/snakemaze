@@ -60,7 +60,7 @@ function setup() {
 	g.newLevel = function(num) {
 		Math.seedrandom(num.toString() + "snak");
 		key.mostRecentKey = null;
-		g.manager.loadReplay(num);
+		g.manager.num = num;
 		if (levels[num] == undefined) return; 
 		//maze
 		g.maze = levels[num];
