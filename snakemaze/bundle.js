@@ -779,6 +779,7 @@ var default_1 = /** @class */ (function (_super) {
         function wait() {
             if (!a.veto) {
                 gameloop.start();
+                renderloop.then = Date.now();
                 renderloop.start();
                 a.visible = false;
                 g.soundManager.visible = false;
@@ -800,7 +801,7 @@ var default_1 = /** @class */ (function (_super) {
                 g.all.updateLayersOrder();
                 a.allow = false;
                 console.log("render");
-                g.renderer.render(g.stage);
+                g.renderer.render(g.all);
                 gameloop.stop();
                 renderloop.stop();
                 key_press_1["default"].waitUp(80, function () {
@@ -981,8 +982,6 @@ function setup() {
             g.stage.y = fixy(g.stage.y);
             g.stage.x = fixx(g.stage.x);
         }
-        var diff;
-        var then = Date.now();
         var calcx = true;
         var calcy = true;
         //give kill function
@@ -1003,9 +1002,7 @@ function setup() {
             //Create a new loop with no controls
             var n = 0;
             snake.counter.xvel = 0;
-            g.level.endLoop = new fps_1["default"](function (frames, self) {
-                diff = (Date.now() - then) / 1000;
-                then = Date.now();
+            g.level.endLoop = new fps_1["default"](function (frames, self, diff) {
                 //make the portal continue to animate
                 if (snake.exit && frames % 10 === 0) {
                     snake.exitSprite.cycle++;
@@ -1118,8 +1115,8 @@ function setup() {
         var gameTick = new gametick_1["default"](function (frames, self) {
             if (frames > 24) {
                 //TODO CHECK LOCATION
-                //snake.shoop();
-                //snake.checkMove();
+                snake.shoop();
+                snake.checkMove();
             }
             else {
                 if (Math.ceil(3 - frames / 8) === 0) {
@@ -1139,12 +1136,10 @@ function setup() {
         g.stage.x = fixx(g.stage.x - 16);
         g.stage.y = fixy(g.stage.y + 16);
         g.renderer.render(g.all);
-        var loop = new fps_1["default"](function (frames, self) {
+        var loop = new fps_1["default"](function (frames, self, diff) {
+            console.log(diff);
             countdown.x = -g.stage.x + 416;
             countdown.y = -g.stage.y + 320;
-            diff = (Date.now() - then) / 1000;
-            then = Date.now();
-            pause.handle(self, gameTick, background);
             camera(diff);
             //
             background.children.forEach(function (val) {
@@ -1155,6 +1150,7 @@ function setup() {
                 val.visible = !(val.x + g.stage.x < -32 || val.x + g.stage.x > 864 || val.y + g.stage.y < -32 || val.y + g.stage.y > 672);
             });
             g.renderer.render(g.all);
+            pause.handle(self, gameTick, background);
             console.log("render");
         });
         return this;
@@ -1776,9 +1772,13 @@ var default_1 = /** @class */ (function (_super) {
             if (_this.going) {
                 requestAnimationFrame(_this.draw);
                 _this.ct++;
-                _this.cb(_this.ct, _this);
+                _this.diff = (Date.now() - _this.then) / 1000;
+                _this.then = Date.now();
+                _this.cb(_this.ct, _this, _this.diff);
             }
         };
+        _this.then = Date.now();
+        _this.diff;
         requestAnimationFrame(_this.draw);
         return _this;
     }

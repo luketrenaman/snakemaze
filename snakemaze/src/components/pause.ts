@@ -39,6 +39,7 @@ export default class extends PIXI.Sprite{
         function wait() {
             if(!a.veto){
                 gameloop.start();
+                renderloop.then = Date.now();
                 renderloop.start();
                 a.visible = false;
                 g.soundManager.visible = false;
@@ -49,7 +50,7 @@ export default class extends PIXI.Sprite{
 
         function allow() {
             if(!a.veto){
-                a.allow = true;
+                a.allow = true
             }
         }
         key.check(80, function() {
@@ -61,7 +62,7 @@ export default class extends PIXI.Sprite{
                 g.all.updateLayersOrder();
                 a.allow = false;
                 console.log("render")
-                g.renderer.render(g.stage);
+                g.renderer.render(g.all);
                 gameloop.stop();
                 renderloop.stop();
                 key.waitUp(80, function() {

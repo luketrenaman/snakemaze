@@ -111,8 +111,6 @@ function setup() {
 			g.stage.y = fixy(g.stage.y);
 			g.stage.x = fixx(g.stage.x);
 		}
-		let diff;
-		let then = Date.now();
 		let calcx = true;
 		let calcy = true;
 		//give kill function
@@ -133,9 +131,7 @@ function setup() {
 			//Create a new loop with no controls
 			let n = 0;
 			snake.counter.xvel = 0;
-			g.level.endLoop = new fps(function(frames, self) {
-				diff = (Date.now() - then) / 1000;
-				then = Date.now();
+			g.level.endLoop = new fps(function(frames, self,diff) {
 				//make the portal continue to animate
 				if (snake.exit && frames % 10 === 0) {
 					snake.exitSprite.cycle++;
@@ -248,8 +244,8 @@ function setup() {
 		let gameTick = new GameTick(function(frames,self){
 			if (frames > 24) {
 				//TODO CHECK LOCATION
-				//snake.shoop();
-				//snake.checkMove();
+				snake.shoop();
+				snake.checkMove();
 			} else {
 				if (Math.ceil(3 - frames / 8) === 0) {
 					countdown.visible = false;
@@ -267,12 +263,10 @@ function setup() {
 		g.stage.x = fixx(g.stage.x-16);
 		g.stage.y = fixy(g.stage.y+16);
 		g.renderer.render(g.all);
-		let loop = new fps(function(frames, self) {
+		let loop = new fps(function(frames, self,diff) {
+			console.log(diff);
 			countdown.x = -g.stage.x + 416;
 			countdown.y = -g.stage.y + 320;
-			diff = (Date.now() - then) / 1000;
-			then = Date.now();
-			pause.handle(self, gameTick,background);
 
 			camera(diff);
 			//
@@ -284,7 +278,8 @@ function setup() {
 				val.visible = !(val.x + g.stage.x < -32 || val.x + g.stage.x > 864 || val.y + g.stage.y < -32 || val.y + g.stage.y > 672)
 			})
 			g.renderer.render(g.all);
-			console.log("render")
+			pause.handle(self, gameTick,background);
+			console.log("render");
 		})
 		return this;
 	}

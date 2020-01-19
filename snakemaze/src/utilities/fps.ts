@@ -2,10 +2,14 @@ import Timer from "./timer.ts";
 export default class extends Timer{
     going:boolean;
     ct:number;
-    cb:Function;
+    cb:function;
+    diff:number;
+    then:number
 
     constructor(cb:(ct:number,obj:Object) => (void)){
         super(cb);
+        this.then = Date.now();
+        this.diff;
         requestAnimationFrame(this.draw);
     }
     start(){
@@ -16,7 +20,9 @@ export default class extends Timer{
         if (this.going) {
             requestAnimationFrame(this.draw);
             this.ct++
-            this.cb(this.ct,this);
+            this.diff = (Date.now()-this.then)/1000;
+            this.then = Date.now()
+            this.cb(this.ct,this,this.diff);
         }
     }
 }
