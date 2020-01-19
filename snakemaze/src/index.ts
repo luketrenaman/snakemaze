@@ -1,6 +1,6 @@
 //glpnasfasfasfsafsa
 //Initialize a global value g
-
+!function(a,b,c,d,e,f,g,h,i){function j(a){var b,c=a.length,e=this,f=0,g=e.i=e.j=0,h=e.S=[];for(c||(a=[c++]);d>f;)h[f]=f++;for(f=0;d>f;f++)h[f]=h[g=s&g+a[f%c]+(b=h[f])],h[g]=b;(e.g=function(a){for(var b,c=0,f=e.i,g=e.j,h=e.S;a--;)b=h[f=s&f+1],c=c*d+h[s&(h[f]=h[g=s&g+b])+(h[g]=b)];return e.i=f,e.j=g,c})(d)}function k(a,b){var c,d=[],e=typeof a;if(b&&"object"==e)for(c in a)try{d.push(k(a[c],b-1))}catch(f){}return d.length?d:"string"==e?a:a+"\0"}function l(a,b){for(var c,d=a+"",e=0;e<d.length;)b[s&e]=s&(c^=19*b[s&e])+d.charCodeAt(e++);return n(b)}function m(c){try{return o?n(o.randomBytes(d)):(a.crypto.getRandomValues(c=new Uint8Array(d)),n(c))}catch(e){return[+new Date,a,(c=a.navigator)&&c.plugins,a.screen,n(b)]}}function n(a){return String.fromCharCode.apply(0,a)}var o,p=c.pow(d,e),q=c.pow(2,f),r=2*q,s=d-1,t=c["seed"+i]=function(a,f,g){var h=[];f=1==f?{entropy:!0}:f||{};var o=l(k(f.entropy?[a,n(b)]:null==a?m():a,3),h),s=new j(h);return l(n(s.S),b),(f.pass||g||function(a,b,d){return d?(c[i]=a,b):a})(function(){for(var a=s.g(e),b=p,c=0;q>a;)a=(a+c)*d,b*=d,c=s.g(1);for(;a>=r;)a/=2,b/=2,c>>>=1;return(a+c)/b},o,"global"in f?f.global:this==c)};if(l(c[i](),b),g&&g.exports){g.exports=t;try{o=require("crypto")}catch(u){}}else h&&h.amd&&h(function(){return t})}(this,[],Math,256,6,52,"object"==typeof module&&module,"function"==typeof define&&define,"random");
 //Utilities
 import key from "./utilities/key-press";
 import "./utilities/equals";
@@ -24,7 +24,7 @@ g.renderer = PIXI.autoDetectRenderer(832, 640);
 g.renderer.backgroundColor = 0x444444;
 g.all = new PIXI.Container();
 document.body.appendChild(g.renderer.view)
-PIXI.loader.add("assets/sound.png").add("assets/nosound.png").add("assets/background-incomplete.png").add("assets/background-complete.png").add("assets/snake-head.png").add("assets/rainbow.json").add("assets/snake-body.png").add("assets/snake-corner.png").add("assets/snake-tail.png").add("assets/grass.png").add("assets/flowers-1.png").add("assets/flowers-2.png").add("assets/rock.png").add("assets/gem-1.png").add("assets/gem-2.png").add("assets/gem-3.png").add("assets/level-1.png").add("assets/titlescreen.png").add("assets/start.png").add("assets/back.png").add("assets/music.png").add("assets/nomusic.png").load(fonts);
+PIXI.loader.add("assets/menu.png").add("assets/refresh.png").add("assets/sound.png").add("assets/nosound.png").add("assets/background-incomplete.png").add("assets/background-complete.png").add("assets/snake-head.png").add("assets/rainbow.json").add("assets/snake-body.png").add("assets/snake-corner.png").add("assets/snake-tail.png").add("assets/grass.png").add("assets/flowers-1.png").add("assets/flowers-2.png").add("assets/rock.png").add("assets/gem-1.png").add("assets/gem-2.png").add("assets/gem-3.png").add("assets/level-1.png").add("assets/titlescreen.png").add("assets/start.png").add("assets/back.png").add("assets/music.png").add("assets/nomusic.png").load(fonts);
 function fonts() {
 	WebFont.load({
 		custom: {
@@ -57,6 +57,8 @@ function setup() {
 		});
 	};
 	g.newLevel = function(num) {
+		Math.seedrandom(num.toString() + "snak");
+		key.mostRecentKey = null;
 		g.manager.loadReplay(num);
 		if (levels[num] == undefined) return; 
 		//maze
@@ -115,13 +117,12 @@ function setup() {
 		let calcy = true;
 		//give kill function
 		this.kill = () => {
+			g.all.removeChild(snake.counter);
 			loop.stop();
 			gameTick.stop();
 			g.level.endLoop.stop();
 			g.all.removeChild(g.stage);
-			g.all.removeChild(snake.counter);
 			g.all.removeChild(pause.obj);
-			g.manager.show("level");
 		}
 		this.end = function(condition) {
 			//Either "victory" or "death"
@@ -131,6 +132,7 @@ function setup() {
 			//Create a new loop with no controls
 			let n = 0;
 			snake.counter.xvel = 0;
+			console.log("endloop is declared!")
 			g.level.endLoop = new fps(function(frames, self,diff) {
 				//make the portal continue to animate
 				if (snake.exit && frames % 10 === 0) {
@@ -177,7 +179,6 @@ function setup() {
 					val.visible = !(val.x + g.stage.x < -32 || val.x + g.stage.x > 864 || val.y + g.stage.y < -32 || val.y + g.stage.y > 672)
 				})
 				g.renderer.render(g.all);
-				console.log("render")
 			})
 		}
 		//Create a pause menu
@@ -264,7 +265,6 @@ function setup() {
 		g.stage.y = fixy(g.stage.y+16);
 		g.renderer.render(g.all);
 		let loop = new fps(function(frames, self,diff) {
-			console.log(diff);
 			countdown.x = -g.stage.x + 416;
 			countdown.y = -g.stage.y + 320;
 
@@ -279,7 +279,6 @@ function setup() {
 			})
 			g.renderer.render(g.all);
 			pause.handle(self, gameTick,background);
-			console.log("render");
 		})
 		return this;
 	}

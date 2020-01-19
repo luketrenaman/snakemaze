@@ -117,14 +117,34 @@ export default function(){
         )
     // -- MENU TO SHOW ON DEATH --
     //TODO
-    let exit2 = new PIXI.Sprite(PIXI.loader.resources["assets/back.png"].texture);
+    let exit2 = new PIXI.Sprite(PIXI.loader.resources["assets/menu.png"].texture);
     button(
         exit2, 0, 0, function () {
             g.manager.show("start");
             g.level.kill();
         }
     )
-    g.manager.loadReplay = function(){
+    let replay = new PIXI.Sprite(PIXI.loader.resources["assets/refresh.png"].texture);
+    let next = new PIXI.Sprite(PIXI.loader.resources["assets/back.png"].texture);
+    next.scale.x = -1;
+    next.anchor.x = 0.5;
+
+    button(
+        replay,replay.x,replay.y,function(){
+        }
+    )
+    let allowReplay = true;
+    g.manager.loadReplay = function(num){
+        replay.on('click',function(){
+            if(allowReplay){
+                allowReplay = false;
+                g.level.kill();
+                setTimeout(function(){
+                    g.level = new g.newLevel(num);
+                    allowReplay = true;
+                },50)
+            }
+        })
         //Set callback of below hamburgers
     }
     let deathMenu = new Menu("death",false);
@@ -132,21 +152,43 @@ export default function(){
     deathBase.x = 832 /2 - deathBase.width / 2
     deathBase.y = 640 / 2 - deathBase.height / 2
     deathMenu.zOrder = -4;
-    let youDied = new PIXI.Text("You died!", {
-        font: "52px Pixel",
-        fill: "white"
+    let youDied = new PIXI.Text("Level failed!", {
+        font: "40px Pixel",
+        fill: "#e74c3c"
     } as TextStyleOptions);
     youDied.anchor.x = 0.5;
     youDied.x = deathBase.width / 2
     youDied.y = 32;
+    
+    exit2.x = 32;
+    replay.x = 64*2+32;
+    next.x = 64*5;
+    exit2.y = 64*3 - 32;
+    replay.y = 64*3 - 32;
+    next.y = 64*3 - 32;
+
+
     deathBase.addChild(youDied);
+    deathBase.addChild(exit2);
+    deathBase.addChild(replay);
+    deathBase.addChild(next);
     deathMenu.addChild(deathBase);
-    deathMenu.addChild(exit2);
     let victoryMenu = new Menu("victory",false);
-    let victoryBase = new PIXI.Sprite(shapes.rectangle(64*6,64*4,"rgba(255, 255, 255,0.7)"));
+    let victoryBase = new PIXI.Sprite(shapes.rectangle(64*6,64*4,"rgba(0, 0, 0,0.7)"));
     victoryBase.x = 832 /2 - victoryBase.width / 2
     victoryBase.y = 640 / 2 - victoryBase.height / 2
     victoryMenu.zOrder = -4;
+    let youWon = new PIXI.Text("Level complete!", {
+        font: "40px Pixel",
+        fill: "#2ecc71"
+    } as TextStyleOptions);
+    youWon.anchor.x = 0.5;
+    youWon.x = youWon.width / 2
+    youWon.y = 32;
+    victoryBase.addChild(youWon);
+    //victoryBase.addChild(exit2);
+    //victoryBase.addChild(replay);
+   // victoryBase.addChild(next);
     victoryMenu.addChild(victoryBase);
     //victoryMenu.addChild(exit2);
   
