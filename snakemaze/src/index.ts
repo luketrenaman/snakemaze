@@ -121,7 +121,9 @@ function setup() {
 			g.all.removeChild(snake.counter);
 			loop.stop();
 			gameTick.stop();
-			g.level.endLoop.stop();
+			if(g.level.endLoop){
+				g.level.endLoop.stop();
+			}
 			g.all.removeChild(g.stage);
 			g.all.removeChild(pause.obj);
 		}
@@ -133,9 +135,6 @@ function setup() {
 			//Create a new loop with no controls
 			let n = 0;
 			snake.counter.xvel = 0;
-			console.log("endloop is declared!")
-
-			let finalScreen = 0
 			g.level.endLoop = new fps(function(frames, self,diff) {
 				//make the portal continue to animate
 				if (snake.exit && frames % 10 === 0) {
@@ -146,35 +145,20 @@ function setup() {
 				snake.counter.x -= 100 * diff * (snake.counter.x - 416 + snake.counter.width/2) / 20;
 				snake.counter.y -= 100 * diff * (snake.counter.y - 500) / 20;
 				if(condition === "victory"){
+					g.manager.show("victory");
 					if(snake.sprites.length !== n - 1){
 						if (frames % 10 === 0){
 							g.stage.removeChild(snake.sprites[n]);
 							snake.checkMove();
 							n++;
 						}
-					} else{
-						if(finalScreen === 0){
-							g.manager.show("victory");
-							g.manager.get("victory").alpha = 0
-						}
-						else if(finalScreen <= 1){
-							g.manager.get("victory").alpha = finalScreen;
-							finalScreen += diff / 2;
-						}
 					}
 				}
 				if(condition === "death"){
+					g.manager.show("death");
 					if (frames % 10 === 0) {
 						if (snake.sprites.length - 1 === n) {
-							if(finalScreen === 0){
-								g.manager.show("death");
-							}
-							else if(finalScreen <= 1){
-								g.manager.get("death").alpha = finalScreen;
-								finalScreen += diff / 2;
-								snake.sprites[n].tint = 0x000;
-							}
-							
+							snake.sprites[n].tint = 0x000;
 						} else {
 							do {
 								snake.sprites[n].tint = 0x000;

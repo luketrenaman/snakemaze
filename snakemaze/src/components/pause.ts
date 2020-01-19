@@ -27,10 +27,13 @@ export default class extends PIXI.Sprite{
         this.allow = true;
         this.veto = false;
         g.all.addChild(this);
-        let abort = new PIXI.Sprite(shapes.rectangle(64*5,64*2,"#000"));
-        button(abort, 4 * 64, 5 * 64, () => {
+        let abort = new PIXI.Sprite(PIXI.loader.resources["assets/back.png"].texture);
+        button(abort, 32, 32, () => {
                 g.level.kill();
-                this.veto = true;
+                g.manager.show("level");
+                g.all.removeChild(this);
+                g.renderer.render(g.all;)
+                this = null;
             })
         this.addChild(abort);
     }

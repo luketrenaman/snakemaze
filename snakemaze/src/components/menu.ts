@@ -132,7 +132,7 @@ export default function(){
     let exit = new PIXI.Sprite(PIXI.loader.resources["assets/back.png"].texture);
     levelSelect.addChild(exit);
     button(
-        exit, 0, 0, function () {
+        exit, 32, 32, function () {
             g.manager.show("start");
         }
         )
@@ -149,8 +149,8 @@ export default function(){
     let exit2 = new PIXI.Sprite(PIXI.loader.resources["assets/menu.png"].texture);
     button(
         exit2, 0, 0, function () {
-            g.manager.show("start");
             g.level.kill();
+            g.manager.show("level");
         }
     )
     let replay = new PIXI.Sprite(PIXI.loader.resources["assets/refresh.png"].texture);

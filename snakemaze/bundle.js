@@ -22895,13 +22895,6 @@ var MenuManager = /** @class */ (function () {
     function MenuManager() {
         this.menus = [];
     }
-    MenuManager.prototype.get = function (menuName) {
-        this.menus.forEach(function (val) {
-            if (val.name === menuName) {
-                return val;
-            }
-        });
-    };
     MenuManager.prototype.show = function (menuName) {
         this.hide();
         this.menus.forEach(function (val) {
@@ -23029,7 +23022,7 @@ function default_1() {
     // -- QUIT BUTTON --
     var exit = new PIXI.Sprite(PIXI.loader.resources["assets/back.png"].texture);
     levelSelect.addChild(exit);
-    button_1["default"](exit, 0, 0, function () {
+    button_1["default"](exit, 32, 32, function () {
         g.manager.show("start");
     });
     // -- MENU TO SHOW ON DEATH --
@@ -23043,8 +23036,8 @@ function default_1() {
     g.base.txt.y = 32;
     var exit2 = new PIXI.Sprite(PIXI.loader.resources["assets/menu.png"].texture);
     button_1["default"](exit2, 0, 0, function () {
-        g.manager.show("start");
         g.level.kill();
+        g.manager.show("level");
     });
     var replay = new PIXI.Sprite(PIXI.loader.resources["assets/refresh.png"].texture);
     var next = new PIXI.Sprite(PIXI.loader.resources["assets/back.png"].texture);
@@ -23115,6 +23108,7 @@ exports.__esModule = true;
 var shapes_1 = __webpack_require__(/*! ../drawing/shapes */ "./snakemaze/src/drawing/shapes.ts");
 var key_press_1 = __webpack_require__(/*! ../utilities/key-press */ "./snakemaze/src/utilities/key-press.ts");
 var button_1 = __webpack_require__(/*! ./button */ "./snakemaze/src/components/button.ts");
+var fps_1 = __webpack_require__(/*! ../utilities/fps */ "./snakemaze/src/utilities/fps.ts");
 var default_1 = /** @class */ (function (_super) {
     __extends(default_1, _super);
     function default_1() {
@@ -23133,55 +23127,59 @@ var default_1 = /** @class */ (function (_super) {
         _this.allow = true;
         _this.veto = false;
         g.all.addChild(_this);
-        var abort = new PIXI.Sprite(shapes_1["default"].rectangle(64 * 5, 64 * 2, "#000"));
-        button_1["default"](abort, 4 * 64, 5 * 64, function () {
+        var abort = new PIXI.Sprite(PIXI.loader.resources["assets/back.png"].texture);
+        button_1["default"](abort, 32, 32, function () {
             g.level.kill();
-            _this.veto = true;
+            g.manager.show("level");
+            g.all.removeChild(_this);
+            g.renderer.render(g.all);
         });
-        _this.addChild(abort);
+        _this = null;
         return _this;
     }
-    default_1.prototype.handle = function (renderloop, gameloop, background) {
-        var a = this;
-        function wait() {
-            if (!a.veto) {
-                gameloop.start();
-                renderloop.then = Date.now();
-                renderloop.start();
-                a.visible = false;
-                g.soundManager.visible = false;
-                background.zIndex = 500;
-                g.all.updateLayersOrder();
-            }
-        }
-        function allow() {
-            if (!a.veto) {
-                a.allow = true;
-            }
-        }
-        key_press_1["default"].check(80, function () {
-            if (a.allow) {
-                a.visible = true;
-                g.soundManager.visible = true;
-                //background.zIndex = -2;
-                a.zIndex = -3;
-                g.all.updateLayersOrder();
-                a.allow = false;
-                console.log("render");
-                g.renderer.render(g.all);
-                gameloop.stop();
-                renderloop.stop();
-                key_press_1["default"].waitUp(80, function () {
-                    key_press_1["default"].waitDown(80, wait);
-                    key_press_1["default"].waitUp(80, allow);
-                });
-            }
-        });
-    };
-    ;
     return default_1;
 }(PIXI.Sprite));
 exports["default"] = default_1;
+this.addChild(abort);
+handle(renderloop, fps_1["default"], gameloop, fps_1["default"], background);
+{
+    var a_1 = this;
+    function wait() {
+        if (!a_1.veto) {
+            gameloop.start();
+            renderloop.then = Date.now();
+            renderloop.start();
+            a_1.visible = false;
+            g.soundManager.visible = false;
+            background.zIndex = 500;
+            g.all.updateLayersOrder();
+        }
+    }
+    function allow() {
+        if (!a_1.veto) {
+            a_1.allow = true;
+        }
+    }
+    key_press_1["default"].check(80, function () {
+        if (a_1.allow) {
+            a_1.visible = true;
+            g.soundManager.visible = true;
+            //background.zIndex = -2;
+            a_1.zIndex = -3;
+            g.all.updateLayersOrder();
+            a_1.allow = false;
+            console.log("render");
+            g.renderer.render(g.all);
+            gameloop.stop();
+            renderloop.stop();
+            key_press_1["default"].waitUp(80, function () {
+                key_press_1["default"].waitDown(80, wait);
+                key_press_1["default"].waitUp(80, allow);
+            });
+        }
+    });
+}
+;
 ;
 
 
@@ -23384,7 +23382,9 @@ function setup() {
             g.all.removeChild(snake.counter);
             loop.stop();
             gameTick.stop();
-            g.level.endLoop.stop();
+            if (g.level.endLoop) {
+                g.level.endLoop.stop();
+            }
             g.all.removeChild(g.stage);
             g.all.removeChild(pause.obj);
         };
@@ -23396,8 +23396,6 @@ function setup() {
             //Create a new loop with no controls
             var n = 0;
             snake.counter.xvel = 0;
-            console.log("endloop is declared!");
-            var finalScreen = 0;
             g.level.endLoop = new fps_1["default"](function (frames, self, diff) {
                 //make the portal continue to animate
                 if (snake.exit && frames % 10 === 0) {
@@ -23408,6 +23406,7 @@ function setup() {
                 snake.counter.x -= 100 * diff * (snake.counter.x - 416 + snake.counter.width / 2) / 20;
                 snake.counter.y -= 100 * diff * (snake.counter.y - 500) / 20;
                 if (condition === "victory") {
+                    g.manager.show("victory");
                     if (snake.sprites.length !== n - 1) {
                         if (frames % 10 === 0) {
                             g.stage.removeChild(snake.sprites[n]);
@@ -23415,28 +23414,12 @@ function setup() {
                             n++;
                         }
                     }
-                    else {
-                        if (finalScreen === 0) {
-                            g.manager.show("victory");
-                            g.manager.get("victory").alpha = 0;
-                        }
-                        else if (finalScreen <= 1) {
-                            g.manager.get("victory").alpha = finalScreen;
-                            finalScreen += diff / 2;
-                        }
-                    }
                 }
                 if (condition === "death") {
+                    g.manager.show("death");
                     if (frames % 10 === 0) {
                         if (snake.sprites.length - 1 === n) {
-                            if (finalScreen === 0) {
-                                g.manager.show("death");
-                            }
-                            else if (finalScreen <= 1) {
-                                g.manager.get("death").alpha = finalScreen;
-                                finalScreen += diff / 2;
-                                snake.sprites[n].tint = 0x000;
-                            }
+                            snake.sprites[n].tint = 0x000;
                         }
                         else {
                             do {
