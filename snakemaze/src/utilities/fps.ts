@@ -6,7 +6,7 @@ export default class extends Timer{
 
     constructor(cb:(ct:number,obj:Object) => (void)){
         super(cb);
-        this.draw();
+        requestAnimationFrame(this.draw);
     }
     start(){
         this.going = true;

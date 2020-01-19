@@ -538,7 +538,7 @@ function default_1(sprite, x, y, func) {
     sprite.interactive = true;
     sprite.x = x;
     sprite.y = y;
-    sprite.on('click', function () { func(); g.renderer.render(g.all); });
+    sprite.on('click', func);
 }
 exports["default"] = default_1;
 
@@ -580,6 +580,7 @@ var MenuManager = /** @class */ (function () {
                 g.soundManager.visible = val.sound;
             }
         });
+        console.log("render");
         g.renderer.render(g.all);
     };
     MenuManager.prototype.hide = function () {
@@ -798,6 +799,7 @@ var default_1 = /** @class */ (function (_super) {
                 a.zIndex = -3;
                 g.all.updateLayersOrder();
                 a.allow = false;
+                console.log("render");
                 g.renderer.render(g.stage);
                 gameloop.stop();
                 renderloop.stop();
@@ -969,6 +971,16 @@ function setup() {
             }
             return py;
         }
+        function camera(diff) {
+            if (calcy) {
+                g.stage.y += diff * 100 * ((320 - snake.sprites[0].worldTransform.ty) / (40 - (+(Math.abs(320 - snake.sprites[0].worldTransform.ty) > 640)) * 39));
+            }
+            if (calcx) {
+                g.stage.x += diff * 100 * ((416 - snake.sprites[0].worldTransform.tx) / (40 - (+(Math.abs(416 - snake.sprites[0].worldTransform.tx) > 832)) * 39));
+            }
+            g.stage.y = fixy(g.stage.y);
+            g.stage.x = fixx(g.stage.x);
+        }
         var diff;
         var then = Date.now();
         var calcx = true;
@@ -1031,14 +1043,7 @@ function setup() {
                     }
                 }
                 if (snake.sprites.length <= n - 1 || !isNaN(snake.sprites[n].worldTransform.ty) && !isNaN(snake.sprites[n].worldTransform.tx)) {
-                    if (calcy) {
-                        g.stage.y += diff * 100 * (320 - snake.sprites[n].worldTransform.ty) / (40 - (+(Math.abs(320 - snake.sprites[0].worldTransform.ty) > 640)) * 39);
-                    }
-                    if (calcx) {
-                        g.stage.x += diff * 100 * (416 - snake.sprites[n].worldTransform.tx) / (40 - (+(Math.abs(416 - snake.sprites[0].worldTransform.tx) > 832)) * 39);
-                    }
-                    g.stage.y = fixy(g.stage.y);
-                    g.stage.x = fixx(g.stage.x);
+                    camera(diff);
                 }
                 background.children.forEach(function (val) {
                     val.y = (val.orig.y * 64 + g.stage.y).mod(640 + 64) - g.stage.y - 64;
@@ -1048,6 +1053,7 @@ function setup() {
                     val.visible = !(val.x + g.stage.x < -32 || val.x + g.stage.x > 864 || val.y + g.stage.y < -32 || val.y + g.stage.y > 672);
                 });
                 g.renderer.render(g.all);
+                console.log("render");
             });
         };
         //Create a pause menu
@@ -1104,8 +1110,6 @@ function setup() {
         //snake.move(0,0);
         //hide menus
         g.manager.hide();
-        g.stage.y = -snake.sprites[0].y + 320;
-        g.stage.x = -snake.sprites[0].x + 416;
         var countdown = new PIXI.Text("3", {
             font: "52px Pixel",
             fill: "white"
@@ -1114,8 +1118,8 @@ function setup() {
         var gameTick = new gametick_1["default"](function (frames, self) {
             if (frames > 24) {
                 //TODO CHECK LOCATION
-                snake.shoop();
-                snake.checkMove();
+                //snake.shoop();
+                //snake.checkMove();
             }
             else {
                 if (Math.ceil(3 - frames / 8) === 0) {
@@ -1126,21 +1130,23 @@ function setup() {
                 }
             }
         }, 130);
+        g.stage.x = -(snake.sprites[0].x - 416);
+        g.stage.y = -(snake.sprites[0].y - 320);
+        //this render needs to be invisible
+        //derive world transform some other way
+        g.stage.x = fixx(g.stage.x + 32);
+        g.stage.y = fixy(g.stage.y + 32);
+        g.stage.x = fixx(g.stage.x - 16);
+        g.stage.y = fixy(g.stage.y + 16);
+        g.renderer.render(g.all);
         var loop = new fps_1["default"](function (frames, self) {
             countdown.x = -g.stage.x + 416;
             countdown.y = -g.stage.y + 320;
             diff = (Date.now() - then) / 1000;
             then = Date.now();
             pause.handle(self, gameTick, background);
+            camera(diff);
             //
-            if (calcy) {
-                g.stage.y += diff * 100 * (320 - snake.sprites[0].worldTransform.ty) / (40 - (+(Math.abs(320 - snake.sprites[0].worldTransform.ty) > 640)) * 39);
-            }
-            if (calcx) {
-                g.stage.x += diff * 100 * (416 - snake.sprites[0].worldTransform.tx) / (40 - (+(Math.abs(416 - snake.sprites[0].worldTransform.tx) > 832)) * 39);
-            }
-            g.stage.y = fixy(g.stage.y);
-            g.stage.x = fixx(g.stage.x);
             background.children.forEach(function (val) {
                 val.y = (val.orig.y * 64 + g.stage.y).mod(640 + 64) - g.stage.y - 64;
                 val.x = (val.orig.x * 64 + g.stage.x).mod(832 + 64) - g.stage.x - 64;
@@ -1149,6 +1155,7 @@ function setup() {
                 val.visible = !(val.x + g.stage.x < -32 || val.x + g.stage.x > 864 || val.y + g.stage.y < -32 || val.y + g.stage.y > 672);
             });
             g.renderer.render(g.all);
+            console.log("render");
         });
         return this;
     };
@@ -1772,7 +1779,7 @@ var default_1 = /** @class */ (function (_super) {
                 _this.cb(_this.ct, _this);
             }
         };
-        _this.draw();
+        requestAnimationFrame(_this.draw);
         return _this;
     }
     default_1.prototype.start = function () {

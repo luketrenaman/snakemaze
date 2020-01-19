@@ -11,6 +11,7 @@ class MenuManager{
                 g.soundManager.visible = val.sound;
             }
         })
+        console.log("render")
         g.renderer.render(g.all);
     }
     hide(){
