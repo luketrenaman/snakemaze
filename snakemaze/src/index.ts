@@ -258,8 +258,8 @@ function setup() {
 		g.stage.y = -(snake.sprites[0].y - 320);
 		//this render needs to be invisible
 		//derive world transform some other way
-		g.stage.x = fixx(g.stage.x+32);
-		g.stage.y = fixy(g.stage.y+32);
+		g.stage.x = fixx(g.stage.x+16);
+		g.stage.y = fixy(g.stage.y-16);
 		g.stage.x = fixx(g.stage.x-16);
 		g.stage.y = fixy(g.stage.y+16);
 		g.renderer.render(g.all);
