@@ -15,6 +15,7 @@ import buildSnake from "./components/buildSnake";
 //Tile rendering
 import tileRender from "./tile-rendering/map";
 import { TextStyleOptions } from "pixi.js";
+import shapes from "./drawing/shapes";
 Number.prototype.mod = function(n) {
 	return ((this % n) + n) % n;
 }; 
@@ -133,6 +134,8 @@ function setup() {
 			let n = 0;
 			snake.counter.xvel = 0;
 			console.log("endloop is declared!")
+
+			let finalScreen = 0
 			g.level.endLoop = new fps(function(frames, self,diff) {
 				//make the portal continue to animate
 				if (snake.exit && frames % 10 === 0) {
@@ -140,10 +143,8 @@ function setup() {
 					snake.exitSprite.cycle %= 8;
 					snake.exitSprite.setTexture(PIXI.loader.resources["assets/rainbow.json"].textures["rainbow" + snake.exitSprite.cycle + ".png"]);
 				}
-				if (snake.sprites.length - 1 == n) {
-					snake.counter.xvel += 0.1;
-					snake.counter.x += snake.counter.xvel;
-				}
+				snake.counter.x -= 100 * diff * (snake.counter.x - 416 + snake.counter.width/2) / 20;
+				snake.counter.y -= 100 * diff * (snake.counter.y - 500) / 20;
 				if(condition === "victory"){
 					if(snake.sprites.length !== n - 1){
 						if (frames % 10 === 0){
@@ -152,14 +153,28 @@ function setup() {
 							n++;
 						}
 					} else{
-						g.manager.show("victory");
+						if(finalScreen === 0){
+							g.manager.show("victory");
+							g.manager.get("victory").alpha = 0
+						}
+						else if(finalScreen <= 1){
+							g.manager.get("victory").alpha = finalScreen;
+							finalScreen += diff / 2;
+						}
 					}
 				}
 				if(condition === "death"){
 					if (frames % 10 === 0) {
 						if (snake.sprites.length - 1 === n) {
-							snake.sprites[n].tint = 0x000;
-							g.manager.show("death");
+							if(finalScreen === 0){
+								g.manager.show("death");
+							}
+							else if(finalScreen <= 1){
+								g.manager.get("death").alpha = finalScreen;
+								finalScreen += diff / 2;
+								snake.sprites[n].tint = 0x000;
+							}
+							
 						} else {
 							do {
 								snake.sprites[n].tint = 0x000;
@@ -168,7 +183,7 @@ function setup() {
 						}
 					}
 				}
-				if (snake.sprites.length <= n-1 || !isNaN(snake.sprites[n].worldTransform.ty) && !isNaN(snake.sprites[n].worldTransform.tx)) {
+				if (snake.sprites[n]) {
 					camera(diff);
 				}
 				background.children.forEach(function(val) {

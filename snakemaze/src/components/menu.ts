@@ -5,10 +5,31 @@ class MenuManager{
     }
     show(menuName:string){
         this.hide();
-        this.menus.forEach(function(val){
+        this.menus.forEach(function(val) {
             if(val.name === menuName){
                 val.visible = true;
                 g.soundManager.visible = val.sound;
+                if(val.name === "victory" || val.name === "death"){
+                    if(val.name === "death"){
+                        g.base.txt.setText("Level failed!");
+                        g.base.txt.setStyle({
+                            font: "35px Pixel",
+                            fill: "#e74c3c"
+                        } as TextStyleOptions);
+                    }
+                    if(val.name === "victory"){
+                        g.base.txt.setText("Level complete!");
+                        g.base.txt.setStyle(
+                            {
+                                font: "35px Pixel",
+                                fill: "#2ecc71"
+                            } as TextStyleOptions)
+                    }
+                    g.base.addChild(g.base.txt);
+                    val.addChild(g.base);
+                    
+                }
+
             }
         })
         console.log("render")
@@ -117,6 +138,14 @@ export default function(){
         )
     // -- MENU TO SHOW ON DEATH --
     //TODO
+    g.base = new PIXI.Sprite(shapes.rectangle(64*6,64*4,"rgba(0, 0, 0,0.7)"));
+    g.base.x = 832 /2 - g.base.width / 2;
+    g.base.y = 640 / 2 - g.base.height / 2;
+
+    g.base.txt = new PIXI.Text();
+    g.base.txt.anchor.x = 0.5;
+    g.base.txt.x = g.base.width / 2
+    g.base.txt.y = 32;
     let exit2 = new PIXI.Sprite(PIXI.loader.resources["assets/menu.png"].texture);
     button(
         exit2, 0, 0, function () {
@@ -133,6 +162,16 @@ export default function(){
         replay,replay.x,replay.y,function(){
         }
     )
+    exit2.x = 32;
+    replay.x = 64*2+32;
+    next.x = 64*5;
+    exit2.y = 64*3 - 32;
+    replay.y = 64*3 - 32;
+    next.y = 64*3 - 32;
+    g.base.addChild(exit2);
+    g.base.addChild(replay);
+    g.base.addChild(next);
+    
     let allowReplay = true;
     g.manager.loadReplay = function(num){
         replay.on('click',function(){
@@ -148,48 +187,12 @@ export default function(){
         //Set callback of below hamburgers
     }
     let deathMenu = new Menu("death",false);
-    let deathBase = new PIXI.Sprite(shapes.rectangle(64*6,64*4,"rgba(0, 0, 0,0.7)"));
-    deathBase.x = 832 /2 - deathBase.width / 2
-    deathBase.y = 640 / 2 - deathBase.height / 2
     deathMenu.zOrder = -4;
-    let youDied = new PIXI.Text("Level failed!", {
-        font: "40px Pixel",
-        fill: "#e74c3c"
-    } as TextStyleOptions);
-    youDied.anchor.x = 0.5;
-    youDied.x = deathBase.width / 2
-    youDied.y = 32;
-    
-    exit2.x = 32;
-    replay.x = 64*2+32;
-    next.x = 64*5;
-    exit2.y = 64*3 - 32;
-    replay.y = 64*3 - 32;
-    next.y = 64*3 - 32;
-
-
-    deathBase.addChild(youDied);
-    deathBase.addChild(exit2);
-    deathBase.addChild(replay);
-    deathBase.addChild(next);
-    deathMenu.addChild(deathBase);
     let victoryMenu = new Menu("victory",false);
-    let victoryBase = new PIXI.Sprite(shapes.rectangle(64*6,64*4,"rgba(0, 0, 0,0.7)"));
-    victoryBase.x = 832 /2 - victoryBase.width / 2
-    victoryBase.y = 640 / 2 - victoryBase.height / 2
     victoryMenu.zOrder = -4;
-    let youWon = new PIXI.Text("Level complete!", {
-        font: "40px Pixel",
-        fill: "#2ecc71"
-    } as TextStyleOptions);
-    youWon.anchor.x = 0.5;
-    youWon.x = youWon.width / 2
-    youWon.y = 32;
-    victoryBase.addChild(youWon);
-    //victoryBase.addChild(exit2);
-    //victoryBase.addChild(replay);
-   // victoryBase.addChild(next);
-    victoryMenu.addChild(victoryBase);
+    //base.addChild(exit2);
+    //base.addChild(replay);
+   // base.addChild(next);
     //victoryMenu.addChild(exit2);
   
 }

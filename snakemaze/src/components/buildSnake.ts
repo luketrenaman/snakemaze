@@ -31,13 +31,13 @@ class Counter extends PIXI.Sprite{
     rules:rules;
     display:PIXI.Text;
     constructor(){
-        super(shapes.rectangle(128, 96, "rgba(44, 62, 80,0.7)"))
+        super(shapes.rectangle(128, 96, "rgba(0, 0, 0,0.7)"))
         this.zOrder = -2;
         this.x = 832 - 32 * 4; //position in bottom right
         this.y = 640 - 32* 3; //position in bottom right
         this.rules = {
             current:0,
-            max:25
+            max:10
         } as rules;
         //Generate icons for the counter
         for(let i = 0;i<3;i++){

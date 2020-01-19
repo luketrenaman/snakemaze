@@ -22459,13 +22459,13 @@ var ab = new PIXI.Sprite(shapes_1["default"].rectangle(128, 96, "rgba(44, 62, 80
 var Counter = /** @class */ (function (_super) {
     __extends(Counter, _super);
     function Counter() {
-        var _this = _super.call(this, shapes_1["default"].rectangle(128, 96, "rgba(44, 62, 80,0.7)")) || this;
+        var _this = _super.call(this, shapes_1["default"].rectangle(128, 96, "rgba(0, 0, 0,0.7)")) || this;
         _this.zOrder = -2;
         _this.x = 832 - 32 * 4; //position in bottom right
         _this.y = 640 - 32 * 3; //position in bottom right
         _this.rules = {
             current: 0,
-            max: 25
+            max: 10
         };
         //Generate icons for the counter
         for (var i = 0; i < 3; i++) {
@@ -22895,12 +22895,37 @@ var MenuManager = /** @class */ (function () {
     function MenuManager() {
         this.menus = [];
     }
+    MenuManager.prototype.get = function (menuName) {
+        this.menus.forEach(function (val) {
+            if (val.name === menuName) {
+                return val;
+            }
+        });
+    };
     MenuManager.prototype.show = function (menuName) {
         this.hide();
         this.menus.forEach(function (val) {
             if (val.name === menuName) {
                 val.visible = true;
                 g.soundManager.visible = val.sound;
+                if (val.name === "victory" || val.name === "death") {
+                    if (val.name === "death") {
+                        g.base.txt.setText("Level failed!");
+                        g.base.txt.setStyle({
+                            font: "35px Pixel",
+                            fill: "#e74c3c"
+                        });
+                    }
+                    if (val.name === "victory") {
+                        g.base.txt.setText("Level complete!");
+                        g.base.txt.setStyle({
+                            font: "35px Pixel",
+                            fill: "#2ecc71"
+                        });
+                    }
+                    g.base.addChild(g.base.txt);
+                    val.addChild(g.base);
+                }
             }
         });
         console.log("render");
@@ -23009,6 +23034,13 @@ function default_1() {
     });
     // -- MENU TO SHOW ON DEATH --
     //TODO
+    g.base = new PIXI.Sprite(shapes_1["default"].rectangle(64 * 6, 64 * 4, "rgba(0, 0, 0,0.7)"));
+    g.base.x = 832 / 2 - g.base.width / 2;
+    g.base.y = 640 / 2 - g.base.height / 2;
+    g.base.txt = new PIXI.Text();
+    g.base.txt.anchor.x = 0.5;
+    g.base.txt.x = g.base.width / 2;
+    g.base.txt.y = 32;
     var exit2 = new PIXI.Sprite(PIXI.loader.resources["assets/menu.png"].texture);
     button_1["default"](exit2, 0, 0, function () {
         g.manager.show("start");
@@ -23020,6 +23052,15 @@ function default_1() {
     next.anchor.x = 0.5;
     button_1["default"](replay, replay.x, replay.y, function () {
     });
+    exit2.x = 32;
+    replay.x = 64 * 2 + 32;
+    next.x = 64 * 5;
+    exit2.y = 64 * 3 - 32;
+    replay.y = 64 * 3 - 32;
+    next.y = 64 * 3 - 32;
+    g.base.addChild(exit2);
+    g.base.addChild(replay);
+    g.base.addChild(next);
     var allowReplay = true;
     g.manager.loadReplay = function (num) {
         replay.on('click', function () {
@@ -23035,45 +23076,12 @@ function default_1() {
         //Set callback of below hamburgers
     };
     var deathMenu = new Menu("death", false);
-    var deathBase = new PIXI.Sprite(shapes_1["default"].rectangle(64 * 6, 64 * 4, "rgba(0, 0, 0,0.7)"));
-    deathBase.x = 832 / 2 - deathBase.width / 2;
-    deathBase.y = 640 / 2 - deathBase.height / 2;
     deathMenu.zOrder = -4;
-    var youDied = new PIXI.Text("Level failed!", {
-        font: "40px Pixel",
-        fill: "#e74c3c"
-    });
-    youDied.anchor.x = 0.5;
-    youDied.x = deathBase.width / 2;
-    youDied.y = 32;
-    exit2.x = 32;
-    replay.x = 64 * 2 + 32;
-    next.x = 64 * 5;
-    exit2.y = 64 * 3 - 32;
-    replay.y = 64 * 3 - 32;
-    next.y = 64 * 3 - 32;
-    deathBase.addChild(youDied);
-    deathBase.addChild(exit2);
-    deathBase.addChild(replay);
-    deathBase.addChild(next);
-    deathMenu.addChild(deathBase);
     var victoryMenu = new Menu("victory", false);
-    var victoryBase = new PIXI.Sprite(shapes_1["default"].rectangle(64 * 6, 64 * 4, "rgba(0, 0, 0,0.7)"));
-    victoryBase.x = 832 / 2 - victoryBase.width / 2;
-    victoryBase.y = 640 / 2 - victoryBase.height / 2;
     victoryMenu.zOrder = -4;
-    var youWon = new PIXI.Text("Level complete!", {
-        font: "40px Pixel",
-        fill: "#2ecc71"
-    });
-    youWon.anchor.x = 0.5;
-    youWon.x = youWon.width / 2;
-    youWon.y = 32;
-    victoryBase.addChild(youWon);
-    //victoryBase.addChild(exit2);
-    //victoryBase.addChild(replay);
-    // victoryBase.addChild(next);
-    victoryMenu.addChild(victoryBase);
+    //base.addChild(exit2);
+    //base.addChild(replay);
+    // base.addChild(next);
     //victoryMenu.addChild(exit2);
 }
 exports["default"] = default_1;
@@ -23389,6 +23397,7 @@ function setup() {
             var n = 0;
             snake.counter.xvel = 0;
             console.log("endloop is declared!");
+            var finalScreen = 0;
             g.level.endLoop = new fps_1["default"](function (frames, self, diff) {
                 //make the portal continue to animate
                 if (snake.exit && frames % 10 === 0) {
@@ -23396,10 +23405,8 @@ function setup() {
                     snake.exitSprite.cycle %= 8;
                     snake.exitSprite.setTexture(PIXI.loader.resources["assets/rainbow.json"].textures["rainbow" + snake.exitSprite.cycle + ".png"]);
                 }
-                if (snake.sprites.length - 1 == n) {
-                    snake.counter.xvel += 0.1;
-                    snake.counter.x += snake.counter.xvel;
-                }
+                snake.counter.x -= 100 * diff * (snake.counter.x - 416 + snake.counter.width / 2) / 20;
+                snake.counter.y -= 100 * diff * (snake.counter.y - 500) / 20;
                 if (condition === "victory") {
                     if (snake.sprites.length !== n - 1) {
                         if (frames % 10 === 0) {
@@ -23409,14 +23416,27 @@ function setup() {
                         }
                     }
                     else {
-                        g.manager.show("victory");
+                        if (finalScreen === 0) {
+                            g.manager.show("victory");
+                            g.manager.get("victory").alpha = 0;
+                        }
+                        else if (finalScreen <= 1) {
+                            g.manager.get("victory").alpha = finalScreen;
+                            finalScreen += diff / 2;
+                        }
                     }
                 }
                 if (condition === "death") {
                     if (frames % 10 === 0) {
                         if (snake.sprites.length - 1 === n) {
-                            snake.sprites[n].tint = 0x000;
-                            g.manager.show("death");
+                            if (finalScreen === 0) {
+                                g.manager.show("death");
+                            }
+                            else if (finalScreen <= 1) {
+                                g.manager.get("death").alpha = finalScreen;
+                                finalScreen += diff / 2;
+                                snake.sprites[n].tint = 0x000;
+                            }
                         }
                         else {
                             do {
@@ -23426,7 +23446,7 @@ function setup() {
                         }
                     }
                 }
-                if (snake.sprites.length <= n - 1 || !isNaN(snake.sprites[n].worldTransform.ty) && !isNaN(snake.sprites[n].worldTransform.tx)) {
+                if (snake.sprites[n]) {
                     camera(diff);
                 }
                 background.children.forEach(function (val) {
