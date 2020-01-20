@@ -33,7 +33,7 @@ export default class extends PIXI.Sprite{
                 g.manager.show("level");
                 g.all.removeChild(this);
                 g.renderer.render(g.all);
-                this = null;
+                this.veto = true;
             })
         this.addChild(abort);
     }
@@ -70,7 +70,6 @@ export default class extends PIXI.Sprite{
                 renderloop.stop();
                 key.waitUp(80, function() {
                     key.waitDown(80, wait);
-                    key.waitUp(80, allow);
                 });
             }
         });

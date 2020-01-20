@@ -75,9 +75,11 @@ class SoundMenu extends PIXI.Sprite{
         button(this, x, y, () => {
                 if (!this.enabled) {
                     this.setTexture(textureOn);
+                    g.renderer.render(g.all);
                 }
                 else {
                     this.setTexture(textureOff);
+                    g.renderer.render(g.all);
                 }
                 this.enabled = !this.enabled;
             }
