@@ -1,4 +1,4 @@
-import shapes from "./drawing/shapes.js";
+import shapes from "./drawing/shapes";
 let stage = new PIXI.Container();
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 // create a renderer instance.
@@ -9,8 +9,8 @@ renderer.interactive = true;
 document.body.appendChild(renderer.view);
 let text = document.createElement("textarea");
 document.body.appendChild(text);
-let start = {"x":0,"y":0}
-let prev = {"x":0,"y":0}
+let start = {"x":0,"y":0};
+let prev = {"x":0,"y":0};
 let mouse = false;
 // create a new Sprite using the texture
 Number.prototype.mod = function(n) {

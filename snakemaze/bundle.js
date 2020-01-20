@@ -22498,7 +22498,6 @@ var Counter = /** @class */ (function (_super) {
 }(PIXI.Sprite));
 var default_1 = /** @class */ (function () {
     function default_1() {
-        var _this = this;
         this.over = false;
         this.exit = false;
         this.locations = [
@@ -22535,22 +22534,6 @@ var default_1 = /** @class */ (function () {
         this.direction = g.maze.snake.direction;
         this.predirection = this.direction;
         var a = this;
-        key_press_1["default"].waitDown([65, 37], function () {
-            //Left
-        }, true);
-        key_press_1["default"].waitDown([68, 39], function () {
-            //Right
-        }, true);
-        key_press_1["default"].waitDown([87, 38], function () {
-            //Up
-            if (_this.direction == "r" || _this.direction == "l" && _this.predirection != "u") {
-                _this.predirection = "u";
-            }
-            ;
-        }, true);
-        key_press_1["default"].waitDown([83, 40], function () {
-            //Down
-        }, true);
     }
     ;
     default_1.prototype.shoop = function () {
@@ -23156,8 +23139,8 @@ var default_1 = /** @class */ (function (_super) {
                 a.allow = true;
             }
         }
-        key_press_1["default"].check(80, function () {
-            if (a.allow) {
+        if (a.allow) {
+            key_press_1["default"].check(80, function () {
                 a.visible = true;
                 g.soundManager.visible = true;
                 //background.zIndex = -2;
@@ -23170,9 +23153,10 @@ var default_1 = /** @class */ (function (_super) {
                 renderloop.stop();
                 key_press_1["default"].waitUp(80, function () {
                     key_press_1["default"].waitDown(80, wait);
+                    key_press_1["default"].waitUp(80, allow);
                 });
-            }
-        });
+            });
+        }
     };
     ;
     return default_1;
@@ -23317,6 +23301,7 @@ function setup() {
         });
     };
     g.newLevel = function (num) {
+        var _this = this;
         Math.seedrandom(num.toString() + "snak");
         key_press_1["default"].mostRecentKey = null;
         g.manager.num = num;
@@ -23380,11 +23365,18 @@ function setup() {
             g.all.removeChild(snake.counter);
             loop.stop();
             gameTick.stop();
+            loop = null;
+            gameTick = null;
             if (g.level.endLoop) {
                 g.level.endLoop.stop();
+                g.level.endLoop = null;
             }
             g.all.removeChild(g.stage);
-            g.all.removeChild(pause.obj);
+            g.all.removeChild(pause);
+            g.maze = null;
+            g.stage = null;
+            pause = null;
+            delete _this.end;
         };
         this.end = function (condition) {
             //Either "victory" or "death"

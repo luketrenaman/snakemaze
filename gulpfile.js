@@ -13,7 +13,7 @@ gulp.task('browserSync', function() {
             "baseDir": cwd
         },
         "ui":{
-            "port":3000
+            "port":3002
         },
         "open": false,
         "notify": false

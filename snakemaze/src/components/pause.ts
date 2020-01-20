@@ -56,8 +56,8 @@ export default class extends PIXI.Sprite{
                 a.allow = true
             }
         }
-        key.check(80, function() {
-            if (a.allow) {
+        if (a.allow) {
+            key.check(80, function() {
                 a.visible = true;
                 g.soundManager.visible = true;
                 //background.zIndex = -2;
@@ -70,8 +70,9 @@ export default class extends PIXI.Sprite{
                 renderloop.stop();
                 key.waitUp(80, function() {
                     key.waitDown(80, wait);
+                    key.waitUp(80, allow);
                 });
-            }
-        });
+            });
+        }
     };
 };

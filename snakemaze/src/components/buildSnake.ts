@@ -115,21 +115,6 @@ export default class{
         this.direction = g.maze.snake.direction;
         this.predirection = this.direction;
         let a = this;
-        key.waitDown([65, 37], () => {
-            //Left
-        },true);
-        key.waitDown([68, 39], () => {
-            //Right
-        },true);
-        key.waitDown([87, 38], () => {
-            //Up
-            if (this.direction == "r" || this.direction == "l" && this.predirection != "u") {
-                this.predirection = "u";
-            };
-        },true);
-        key.waitDown([83, 40], () => {
-            //Down
-        },true);
     };
     shoop(){
         this.doop()

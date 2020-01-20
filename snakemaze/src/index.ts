@@ -121,11 +121,19 @@ function setup() {
 			g.all.removeChild(snake.counter);
 			loop.stop();
 			gameTick.stop();
+			loop = null;
+			gameTick = null;
 			if(g.level.endLoop){
 				g.level.endLoop.stop();
+				g.level.endLoop = null;
 			}
 			g.all.removeChild(g.stage);
-			g.all.removeChild(pause.obj);
+			g.all.removeChild(pause);
+			g.maze = null;
+			g.stage = null;
+			pause = null;
+			delete this.end;
+			
 		}
 		this.end = function(condition) {
 			//Either "victory" or "death"
@@ -178,7 +186,7 @@ function setup() {
 					val.visible = !(val.x + g.stage.x < -32 || val.x + g.stage.x > 864 || val.y + g.stage.y < -32 || val.y + g.stage.y > 672)
 				})
 				g.renderer.render(g.all);
-			})
+			});
 		}
 		//Create a pause menu
 		let pause = new pauseConstructor();
