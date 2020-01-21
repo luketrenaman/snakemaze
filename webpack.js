@@ -3,8 +3,8 @@
 //For compile: webpack
 module.exports = function(cwd, ptype) {
 	var config = {
-		"mode":"production",
-		//"devtool": "source-map",
+		"mode":"development",
+		"devtool": "source-map",
 		"entry": "./" + cwd + "src/index.ts",
 		"output": {
 			"path": require("path").resolve("./" + cwd),

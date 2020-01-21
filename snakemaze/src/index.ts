@@ -133,6 +133,7 @@ function setup() {
 			g.stage = null;
 			pause = null;
 			delete this.end;
+			snake = null;
 			
 		}
 		this.end = function(condition) {
