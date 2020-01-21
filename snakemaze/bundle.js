@@ -22465,7 +22465,7 @@ var Counter = /** @class */ (function (_super) {
         _this.y = 640 - 32 * 3; //position in bottom right
         _this.rules = {
             current: 0,
-            max: 20
+            max: 1
         };
         //Generate icons for the counter
         for (var i = 0; i < 3; i++) {
@@ -23269,7 +23269,7 @@ g.renderer = PIXI.autoDetectRenderer(832, 640);
 g.renderer.backgroundColor = 0x444444;
 g.all = new PIXI.Container();
 document.body.appendChild(g.renderer.view);
-PIXI.loader.add("assets/menu.png").add("assets/refresh.png").add("assets/sound.png").add("assets/nosound.png").add("assets/background-incomplete.png").add("assets/background-complete.png").add("assets/snake-head.png").add("assets/rainbow.json").add("assets/snake-body.png").add("assets/snake-corner.png").add("assets/snake-tail.png").add("assets/grass.png").add("assets/flowers-1.png").add("assets/flowers-2.png").add("assets/rock.png").add("assets/gem-1.png").add("assets/gem-2.png").add("assets/gem-3.png").add("assets/level-1.png").add("assets/titlescreen.png").add("assets/start.png").add("assets/back.png").add("assets/music.png").add("assets/nomusic.png").load(fonts);
+PIXI.loader.add("assets/snake-portal.png").add("assets/menu.png").add("assets/refresh.png").add("assets/sound.png").add("assets/nosound.png").add("assets/background-incomplete.png").add("assets/background-complete.png").add("assets/snake-head.png").add("assets/rainbow.json").add("assets/snake-body.png").add("assets/snake-corner.png").add("assets/snake-tail.png").add("assets/grass.png").add("assets/flowers-1.png").add("assets/flowers-2.png").add("assets/rock.png").add("assets/gem-1.png").add("assets/gem-2.png").add("assets/gem-3.png").add("assets/level-1.png").add("assets/titlescreen.png").add("assets/start.png").add("assets/back.png").add("assets/music.png").add("assets/nomusic.png").load(fonts);
 function fonts() {
     WebFont.load({
         custom: {
@@ -23377,6 +23377,7 @@ function setup() {
             g.stage = null;
             pause = null;
             delete _this.end;
+            snake = null;
         };
         this.end = function (condition) {
             //Either "victory" or "death"
@@ -23401,6 +23402,7 @@ function setup() {
                         if (frames % 10 === 0) {
                             g.stage.removeChild(snake.sprites[n]);
                             snake.checkMove();
+                            snake.sprites[n + 1].setTexture(PIXI.loader.resources["assets/snake-portal.png"].texture);
                             n++;
                         }
                     }
@@ -23496,6 +23498,7 @@ function setup() {
                 //TODO CHECK LOCATION
                 snake.shoop();
                 snake.checkMove();
+                snake.eat();
             }
             else {
                 if (Math.ceil(3 - frames / 8) === 0) {
