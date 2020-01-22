@@ -22465,7 +22465,7 @@ var Counter = /** @class */ (function (_super) {
         _this.y = 640 - 32 * 3; //position in bottom right
         _this.rules = {
             current: 0,
-            max: 1
+            max: 15
         };
         //Generate icons for the counter
         for (var i = 0; i < 3; i++) {
