@@ -6,7 +6,7 @@ export default class extends Timer{
     diff:number;
     then:number
 
-    constructor(cb:(ct:number,obj:Object) => (void)){
+    constructor(cb:(ct:number,obj:Object,diff:number) => (void)){
         super(cb);
         this.then = Date.now();
         this.diff;

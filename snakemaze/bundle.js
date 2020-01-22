@@ -23478,7 +23478,9 @@ function setup() {
                             console.log("pass 2");
                             g.stage.removeChild(snake.sprites[n]);
                             snake.checkMove();
-                            snake.sprites[n + 1].setTexture(PIXI.loader.resources["assets/snake-portal.png"].texture);
+                            if (snake.sprites.length !== n - 2) {
+                                snake.sprites[n + 1].setTexture(PIXI.loader.resources["assets/snake-portal.png"].texture);
+                            }
                             n++;
                         }
                     }
@@ -23577,7 +23579,6 @@ function setup() {
                 //TODO CHECK LOCATION
                 snake.shoop();
                 snake.checkMove();
-                snake.eat();
             }
             else {
                 if (Math.ceil(3 - frames / 8) === 0) {
