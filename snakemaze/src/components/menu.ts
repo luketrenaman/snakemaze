@@ -1,7 +1,7 @@
 class MenuManager{
     menus: Array<Menu>;
     constructor(){
-        this.menus = []
+        this.menus = [];
     }
     show(menuName:string){
         this.hide();
@@ -32,7 +32,6 @@ class MenuManager{
 
             }
         })
-        console.log("render")
         g.renderer.render(g.all);
     }
     hide(){
@@ -86,6 +85,37 @@ class SoundMenu extends PIXI.Sprite{
             );
     }
 }
+interface DifficultyConfig{
+    long:number,
+    medium:number,
+    short:number,
+    tickrate:number
+}
+class TrophyManager extends PIXI.Container{
+    trophies:Array<TrophySelect>;
+    constructor(){
+        super();
+        this.x = 32;
+        this.y = 640 - 68 - 32;
+        this.trophies = [];
+    }
+    select(trophy){
+        this.children.forEach(function(val){
+            val.alpha = 0.6;
+        })
+        trophy.alpha = 1;
+    }
+    add(trophy:TrophySelect){
+        this.addChild(trophy);
+    }
+}
+class TrophySelect extends PIXI.Sprite{
+    constructor(tex,x:number,config:DifficultyConfig){
+        super(tex);
+        this.x = x;
+
+    }
+}
 export default function(){
     g.manager = new MenuManager();
     // -- HANDLE MUSIC --
@@ -130,6 +160,37 @@ export default function(){
             lev.addChild(text);
         }
     }
+    let bronze = new TrophySelect(PIXI.loader.resources["assets/trophy-bronze.png"].texture,0,{
+        "long":20,
+        "medium":10,
+        "short":5,
+        "tickrate":250
+    });
+    let silver = new TrophySelect(PIXI.loader.resources["assets/trophy-silver.png"].texture,(68+32),{
+        "long":25,
+        "medium":15,
+        "short":8,
+        "tickrate":200
+    });
+    let gold = new TrophySelect(PIXI.loader.resources["assets/trophy-gold.png"].texture,(68+32)*2,{
+        "long":40,
+        "medium":20,
+        "short":10,
+        "tickrate":130
+    });
+    let diamond = new TrophySelect(PIXI.loader.resources["assets/trophy-diamond.png"].texture,(68+32)*3,{
+        "long":50,
+        "medium":25,
+        "short":12,
+        "tickrate":100
+    });
+    let trophyManager = new TrophyManager();
+    trophyManager.add(bronze);
+    trophyManager.add(silver);
+    trophyManager.add(gold);
+    trophyManager.add(diamond);
+    trophyManager.select(bronze);
+    levelSelect.addChild(trophyManager);
     // -- QUIT BUTTON --
     let exit = new PIXI.Sprite(PIXI.loader.resources["assets/back.png"].texture);
     levelSelect.addChild(exit);
@@ -181,7 +242,6 @@ let allowReplay = true;
             g.level.kill();
             setTimeout(function(){
                 g.level = g.newLevel(g.manager.num);
-                console.log(g.manager.num);
                 allowReplay = true;
             },50)
         }

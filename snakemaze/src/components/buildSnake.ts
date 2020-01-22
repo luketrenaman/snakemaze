@@ -292,6 +292,9 @@ export default class{
         g.stage.updateLayersOrder();
     }
     collide() {
+        if(this.over){
+            return false;
+        }
         let a = this;
         let death = false;
         let collide = false;
@@ -349,7 +352,6 @@ export default class{
                 this.exitSprite.setTexture(PIXI.loader.resources["assets/rainbow.json"].textures["rainbow" + this.exitSprite.cycle + ".png"]);
                 if (this.locations[0].x === this.exitSprite.coord.x && this.locations[0].y === this.exitSprite.coord.y && !this.over) {
                     //TODO = WIN SCREEN
-                    collide = true;
                     g.level.end("victory")
                     this.over = true;
                 }

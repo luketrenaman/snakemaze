@@ -22720,6 +22720,9 @@ var default_1 = /** @class */ (function () {
     };
     default_1.prototype.collide = function () {
         var _this = this;
+        if (this.over) {
+            return false;
+        }
         var a = this;
         var death = false;
         var collide = false;
@@ -22775,7 +22778,6 @@ var default_1 = /** @class */ (function () {
                 this.exitSprite.setTexture(PIXI.loader.resources["assets/rainbow.json"].textures["rainbow" + this.exitSprite.cycle + ".png"]);
                 if (this.locations[0].x === this.exitSprite.coord.x && this.locations[0].y === this.exitSprite.coord.y && !this.over) {
                     //TODO = WIN SCREEN
-                    collide = true;
                     g.level.end("victory");
                     this.over = true;
                 }
@@ -22912,7 +22914,6 @@ var MenuManager = /** @class */ (function () {
                 }
             }
         });
-        console.log("render");
         g.renderer.render(g.all);
     };
     MenuManager.prototype.hide = function () {
@@ -22970,6 +22971,35 @@ var SoundMenu = /** @class */ (function (_super) {
     }
     return SoundMenu;
 }(PIXI.Sprite));
+var TrophyManager = /** @class */ (function (_super) {
+    __extends(TrophyManager, _super);
+    function TrophyManager() {
+        var _this = _super.call(this) || this;
+        _this.x = 32;
+        _this.y = 640 - 68 - 32;
+        _this.trophies = [];
+        return _this;
+    }
+    TrophyManager.prototype.select = function (trophy) {
+        this.children.forEach(function (val) {
+            val.alpha = 0.6;
+        });
+        trophy.alpha = 1;
+    };
+    TrophyManager.prototype.add = function (trophy) {
+        this.addChild(trophy);
+    };
+    return TrophyManager;
+}(PIXI.Container));
+var TrophySelect = /** @class */ (function (_super) {
+    __extends(TrophySelect, _super);
+    function TrophySelect(tex, x, config) {
+        var _this = _super.call(this, tex) || this;
+        _this.x = x;
+        return _this;
+    }
+    return TrophySelect;
+}(PIXI.Sprite));
 function default_1() {
     g.manager = new MenuManager();
     // -- HANDLE MUSIC --
@@ -23012,6 +23042,37 @@ function default_1() {
     for (var i = 0; i < 5; i++) {
         _loop_1(i);
     }
+    var bronze = new TrophySelect(PIXI.loader.resources["assets/trophy-bronze.png"].texture, 0, {
+        "long": 20,
+        "medium": 10,
+        "short": 5,
+        "tickrate": 250
+    });
+    var silver = new TrophySelect(PIXI.loader.resources["assets/trophy-silver.png"].texture, (68 + 32), {
+        "long": 25,
+        "medium": 15,
+        "short": 8,
+        "tickrate": 200
+    });
+    var gold = new TrophySelect(PIXI.loader.resources["assets/trophy-gold.png"].texture, (68 + 32) * 2, {
+        "long": 40,
+        "medium": 20,
+        "short": 10,
+        "tickrate": 130
+    });
+    var diamond = new TrophySelect(PIXI.loader.resources["assets/trophy-diamond.png"].texture, (68 + 32) * 3, {
+        "long": 50,
+        "medium": 25,
+        "short": 12,
+        "tickrate": 100
+    });
+    var trophyManager = new TrophyManager();
+    trophyManager.add(bronze);
+    trophyManager.add(silver);
+    trophyManager.add(gold);
+    trophyManager.add(diamond);
+    trophyManager.select(bronze);
+    levelSelect.addChild(trophyManager);
     // -- QUIT BUTTON --
     var exit = new PIXI.Sprite(PIXI.loader.resources["assets/back.png"].texture);
     levelSelect.addChild(exit);
@@ -23054,7 +23115,6 @@ function default_1() {
             g.level.kill();
             setTimeout(function () {
                 g.level = g.newLevel(g.manager.num);
-                console.log(g.manager.num);
                 allowReplay = true;
             }, 50);
         }
@@ -23155,7 +23215,6 @@ var default_1 = /** @class */ (function (_super) {
                 a.zIndex = -3;
                 g.all.updateLayersOrder();
                 a.allow = false;
-                console.log("render");
                 g.renderer.render(g.all);
                 gameloop.stop();
                 renderloop.stop();
@@ -23277,7 +23336,16 @@ g.renderer = PIXI.autoDetectRenderer(832, 640);
 g.renderer.backgroundColor = 0x444444;
 g.all = new PIXI.Container();
 document.body.appendChild(g.renderer.view);
-PIXI.loader.add("assets/snake-portal.png").add("assets/menu.png").add("assets/refresh.png").add("assets/sound.png").add("assets/nosound.png").add("assets/background-incomplete.png").add("assets/background-complete.png").add("assets/snake-head.png").add("assets/rainbow.json").add("assets/snake-body.png").add("assets/snake-corner.png").add("assets/snake-tail.png").add("assets/grass.png").add("assets/flowers-1.png").add("assets/flowers-2.png").add("assets/rock.png").add("assets/gem-1.png").add("assets/gem-2.png").add("assets/gem-3.png").add("assets/level-1.png").add("assets/titlescreen.png").add("assets/start.png").add("assets/back.png").add("assets/music.png").add("assets/nomusic.png").load(fonts);
+PIXI.loader
+    .add("assets/trophy-bronze.png")
+    .add("assets/trophy-silver.png")
+    .add("assets/trophy-gold.png")
+    .add("assets/trophy-diamond.png")
+    .add("assets/award-bronze.png")
+    .add("assets/award-silver.png")
+    .add("assets/award-gold.png")
+    .add("assets/award-diamond.png")
+    .add("assets/snake-portal.png").add("assets/menu.png").add("assets/refresh.png").add("assets/sound.png").add("assets/nosound.png").add("assets/background-incomplete.png").add("assets/background-complete.png").add("assets/snake-head.png").add("assets/rainbow.json").add("assets/snake-body.png").add("assets/snake-corner.png").add("assets/snake-tail.png").add("assets/grass.png").add("assets/flowers-1.png").add("assets/flowers-2.png").add("assets/rock.png").add("assets/gem-1.png").add("assets/gem-2.png").add("assets/gem-3.png").add("assets/level-1.png").add("assets/titlescreen.png").add("assets/start.png").add("assets/back.png").add("assets/music.png").add("assets/nomusic.png").load(fonts);
 function fonts() {
     WebFont.load({
         custom: {
@@ -23356,12 +23424,12 @@ function setup() {
             }
             return py;
         }
-        function camera(diff) {
+        function camera(diff, spr) {
             if (calcy) {
-                g.stage.y += diff * 100 * ((320 - snake.sprites[0].worldTransform.ty) / (40 - (+(Math.abs(320 - snake.sprites[0].worldTransform.ty) > 640)) * 39));
+                g.stage.y += diff * 100 * ((320 - spr.worldTransform.ty) / (40 - (+(Math.abs(320 - snake.sprites[0].worldTransform.ty) > 640)) * 39));
             }
             if (calcx) {
-                g.stage.x += diff * 100 * ((416 - snake.sprites[0].worldTransform.tx) / (40 - (+(Math.abs(416 - snake.sprites[0].worldTransform.tx) > 832)) * 39));
+                g.stage.x += diff * 100 * ((416 - spr.worldTransform.tx) / (40 - (+(Math.abs(416 - snake.sprites[0].worldTransform.tx) > 832)) * 39));
             }
             g.stage.y = fixy(g.stage.y);
             g.stage.x = fixx(g.stage.x);
@@ -23402,8 +23470,12 @@ function setup() {
                 snake.counter.y -= 100 * diff * (snake.counter.y - 500) / 20;
                 if (condition === "victory") {
                     g.manager.show("victory");
+                    console.log("snake sprite: " + snake.sprites.length);
+                    console.log("n: " + n);
                     if (snake.sprites.length !== n - 1) {
+                        console.log("pass 1");
                         if (frames % 10 === 0) {
+                            console.log("pass 2");
                             g.stage.removeChild(snake.sprites[n]);
                             snake.checkMove();
                             snake.sprites[n + 1].setTexture(PIXI.loader.resources["assets/snake-portal.png"].texture);
@@ -23426,7 +23498,10 @@ function setup() {
                     }
                 }
                 if (snake.sprites[n]) {
-                    camera(diff);
+                    camera(diff, snake.sprites[n]);
+                }
+                else {
+                    camera(diff, snake.exitSprite);
                 }
                 background.children.forEach(function (val) {
                     val.y = (val.orig.y * 64 + g.stage.y).mod(640 + 64) - g.stage.y - 64;
@@ -23526,7 +23601,7 @@ function setup() {
             snake.portalAnim(diff);
             countdown.x = -g.stage.x + 416;
             countdown.y = -g.stage.y + 320;
-            camera(diff);
+            camera(diff, snake.sprites[0]);
             //
             background.children.forEach(function (val) {
                 val.y = (val.orig.y * 64 + g.stage.y).mod(640 + 64) - g.stage.y - 64;

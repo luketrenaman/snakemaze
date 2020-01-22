@@ -3,7 +3,7 @@
 //For compile: webpack
 module.exports = function(cwd, ptype) {
 	var config = {
-		"mode":"development",
+		"mode":"production",
 		"devtool": "source-map",
 		"entry": "./" + cwd + "src/index.ts",
 		"output": {
