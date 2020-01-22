@@ -64,7 +64,6 @@ export default class extends PIXI.Sprite{
                 a.zIndex = -3;
                 g.all.updateLayersOrder();
                 a.allow = false;
-                console.log("render")
                 g.renderer.render(g.all);
                 gameloop.stop();
                 renderloop.stop();

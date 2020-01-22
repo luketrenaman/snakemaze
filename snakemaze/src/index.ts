@@ -146,11 +146,7 @@ function setup() {
 			snake.counter.xvel = 0;
 			g.level.endLoop = new fps(function(frames, self,diff) {
 				//make the portal continue to animate
-				if (snake.exit && frames % 10 === 0) {
-					snake.exitSprite.cycle++;
-					snake.exitSprite.cycle %= 8;
-					snake.exitSprite.setTexture(PIXI.loader.resources["assets/rainbow.json"].textures["rainbow" + snake.exitSprite.cycle + ".png"]);
-				}
+				snake.portalAnim(diff);
 				snake.counter.x -= 100 * diff * (snake.counter.x - 416 + snake.counter.width/2) / 20;
 				snake.counter.y -= 100 * diff * (snake.counter.y - 500) / 20;
 				if(condition === "victory"){
@@ -275,6 +271,7 @@ function setup() {
 		g.stage.y = fixy(g.stage.y+16);
 		g.renderer.render(g.all);
 		let loop = new fps(function(frames, self,diff) {
+			snake.portalAnim(diff);
 			countdown.x = -g.stage.x + 416;
 			countdown.y = -g.stage.y + 320;
 

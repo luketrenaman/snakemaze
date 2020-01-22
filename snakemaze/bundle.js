@@ -22496,6 +22496,22 @@ var Counter = /** @class */ (function (_super) {
     }
     return Counter;
 }(PIXI.Sprite));
+var ExitSprite = /** @class */ (function (_super) {
+    __extends(ExitSprite, _super);
+    function ExitSprite(coord) {
+        var _this = _super.call(this, PIXI.loader.resources["assets/rainbow.json"].textures["rainbow1.png"]) || this;
+        _this.cycle = 1;
+        _this.diff = 0;
+        _this.x = coord.x * 32;
+        _this.y = coord.y * 32;
+        _this.scale.x = 1 / 6;
+        _this.scale.y = 1 / 6;
+        _this.coord = coord;
+        _this.zIndex = 1;
+        return _this;
+    }
+    return ExitSprite;
+}(PIXI.Sprite));
 var default_1 = /** @class */ (function () {
     function default_1() {
         this.over = false;
@@ -22520,14 +22536,7 @@ var default_1 = /** @class */ (function () {
         }
         else {
             this.exit = true;
-            this.exitSprite = new PIXI.Sprite(PIXI.loader.resources["assets/rainbow.json"].textures["rainbow1.png"]);
-            this.exitSprite.cycle = 1;
-            this.exitSprite.x = g.maze.end.x * 32;
-            this.exitSprite.y = g.maze.end.y * 32;
-            this.exitSprite.scale.x = 1 / 6;
-            this.exitSprite.scale.y = 1 / 6;
-            this.exitSprite.coord = g.maze.end;
-            this.exitSprite.zIndex = 1;
+            this.exitSprite = new ExitSprite(g.maze.end);
             g.stage.addChild(this.exitSprite);
         }
         ;
@@ -22693,14 +22702,7 @@ var default_1 = /** @class */ (function () {
                 }) && g.maze.data[spawn.y][spawn.x] === 2;
                 if (safe) {
                     a.exit = true;
-                    a.exitSprite = new PIXI.Sprite(PIXI.loader.resources["assets/rainbow.json"].textures["rainbow1.png"]);
-                    a.exitSprite.cycle = 1;
-                    a.exitSprite.x = spawn.x * 32;
-                    a.exitSprite.y = spawn.y * 32;
-                    a.exitSprite.scale.x = 1 / 6;
-                    a.exitSprite.scale.y = 1 / 6;
-                    a.exitSprite.coord = spawn;
-                    a.exitSprite.zIndex = 1;
+                    a.exitSprite = new ExitSprite(spawn);
                     g.stage.addChild(a.exitSprite);
                 }
                 else {
@@ -22761,18 +22763,24 @@ var default_1 = /** @class */ (function () {
                 }
             });
         }
+        return collide;
+    };
+    default_1.prototype.portalAnim = function (diff) {
         if (this.exit) {
-            this.exitSprite.cycle++;
-            this.exitSprite.cycle %= 8;
-            this.exitSprite.setTexture(PIXI.loader.resources["assets/rainbow.json"].textures["rainbow" + this.exitSprite.cycle + ".png"]);
-            if (this.locations[0].x === this.exitSprite.coord.x && this.locations[0].y === this.exitSprite.coord.y && !this.over) {
-                //TODO = WIN SCREEN
-                collide = true;
-                g.level.end("victory");
-                this.over = true;
+            this.exitSprite.diff += diff;
+            if (this.exitSprite.diff >= 0.1) {
+                this.exitSprite.diff = 0;
+                this.exitSprite.cycle++;
+                this.exitSprite.cycle %= 8;
+                this.exitSprite.setTexture(PIXI.loader.resources["assets/rainbow.json"].textures["rainbow" + this.exitSprite.cycle + ".png"]);
+                if (this.locations[0].x === this.exitSprite.coord.x && this.locations[0].y === this.exitSprite.coord.y && !this.over) {
+                    //TODO = WIN SCREEN
+                    collide = true;
+                    g.level.end("victory");
+                    this.over = true;
+                }
             }
         }
-        return collide;
     };
     default_1.prototype.checkMove = function () {
         this.direction = this.predirection;
@@ -23389,11 +23397,7 @@ function setup() {
             snake.counter.xvel = 0;
             g.level.endLoop = new fps_1["default"](function (frames, self, diff) {
                 //make the portal continue to animate
-                if (snake.exit && frames % 10 === 0) {
-                    snake.exitSprite.cycle++;
-                    snake.exitSprite.cycle %= 8;
-                    snake.exitSprite.setTexture(PIXI.loader.resources["assets/rainbow.json"].textures["rainbow" + snake.exitSprite.cycle + ".png"]);
-                }
+                snake.portalAnim(diff);
                 snake.counter.x -= 100 * diff * (snake.counter.x - 416 + snake.counter.width / 2) / 20;
                 snake.counter.y -= 100 * diff * (snake.counter.y - 500) / 20;
                 if (condition === "victory") {
@@ -23519,6 +23523,7 @@ function setup() {
         g.stage.y = fixy(g.stage.y + 16);
         g.renderer.render(g.all);
         var loop = new fps_1["default"](function (frames, self, diff) {
+            snake.portalAnim(diff);
             countdown.x = -g.stage.x + 416;
             countdown.y = -g.stage.y + 320;
             camera(diff);

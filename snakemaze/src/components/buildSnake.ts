@@ -66,6 +66,23 @@ class Counter extends PIXI.Sprite{
         g.all.addChild(this);
     }
 }
+class ExitSprite extends PIXI.Sprite{
+    cycle:number;
+    diff:number;
+    coord:location;
+    zIndex:number;
+    constructor(coord){
+        super(PIXI.loader.resources["assets/rainbow.json"].textures["rainbow1.png"]);
+        this.cycle = 1;
+        this.diff = 0;
+        this.x = coord.x * 32;
+        this.y = coord.y * 32;
+        this.scale.x = 1 / 6;
+        this.scale.y = 1 / 6;
+        this.coord = coord;
+        this.zIndex = 1;
+    }
+}
 interface location{
     x:number;
     y:number;
@@ -79,6 +96,7 @@ export default class{
     direction: string;
     predirection:string;
     over:boolean;
+    exitSprite: ExitSprite;
     constructor() {
         this.over = false
         this.exit = false;
@@ -102,14 +120,7 @@ export default class{
         }
         else{
             this.exit = true;
-            this.exitSprite = new PIXI.Sprite(PIXI.loader.resources["assets/rainbow.json"].textures["rainbow1.png"]);
-            this.exitSprite.cycle = 1;
-            this.exitSprite.x = g.maze.end.x * 32;
-            this.exitSprite.y = g.maze.end.y * 32;
-            this.exitSprite.scale.x = 1 / 6;
-            this.exitSprite.scale.y = 1 / 6;
-            this.exitSprite.coord = g.maze.end;
-            this.exitSprite.zIndex = 1;
+            this.exitSprite = new ExitSprite(g.maze.end);
             g.stage.addChild(this.exitSprite);
         };
         this.direction = g.maze.snake.direction;
@@ -265,14 +276,7 @@ export default class{
                 }) && g.maze.data[spawn.y][spawn.x] === 2;
                 if (safe) {
                     a.exit = true;
-                    a.exitSprite = new PIXI.Sprite(PIXI.loader.resources["assets/rainbow.json"].textures["rainbow1.png"]);
-                    a.exitSprite.cycle = 1;
-                    a.exitSprite.x = spawn.x * 32;
-                    a.exitSprite.y = spawn.y * 32;
-                    a.exitSprite.scale.x = 1 / 6;
-                    a.exitSprite.scale.y = 1 / 6;
-                    a.exitSprite.coord = spawn;
-                    a.exitSprite.zIndex = 1;
+                    a.exitSprite = new ExitSprite(spawn);
                     g.stage.addChild(a.exitSprite);
                 } else {
                     check()
@@ -332,19 +336,25 @@ export default class{
                 }
             })
         }
-        if (this.exit) {
-            this.exitSprite.cycle++;
-            this.exitSprite.cycle %= 8;
-            this.exitSprite.setTexture(PIXI.loader.resources["assets/rainbow.json"].textures["rainbow" + this.exitSprite.cycle + ".png"]);
-            if (this.locations[0].x === this.exitSprite.coord.x && this.locations[0].y === this.exitSprite.coord.y && !this.over) {
-                //TODO = WIN SCREEN
-                collide = true;
-                g.level.end("victory")
-                this.over = true;
-            }
-        }
         return collide;
 
+    }
+    portalAnim(diff){
+        if (this.exit) {
+            this.exitSprite.diff += diff;
+            if(this.exitSprite.diff >= 0.1){
+                this.exitSprite.diff = 0
+                this.exitSprite.cycle++;
+                this.exitSprite.cycle %= 8;
+                this.exitSprite.setTexture(PIXI.loader.resources["assets/rainbow.json"].textures["rainbow" + this.exitSprite.cycle + ".png"]);
+                if (this.locations[0].x === this.exitSprite.coord.x && this.locations[0].y === this.exitSprite.coord.y && !this.over) {
+                    //TODO = WIN SCREEN
+                    collide = true;
+                    g.level.end("victory")
+                    this.over = true;
+                }
+            }
+        }
     }
     checkMove(){
         this.direction = this.predirection;
