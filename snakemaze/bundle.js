@@ -22465,7 +22465,7 @@ var Counter = /** @class */ (function (_super) {
         _this.y = 640 - 32 * 3; //position in bottom right
         _this.rules = {
             current: 0,
-            max: 15
+            max: g.difficulty[g.maze.duration]
         };
         //Generate icons for the counter
         for (var i = 0; i < 3; i++) {
@@ -22978,6 +22978,9 @@ var TrophyManager = /** @class */ (function (_super) {
         _this.x = 32;
         _this.y = 640 - 68 - 32;
         _this.trophies = [];
+        _this.txt = new PIXI.Text("");
+        _this.txt.y = -64;
+        _this.addChild(_this.txt);
         return _this;
     }
     TrophyManager.prototype.select = function (trophy) {
@@ -22985,11 +22988,20 @@ var TrophyManager = /** @class */ (function (_super) {
             val.alpha = 0.6;
         });
         trophy.alpha = 1;
-        g.renderer.render(g.all);
+        this.txt.alpha = 1;
         g.difficulty = trophy.config;
+        this.updateDifficulty();
+        g.renderer.render(g.all);
     };
     TrophyManager.prototype.add = function (trophy) {
         this.addChild(trophy);
+    };
+    TrophyManager.prototype.updateDifficulty = function () {
+        this.txt.setText(g.difficulty.name);
+        this.txt.setStyle({
+            font: "35px Pixel",
+            fill: g.difficulty.color
+        });
     };
     return TrophyManager;
 }(PIXI.Container));
@@ -23620,7 +23632,7 @@ function setup() {
                     countdown.setText(Math.ceil(3 - frames / 8));
                 }
             }
-        }, 130);
+        }, g.difficulty.tickrate);
         g.stage.x = -(snake.sprites[0].x - 416);
         g.stage.y = -(snake.sprites[0].y - 320);
         //this render needs to be invisible
@@ -23665,6 +23677,7 @@ function setup() {
 
 exports.__esModule = true;
 exports["default"] = [{
+        "duration": "medium",
         "mode": "normal",
         "snake": {
             "x": 16,
@@ -23693,6 +23706,7 @@ exports["default"] = [{
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
         ]
     }, {
+        "duration": "medium",
         "mode": "normal",
         "snake": {
             "x": 14,
@@ -23719,6 +23733,7 @@ exports["default"] = [{
             [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0]
         ]
     }, {
+        "duration": "long",
         "snake": {
             "x": 4,
             "y": 4,
@@ -23757,6 +23772,7 @@ exports["default"] = [{
         "mode": "normal"
     },
     {
+        "duration": "medium",
         "snake": {
             "x": 2,
             "y": 16,
@@ -23793,6 +23809,7 @@ exports["default"] = [{
         ],
         "fruit": []
     }, {
+        "duration": "medium",
         "mode": "normal",
         "snake": {
             "x": 2,
@@ -23844,6 +23861,7 @@ exports["default"] = [{
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         ]
     }, {
+        "duration": "medium",
         "mode": "normal",
         "snake": {
             "x": 1,
@@ -23893,6 +23911,7 @@ exports["default"] = [{
         ]
     },
     {
+        "duration": "short",
         "mode": "normal",
         "snake": {
             "x": 1,
@@ -23917,6 +23936,7 @@ exports["default"] = [{
         ]
     },
     {
+        "duration": "short",
         "mode": "normal",
         "snake": {
             "x": 11,
@@ -23948,6 +23968,7 @@ exports["default"] = [{
         ]
     },
     {
+        "duration": "long",
         "mode": "normal",
         "snake": {
             "x": 1,
@@ -24009,6 +24030,7 @@ exports["default"] = [{
         ],
         "fruit": []
     }, {
+        "duration": "medium",
         "mode": "normal",
         "snake": {
             "x": 8,

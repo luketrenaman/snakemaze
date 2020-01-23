@@ -1,4 +1,5 @@
 export default [{
+	"duration":"medium",
 	"mode": "normal",
 	"snake": {
 		"x": 16,
@@ -7,7 +8,7 @@ export default [{
 	},
 	"data": [
 		[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-		[1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+		[1, 2, 2,  2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
 		[1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
 		[1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
 		[1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
@@ -27,6 +28,7 @@ export default [{
 		[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 	]
 }, {
+	"duration":"medium",
 	"mode": "normal",
 	"snake": {
 		"x": 14,
@@ -53,6 +55,7 @@ export default [{
 		[0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0]
 	]
 }, {
+	"duration":"long",
 	"snake": {
 		"x": 4,
 		"y": 4,
@@ -91,6 +94,7 @@ export default [{
 	"mode": "normal"
 },
 {
+	"duration":"medium",
 	"snake": {
 		"x": 2,
 		"y": 16,
@@ -127,6 +131,7 @@ export default [{
 	],
 	"fruit": []
 }, {
+	"duration":"medium",
 	"mode": "normal",
 	"snake": {
 		"x": 2,
@@ -178,6 +183,7 @@ export default [{
 		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 	]
 }, {
+	"duration":"medium",
 	"mode": "normal",
 	"snake": {
 		"x": 1,
@@ -227,6 +233,7 @@ export default [{
 	]
 },
 {
+	"duration":"short",
 	"mode": "normal",
 	"snake": {
 		"x": 1,
@@ -251,6 +258,7 @@ export default [{
 	]
 },
 {
+	"duration":"short",
 	"mode": "normal",
 	"snake": {
 		"x": 11,
@@ -282,6 +290,7 @@ export default [{
 	]
 },
 {
+	"duration":"long",
 	"mode": "normal",
 	"snake": {
 		"x": 1,
@@ -343,6 +352,7 @@ export default [{
 	],
 	"fruit": []
 }, {
+	"duration":"medium",
 	"mode": "normal",
 	"snake": {
 		"x": 8,

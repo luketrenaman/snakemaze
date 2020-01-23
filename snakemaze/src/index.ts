@@ -276,7 +276,7 @@ function setup() {
 					countdown.setText(Math.ceil(3 - frames / 8));
 				}
 			}
-		},130);
+		},g.difficulty.tickrate);
 		g.stage.x = -(snake.sprites[0].x -416);
 		g.stage.y = -(snake.sprites[0].y - 320);
 		//this render needs to be invisible

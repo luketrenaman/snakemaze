@@ -95,22 +95,36 @@ interface DifficultyConfig{
 }
 class TrophyManager extends PIXI.Container{
     trophies:Array<TrophySelect>;
+    txt:PIXI.Text;
     constructor(){
         super();
         this.x = 32;
         this.y = 640 - 68 - 32;
         this.trophies = [];
+        this.txt = new PIXI.Text("");
+        this.txt.y = -64;
+        this.addChild(this.txt);
     }
     select(trophy){
         this.children.forEach(function(val){
             val.alpha = 0.6;
         })
         trophy.alpha = 1;
-        g.renderer.render(g.all);
+        this.txt.alpha = 1;
         g.difficulty = trophy.config;
+        this.updateDifficulty();
+        g.renderer.render(g.all);
     }
     add(trophy:TrophySelect){
         this.addChild(trophy);
+    }
+    updateDifficulty(){
+        this.txt.setText(g.difficulty.name);
+        this.txt.setStyle(
+            {
+                font: "35px Pixel",
+                fill: g.difficulty.color
+            } as TextStyleOptions)
     }
 }
 class TrophySelect extends PIXI.Sprite{

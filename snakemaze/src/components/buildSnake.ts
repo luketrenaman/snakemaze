@@ -37,7 +37,7 @@ class Counter extends PIXI.Sprite{
         this.y = 640 - 32* 3; //position in bottom right
         this.rules = {
             current:0,
-            max:15
+            max:g.difficulty[g.maze.duration]
         } as rules;
         //Generate icons for the counter
         for(let i = 0;i<3;i++){

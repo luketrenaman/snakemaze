@@ -2,7 +2,7 @@ import Timer from "./timer.ts";
 export default class extends Timer{
     going:boolean;
     ct:number;
-    cb:function;
+    cb:Function;
     diff:number;
     then:number
 
