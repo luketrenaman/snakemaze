@@ -225,6 +225,10 @@ export default function(){
         replay,replay.x,replay.y,function(){
         }
     )
+    button(
+        next,next.x,next.y,function(){
+        }
+    )
     exit2.x = 32;
     replay.x = 64*2+32;
     next.x = 64*5;
@@ -243,7 +247,21 @@ let allowReplay = true;
             setTimeout(function(){
                 g.level = g.newLevel(g.manager.num);
                 allowReplay = true;
-            },50)
+            },50);
+        }
+    });
+    next.on('click',function(){
+        if(allowReplay){
+            allowReplay = false;
+            g.level.kill();
+            if (g.manager.num != 9){
+                setTimeout(function(){
+                    g.level = g.newLevel(g.manager.num + 1);
+                    allowReplay = true;
+                },50);
+            } else{
+                g.manager.show("level");
+            }
         }
     })
         //Set callback of below hamburgers

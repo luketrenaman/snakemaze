@@ -23099,6 +23099,8 @@ function default_1() {
     next.anchor.x = 0.5;
     button_1["default"](replay, replay.x, replay.y, function () {
     });
+    button_1["default"](next, next.x, next.y, function () {
+    });
     exit2.x = 32;
     replay.x = 64 * 2 + 32;
     next.x = 64 * 5;
@@ -23117,6 +23119,21 @@ function default_1() {
                 g.level = g.newLevel(g.manager.num);
                 allowReplay = true;
             }, 50);
+        }
+    });
+    next.on('click', function () {
+        if (allowReplay) {
+            allowReplay = false;
+            g.level.kill();
+            if (g.manager.num != 9) {
+                setTimeout(function () {
+                    g.level = g.newLevel(g.manager.num + 1);
+                    allowReplay = true;
+                }, 50);
+            }
+            else {
+                g.manager.show("level");
+            }
         }
     });
     //Set callback of below hamburgers
