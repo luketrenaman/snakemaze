@@ -89,7 +89,9 @@ interface DifficultyConfig{
     long:number,
     medium:number,
     short:number,
-    tickrate:number
+    tickrate:number,
+    name:string,
+    color:string
 }
 class TrophyManager extends PIXI.Container{
     trophies:Array<TrophySelect>;
@@ -104,16 +106,22 @@ class TrophyManager extends PIXI.Container{
             val.alpha = 0.6;
         })
         trophy.alpha = 1;
+        g.renderer.render(g.all);
+        g.difficulty = trophy.config;
     }
     add(trophy:TrophySelect){
         this.addChild(trophy);
     }
 }
 class TrophySelect extends PIXI.Sprite{
+    config:DifficultyConfig;
     constructor(tex,x:number,config:DifficultyConfig){
         super(tex);
         this.x = x;
-
+        this.config = config;
+        button(this,this.x,this.y,() =>{
+            (this.parent as TrophyManager).select(this);
+        })
     }
 }
 export default function(){
@@ -164,26 +172,35 @@ export default function(){
         "long":20,
         "medium":10,
         "short":5,
-        "tickrate":250
+        "tickrate":250,
+        "name":"casual",
+        "color":"#d6841c"
     });
     let silver = new TrophySelect(PIXI.loader.resources["assets/trophy-silver.png"].texture,(68+32),{
         "long":25,
         "medium":15,
         "short":8,
-        "tickrate":200
+        "tickrate":200,
+        "name":"normal",
+        "color":"#95928f"
     });
     let gold = new TrophySelect(PIXI.loader.resources["assets/trophy-gold.png"].texture,(68+32)*2,{
         "long":40,
         "medium":20,
         "short":10,
-        "tickrate":130
+        "tickrate":130,
+        "name":"hard",
+        "color":"#f6d91f"
     });
     let diamond = new TrophySelect(PIXI.loader.resources["assets/trophy-diamond.png"].texture,(68+32)*3,{
         "long":50,
         "medium":25,
         "short":12,
-        "tickrate":100
+        "tickrate":100,
+        "name":"insane",
+        "color":"#2ac4b3"
     });
+    g.difficulty = bronze.config;
     let trophyManager = new TrophyManager();
     trophyManager.add(bronze);
     trophyManager.add(silver);

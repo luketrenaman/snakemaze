@@ -22985,6 +22985,8 @@ var TrophyManager = /** @class */ (function (_super) {
             val.alpha = 0.6;
         });
         trophy.alpha = 1;
+        g.renderer.render(g.all);
+        g.difficulty = trophy.config;
     };
     TrophyManager.prototype.add = function (trophy) {
         this.addChild(trophy);
@@ -22996,6 +22998,10 @@ var TrophySelect = /** @class */ (function (_super) {
     function TrophySelect(tex, x, config) {
         var _this = _super.call(this, tex) || this;
         _this.x = x;
+        _this.config = config;
+        button_1["default"](_this, _this.x, _this.y, function () {
+            _this.parent.select(_this);
+        });
         return _this;
     }
     return TrophySelect;
@@ -23046,26 +23052,35 @@ function default_1() {
         "long": 20,
         "medium": 10,
         "short": 5,
-        "tickrate": 250
+        "tickrate": 250,
+        "name": "casual",
+        "color": "#d6841c"
     });
     var silver = new TrophySelect(PIXI.loader.resources["assets/trophy-silver.png"].texture, (68 + 32), {
         "long": 25,
         "medium": 15,
         "short": 8,
-        "tickrate": 200
+        "tickrate": 200,
+        "name": "normal",
+        "color": "#95928f"
     });
     var gold = new TrophySelect(PIXI.loader.resources["assets/trophy-gold.png"].texture, (68 + 32) * 2, {
         "long": 40,
         "medium": 20,
         "short": 10,
-        "tickrate": 130
+        "tickrate": 130,
+        "name": "hard",
+        "color": "#f6d91f"
     });
     var diamond = new TrophySelect(PIXI.loader.resources["assets/trophy-diamond.png"].texture, (68 + 32) * 3, {
         "long": 50,
         "medium": 25,
         "short": 12,
-        "tickrate": 100
+        "tickrate": 100,
+        "name": "insane",
+        "color": "#2ac4b3"
     });
+    g.difficulty = bronze.config;
     var trophyManager = new TrophyManager();
     trophyManager.add(bronze);
     trophyManager.add(silver);

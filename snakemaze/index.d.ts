@@ -6,6 +6,14 @@ interface Container extends PIXI.Container{
     zOrder:number;
     updateLayersOrder:Function;
 }
+interface DifficultyConfig{
+    long:number,
+    medium:number,
+    short:number,
+    tickrate:number,
+    name:string,
+    color:string
+}
 interface globalController{
     soundManager:any;
     all:Container;
@@ -15,6 +23,7 @@ interface globalController{
     maze:any; //CLARIFY
     level:any; //CLARIFY 
     manager:any; //CLARIFY
+    difficulty:DifficultyConfig;
 }
 declare var g: globalController;
 declare var WebFont: any;
