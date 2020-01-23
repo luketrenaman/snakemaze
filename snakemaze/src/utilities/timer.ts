@@ -3,7 +3,7 @@ export default class{
     ct:number;
     cb:Function;
 
-    constructor(cb:(ct:number,obj:Object) => (void)){
+    constructor(cb:(ct:number,obj:Object,diff:number) => (void)){
         this.going = true;
         this.ct = 0;
         this.cb = cb;

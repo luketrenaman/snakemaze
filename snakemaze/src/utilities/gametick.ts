@@ -1,4 +1,4 @@
-import Timer from "./timer.ts";
+import Timer from "./timer";
 export default class extends Timer{
     going:boolean;
     ct:number;
@@ -7,7 +7,7 @@ export default class extends Timer{
     then:number;
     delay:number;
 
-    constructor(cb:(ct:number,obj:Object) => (void),delay:Number){
+    constructor(cb:(ct:number,obj:Object) => (void),delay:number){
         super(cb);
         this.delay = delay;
         this.draw();

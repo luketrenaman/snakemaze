@@ -1,4 +1,4 @@
-import Timer from "./timer.ts";
+import Timer from "./timer";
 export default class extends Timer{
     going:boolean;
     ct:number;

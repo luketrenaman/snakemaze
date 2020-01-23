@@ -23064,7 +23064,7 @@ function default_1() {
         "long": 20,
         "medium": 10,
         "short": 5,
-        "tickrate": 250,
+        "tickrate": 200,
         "name": "casual",
         "color": "#d6841c"
     });
@@ -23072,7 +23072,7 @@ function default_1() {
         "long": 25,
         "medium": 15,
         "short": 8,
-        "tickrate": 200,
+        "tickrate": 160,
         "name": "normal",
         "color": "#95928f"
     });
@@ -23619,17 +23619,17 @@ function setup() {
         });
         g.stage.addChild(countdown);
         var gameTick = new gametick_1["default"](function (frames, self) {
-            if (frames > 24) {
+            if (frames > 15) {
                 //TODO CHECK LOCATION
                 snake.shoop();
                 snake.checkMove();
             }
             else {
-                if (Math.ceil(3 - frames / 8) === 0) {
+                if (Math.ceil(3 - frames / 5) === 0) {
                     countdown.visible = false;
                 }
                 else {
-                    countdown.setText(Math.ceil(3 - frames / 8));
+                    countdown.setText(Math.ceil(3 - frames / 5));
                 }
             }
         }, g.difficulty.tickrate);
@@ -24273,7 +24273,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-var timer_ts_1 = __webpack_require__(/*! ./timer.ts */ "./snakemaze/src/utilities/timer.ts");
+var timer_1 = __webpack_require__(/*! ./timer */ "./snakemaze/src/utilities/timer.ts");
 var default_1 = /** @class */ (function (_super) {
     __extends(default_1, _super);
     function default_1(cb) {
@@ -24297,7 +24297,7 @@ var default_1 = /** @class */ (function (_super) {
         requestAnimationFrame(this.draw);
     };
     return default_1;
-}(timer_ts_1["default"]));
+}(timer_1["default"]));
 exports["default"] = default_1;
 
 
@@ -24326,7 +24326,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-var timer_ts_1 = __webpack_require__(/*! ./timer.ts */ "./snakemaze/src/utilities/timer.ts");
+var timer_1 = __webpack_require__(/*! ./timer */ "./snakemaze/src/utilities/timer.ts");
 var default_1 = /** @class */ (function (_super) {
     __extends(default_1, _super);
     function default_1(cb, delay) {
@@ -24347,7 +24347,7 @@ var default_1 = /** @class */ (function (_super) {
         setTimeout(this.draw, this.delay);
     };
     return default_1;
-}(timer_ts_1["default"]));
+}(timer_1["default"]));
 exports["default"] = default_1;
 
 

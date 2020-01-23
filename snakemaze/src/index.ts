@@ -265,15 +265,15 @@ function setup() {
 		} as TextStyleOptions);
 		g.stage.addChild(countdown);
 		let gameTick = new GameTick(function(frames,self){
-			if (frames > 24) {
+			if (frames > 15) {
 				//TODO CHECK LOCATION
 				snake.shoop();
 				snake.checkMove();
 			} else {
-				if (Math.ceil(3 - frames / 8) === 0) {
+				if (Math.ceil(3 - frames / 5) === 0) {
 					countdown.visible = false;
 				} else {
-					countdown.setText(Math.ceil(3 - frames / 8));
+					countdown.setText(Math.ceil(3 - frames / 5));
 				}
 			}
 		},g.difficulty.tickrate);

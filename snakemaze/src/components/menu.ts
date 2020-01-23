@@ -186,7 +186,7 @@ export default function(){
         "long":20,
         "medium":10,
         "short":5,
-        "tickrate":250,
+        "tickrate":200,
         "name":"casual",
         "color":"#d6841c"
     });
@@ -194,7 +194,7 @@ export default function(){
         "long":25,
         "medium":15,
         "short":8,
-        "tickrate":200,
+        "tickrate":160,
         "name":"normal",
         "color":"#95928f"
     });
