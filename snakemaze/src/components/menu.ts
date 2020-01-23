@@ -188,7 +188,7 @@ export default function(){
         "short":5,
         "tickrate":200,
         "name":"casual",
-        "color":"#d6841c"
+        "color":"#e59734"
     });
     let silver = new TrophySelect(PIXI.loader.resources["assets/trophy-silver.png"].texture,(68+32),{
         "long":25,
@@ -196,7 +196,7 @@ export default function(){
         "short":8,
         "tickrate":160,
         "name":"normal",
-        "color":"#95928f"
+        "color":"#b8b8b8"
     });
     let gold = new TrophySelect(PIXI.loader.resources["assets/trophy-gold.png"].texture,(68+32)*2,{
         "long":40,

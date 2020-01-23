@@ -19,9 +19,9 @@ export default class extends Timer{
     draw=()=>{
         if (this.going) {
             requestAnimationFrame(this.draw);
-            this.ct++
+            this.ct++;
             this.diff = (Date.now()-this.then)/1000;
-            this.then = Date.now()
+            this.then = Date.now();
             this.cb(this.ct,this,this.diff);
         }
     }
