@@ -23488,11 +23488,8 @@ function setup() {
     //Button is a function that creates an interactive sprite at a certain position, and provide a callback
     //Get save data
     g.save = localStorage.getItem("snakemaze_save_data");
-    console.log(g.save);
     if (g.save !== null) {
-        console.log(g.save);
         g.save = JSON.parse(g.save);
-        console.log(g.save);
     }
     else {
         var levelCompletion = [];
@@ -23625,13 +23622,14 @@ function setup() {
                 snake.counter.x -= 100 * diff * (snake.counter.x - 416 + snake.counter.width / 2) / 20;
                 snake.counter.y -= 100 * diff * (snake.counter.y - 500) / 20;
                 if (condition === "victory") {
-                    g.manager.show("victory");
-                    console.log("snake sprite: " + snake.sprites.length);
-                    console.log("n: " + n);
+                    if (n === 0) {
+                        g.manager.show("victory");
+                        g.save.levelCompletion[num] = g.difficulty.value;
+                        localStorage.setItem("snakemaze_save_data", JSON.stringify(g.save));
+                        g.manager.levelCompletion(g.save.levelCompletion);
+                    }
                     if (snake.sprites.length !== n - 1) {
-                        console.log("pass 1");
                         if (frames % 10 === 0) {
-                            console.log("pass 2");
                             g.stage.removeChild(snake.sprites[n]);
                             snake.checkMove();
                             if (snake.sprites.length !== n - 2) {
