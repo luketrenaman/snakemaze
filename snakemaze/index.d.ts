@@ -12,7 +12,8 @@ interface DifficultyConfig{
     short:number,
     tickrate:number,
     name:string,
-    color:string
+    color:string,
+    value:number
 }
 interface globalController{
     soundManager:any;
@@ -24,6 +25,7 @@ interface globalController{
     level:any; //CLARIFY 
     manager:any; //CLARIFY
     difficulty:DifficultyConfig;
+    save:any;
 }
 declare var g: globalController;
 declare var WebFont: any;

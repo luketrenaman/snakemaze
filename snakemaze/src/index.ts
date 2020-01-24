@@ -57,7 +57,42 @@ function setup() {
 		PIXI.loader.resources["assets/rock.png"].texture
 	]
 	//Button is a function that creates an interactive sprite at a certain position, and provide a callback
+	//Get save data
+	g.save = localStorage.getItem("snakemaze_save_data");
+	console.log(g.save);
+	if(g.save !== null){
+		console.log(g.save);
+		g.save = JSON.parse(g.save);
+		console.log(g.save);
+	} else{
+		let levelCompletion = [];
+		for(let i = 0; i < levels.length;i++){
+			levelCompletion.push(0);
+		};
+		g.save = {
+			"selectedDifficulty":1,
+			"soundsEnabled":true,
+			"musicEnabled":true,
+			"levelCompletion":levelCompletion
+		};
+		localStorage.setItem("snakemaze_save_data",JSON.stringify(g.save));
+	}
+	
 	menuConstructor();
+	//Manipulate previous menu settings with save data
+	if(g.save.musicEnabled){
+		g.soundManager.children[0].enable();
+	} else{
+		g.soundManager.children[0].disable();
+	}
+	if(g.save.soundsEnabled){
+		g.soundManager.children[1].enable();
+	} else{
+		g.soundManager.children[1].disable();
+	}
+	g.manager.selectDifficulty(g.save.selectedDifficulty);
+	g.manager.levelCompletion(g.save.levelCompletion);
+
 	g.manager.show("start"); //set to level for debug
 	g.all.updateLayersOrder = function() {
 		g.all.children.sort(function(a, b) {

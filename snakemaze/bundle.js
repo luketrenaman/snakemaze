@@ -22953,22 +22953,42 @@ var SoundManager = /** @class */ (function (_super) {
 }(PIXI.Container));
 var SoundMenu = /** @class */ (function (_super) {
     __extends(SoundMenu, _super);
-    function SoundMenu(x, y, textureOn, textureOff) {
+    function SoundMenu(x, y, textureOn, textureOff, name) {
         var _this = _super.call(this, textureOn) || this;
+        _this.name = name;
         _this.enabled = true;
+        _this.textureOn = textureOn;
+        _this.textureOff = textureOff;
         button_1["default"](_this, x, y, function () {
             if (!_this.enabled) {
-                _this.setTexture(textureOn);
-                g.renderer.render(g.all);
+                _this.enable();
             }
             else {
-                _this.setTexture(textureOff);
-                g.renderer.render(g.all);
+                _this.disable();
             }
-            _this.enabled = !_this.enabled;
+            _this.save();
         });
         return _this;
     }
+    SoundMenu.prototype.enable = function () {
+        this.setTexture(this.textureOn);
+        g.renderer.render(g.all);
+        this.enabled = true;
+    };
+    SoundMenu.prototype.disable = function () {
+        this.setTexture(this.textureOff);
+        g.renderer.render(g.all);
+        this.enabled = false;
+    };
+    SoundMenu.prototype.save = function () {
+        if (this.name === "sound") {
+            g.save.soundsEnabled = this.enabled;
+        }
+        if (this.name === "music") {
+            g.save.musicEnabled = this.enabled;
+        }
+        localStorage.setItem("snakemaze_save_data", JSON.stringify(g.save));
+    };
     return SoundMenu;
 }(PIXI.Sprite));
 var TrophyManager = /** @class */ (function (_super) {
@@ -22983,8 +23003,12 @@ var TrophyManager = /** @class */ (function (_super) {
         _this.addChild(_this.txt);
         return _this;
     }
-    TrophyManager.prototype.select = function (trophy) {
+    TrophyManager.prototype.select = function (num) {
+        var trophy;
         this.children.forEach(function (val) {
+            if (val.config && val.config.value === num) {
+                trophy = val;
+            }
             val.alpha = 0.6;
         });
         trophy.alpha = 1;
@@ -22992,6 +23016,9 @@ var TrophyManager = /** @class */ (function (_super) {
         g.difficulty = trophy.config;
         this.updateDifficulty();
         g.renderer.render(g.all);
+        //save selected difficulty
+        g.save.selectedDifficulty = num;
+        localStorage.setItem("snakemaze_save_data", JSON.stringify(g.save));
     };
     TrophyManager.prototype.add = function (trophy) {
         this.addChild(trophy);
@@ -23012,18 +23039,70 @@ var TrophySelect = /** @class */ (function (_super) {
         _this.x = x;
         _this.config = config;
         button_1["default"](_this, _this.x, _this.y, function () {
-            _this.parent.select(_this);
+            _this.parent.select(_this.config.value);
         });
         return _this;
     }
     return TrophySelect;
 }(PIXI.Sprite));
+var TrophyIcon = /** @class */ (function (_super) {
+    __extends(TrophyIcon, _super);
+    function TrophyIcon(metal, value) {
+        var _this = _super.call(this, PIXI.loader.resources["assets/award-" + metal + ".png"].texture) || this;
+        _this.scale.x = 0.75;
+        _this.scale.y = 0.75;
+        _this.value = value;
+        _this.visible = false;
+        return _this;
+    }
+    return TrophyIcon;
+}(PIXI.Sprite));
+var LevelSelect = /** @class */ (function (_super) {
+    __extends(LevelSelect, _super);
+    function LevelSelect(i, j) {
+        var _this = _super.call(this, PIXI.loader.resources["assets/background-incomplete.png"].texture) || this;
+        button_1["default"](_this, i * 128 + 128, j * 128 + 128, function () {
+            g.level = new g.newLevel(i + j * 5);
+        });
+        _this.addChild(new TrophyIcon("bronze", 1));
+        _this.addChild(new TrophyIcon("silver", 2));
+        _this.addChild(new TrophyIcon("gold", 3));
+        _this.addChild(new TrophyIcon("diamond", 4));
+        for (var i_1 = 0; i_1 < _this.children.length; i_1++) {
+            _this.children[i_1].y = 56;
+            _this.children[i_1].x = i_1 * 12;
+        }
+        var text = new PIXI.Text(i + j * 5, {
+            font: "48px Pixel",
+            fill: "white"
+        });
+        text.anchor.x = 0.5;
+        text.x = 32;
+        text.y = 8;
+        text.value = 0;
+        _this.addChild(text);
+        return _this;
+    }
+    LevelSelect.prototype.showTrophies = function (completion) {
+        this.children.forEach(function (icon) {
+            if (icon.value <= completion) {
+                icon.visible = true;
+            }
+            ;
+        });
+        if (completion > 0) {
+            this.texture = PIXI.loader.resources["assets/background-complete.png"].texture;
+        }
+        g.renderer.render(g.all);
+    };
+    return LevelSelect;
+}(PIXI.Sprite));
 function default_1() {
     g.manager = new MenuManager();
     // -- HANDLE MUSIC --
     g.soundManager = new SoundManager();
-    g.soundManager.addChild(new SoundMenu(-4, 0, PIXI.loader.resources["assets/music.png"].texture, PIXI.loader.resources["assets/nomusic.png"].texture));
-    g.soundManager.addChild(new SoundMenu(64, 0, PIXI.loader.resources["assets/sound.png"].texture, PIXI.loader.resources["assets/nosound.png"].texture));
+    g.soundManager.addChild(new SoundMenu(-4, 0, PIXI.loader.resources["assets/music.png"].texture, PIXI.loader.resources["assets/nomusic.png"].texture, "music"));
+    g.soundManager.addChild(new SoundMenu(64, 0, PIXI.loader.resources["assets/sound.png"].texture, PIXI.loader.resources["assets/nosound.png"].texture, "sound"));
     g.all.addChild(g.soundManager);
     // -- START SCREEN --
     var startScreen = new Menu("start", true);
@@ -23036,29 +23115,13 @@ function default_1() {
     });
     // -- LEVEL SELECT --
     var levelSelect = new Menu("level", true);
-    var _loop_1 = function (i) {
-        var _loop_2 = function (j) {
-            var lev = new PIXI.Sprite(PIXI.loader.resources["assets/background-incomplete.png"].texture);
-            levelSelect.addChild(lev);
-            button_1["default"](lev, i * 128 + 128, j * 128 + 128, function () {
-                g.level = new g.newLevel(i + j * 5);
-            });
-            text = new PIXI.Text(i + j * 5, {
-                font: "48px Pixel",
-                fill: "white"
-            });
-            text.anchor.x = 0.5;
-            text.x = 32;
-            text.y = 8;
-            lev.addChild(text);
-        };
-        for (var j = 0; j < 2; j++) {
-            _loop_2(j);
-        }
-    };
-    var text;
+    levelSelect.levels = [];
     for (var i = 0; i < 5; i++) {
-        _loop_1(i);
+        for (var j = 0; j < 2; j++) {
+            var lev = new LevelSelect(i, j);
+            levelSelect.levels[i + j * 5] = lev;
+            levelSelect.addChild(lev);
+        }
     }
     var bronze = new TrophySelect(PIXI.loader.resources["assets/trophy-bronze.png"].texture, 0, {
         "long": 20,
@@ -23066,7 +23129,8 @@ function default_1() {
         "short": 5,
         "tickrate": 200,
         "name": "casual",
-        "color": "#e59734"
+        "color": "#e59734",
+        "value": 1
     });
     var silver = new TrophySelect(PIXI.loader.resources["assets/trophy-silver.png"].texture, (68 + 32), {
         "long": 25,
@@ -23074,7 +23138,8 @@ function default_1() {
         "short": 8,
         "tickrate": 160,
         "name": "normal",
-        "color": "#b8b8b8"
+        "color": "#b8b8b8",
+        "value": 2
     });
     var gold = new TrophySelect(PIXI.loader.resources["assets/trophy-gold.png"].texture, (68 + 32) * 2, {
         "long": 40,
@@ -23082,7 +23147,8 @@ function default_1() {
         "short": 10,
         "tickrate": 130,
         "name": "hard",
-        "color": "#f6d91f"
+        "color": "#f6d91f",
+        "value": 3
     });
     var diamond = new TrophySelect(PIXI.loader.resources["assets/trophy-diamond.png"].texture, (68 + 32) * 3, {
         "long": 50,
@@ -23090,7 +23156,8 @@ function default_1() {
         "short": 12,
         "tickrate": 100,
         "name": "insane",
-        "color": "#2ac4b3"
+        "color": "#2ac4b3",
+        "value": 4
     });
     g.difficulty = bronze.config;
     var trophyManager = new TrophyManager();
@@ -23098,7 +23165,6 @@ function default_1() {
     trophyManager.add(silver);
     trophyManager.add(gold);
     trophyManager.add(diamond);
-    trophyManager.select(bronze);
     levelSelect.addChild(trophyManager);
     // -- QUIT BUTTON --
     var exit = new PIXI.Sprite(PIXI.loader.resources["assets/back.png"].texture);
@@ -23172,6 +23238,15 @@ function default_1() {
     //base.addChild(replay);
     // base.addChild(next);
     //victoryMenu.addChild(exit2);
+    g.manager.selectDifficulty = function (difficulty) {
+        trophyManager.select(difficulty);
+    };
+    g.manager.levelCompletion = function (levelCompletion) {
+        for (var i = 0; i < levelSelect.levels.length; i++) {
+            levelSelect.levels[i].showTrophies(levelCompletion[i]);
+        }
+    };
+    //Relevant to save data
 }
 exports["default"] = default_1;
 
@@ -23411,7 +23486,44 @@ function setup() {
         PIXI.loader.resources["assets/rock.png"].texture
     ];
     //Button is a function that creates an interactive sprite at a certain position, and provide a callback
+    //Get save data
+    g.save = localStorage.getItem("snakemaze_save_data");
+    console.log(g.save);
+    if (g.save !== null) {
+        console.log(g.save);
+        g.save = JSON.parse(g.save);
+        console.log(g.save);
+    }
+    else {
+        var levelCompletion = [];
+        for (var i = 0; i < levels_1["default"].length; i++) {
+            levelCompletion.push(0);
+        }
+        ;
+        g.save = {
+            "selectedDifficulty": 1,
+            "soundsEnabled": true,
+            "musicEnabled": true,
+            "levelCompletion": levelCompletion
+        };
+        localStorage.setItem("snakemaze_save_data", JSON.stringify(g.save));
+    }
     menu_1["default"]();
+    //Manipulate previous menu settings with save data
+    if (g.save.musicEnabled) {
+        g.soundManager.children[0].enable();
+    }
+    else {
+        g.soundManager.children[0].disable();
+    }
+    if (g.save.soundsEnabled) {
+        g.soundManager.children[1].enable();
+    }
+    else {
+        g.soundManager.children[1].disable();
+    }
+    g.manager.selectDifficulty(g.save.selectedDifficulty);
+    g.manager.levelCompletion(g.save.levelCompletion);
     g.manager.show("start"); //set to level for debug
     g.all.updateLayersOrder = function () {
         g.all.children.sort(function (a, b) {
