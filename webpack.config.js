@@ -1,5 +1,5 @@
 var path = require('path');
-var cwd = "/snakemaze";
+var cwd = "\\snakemaze";
 console.log(__dirname + cwd);
 module.exports = {
 		"mode":"development",
