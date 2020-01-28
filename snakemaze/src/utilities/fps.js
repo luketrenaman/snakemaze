@@ -5,15 +5,15 @@ export default class extends Timer{
         super(cb);
         this.then = Date.now();
         this.diff;
-        requestAnimationFrame(this.draw);
+        requestAnimationFrame(this.draw.bind(this));
     }
     start(){
         this.going = true;
-        requestAnimationFrame(this.draw);
+        requestAnimationFrame(this.draw.bind(this));
     }
-    draw=()=>{
+    draw(){
         if (this.going) {
-            requestAnimationFrame(this.draw);
+            requestAnimationFrame(this.draw.bind(this));
             this.ct++;
             this.diff = (Date.now()-this.then)/1000;
             this.then = Date.now();

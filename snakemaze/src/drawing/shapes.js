@@ -1,7 +1,7 @@
 export default new function() {
     var a = this;
     this.renderer = "";
-    this.canvas = function(width:number, height:number) {
+    this.canvas = function(width, height) {
         var canvas = document.createElement('canvas');
         canvas.width = width;
         canvas.height = height;
@@ -11,13 +11,13 @@ export default new function() {
             "ctx": ctx
         };
     };
-    this.rectangle = function(width:number, height:number, color:string) {
+    this.rectangle = function(width, height, color) {
         var b = a.canvas(width, height);
         b.ctx.fillStyle = color;
         b.ctx.fillRect(0, 0, width, height);
         return PIXI.Texture.fromCanvas(b.canvas);
     };
-    this.circle = function(radius:number, color:string) {
+    this.circle = function(radius, color) {
         var b = a.canvas(radius * 2, radius * 2);
         b.ctx.fillStyle = color;
         b.ctx.beginPath();

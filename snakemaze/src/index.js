@@ -14,8 +14,6 @@ import pauseConstructor from "./components/pause";
 import buildSnake from "./components/buildSnake";
 //Tile rendering
 import tileRender from "./tile-rendering/map";
-import { TextStyleOptions } from "pixi.js";
-import shapes from "./drawing/shapes";
 Number.prototype.mod = function(n) {
 	return ((this % n) + n) % n;
 }; 
@@ -26,6 +24,7 @@ g.renderer.backgroundColor = 0x444444;
 g.all = new PIXI.Container();
 document.body.appendChild(g.renderer.view)
 PIXI.loader
+.add("assets/maze-wall.png")
 .add("assets/trophy-bronze.png")
 .add("assets/trophy-silver.png")
 .add("assets/trophy-gold.png")

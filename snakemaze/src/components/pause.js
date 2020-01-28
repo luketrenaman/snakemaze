@@ -1,16 +1,9 @@
 import shapes from "../drawing/shapes";
 import key from "../utilities/key-press";
 import button from "./button";
-import fps from "../utilities/fps";
-import { TextStyleOptions } from "pixi.js";
 export default class extends PIXI.Sprite{
 /*
 */
-    zIndex:number;
-    zOrder:number
-    pauseScreen:PIXI.Sprite;
-    allow:boolean;
-    veto:boolean;
     constructor(){
         super(shapes.rectangle(832, 640, "rgba(44, 62, 80,0.7)"))
         var a = this;
@@ -18,7 +11,7 @@ export default class extends PIXI.Sprite{
         var text = new PIXI.Text("Game paused", {
             font: "52px Pixel",
             fill: "white"
-        } as TextStyleOptions);
+        });
         text.anchor.x = 0.5;
         text.x = 416;
         text.y = 200;
@@ -37,7 +30,7 @@ export default class extends PIXI.Sprite{
             })
         this.addChild(abort);
     }
-    handle(renderloop:fps,gameloop:fps,background) {
+    handle(renderloop,gameloop,background) {
         let a = this;
         function wait() {
             if(!a.veto){

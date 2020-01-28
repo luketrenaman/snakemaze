@@ -1,5 +1,4 @@
 import shapes from "../drawing/shapes";
-import { TextStyleOptions } from "pixi.js";
 import key from "../utilities/key-press";
 class Segment extends PIXI.Sprite {
     constructor(type){

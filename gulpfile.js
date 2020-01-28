@@ -21,7 +21,7 @@ gulp.task('browserSync', function() {
 });
 gulp.task('webpack',function(){
     return gulp.src("")
-    .pipe(webpack(require('./webpack.js')(cwd,ptype), require("webpack")))
+    .pipe(webpack(require('./webpack.config.js'), require("webpack")))
     .on('error', function handleError() {
         this.emit('end'); // Recover from errors
     })

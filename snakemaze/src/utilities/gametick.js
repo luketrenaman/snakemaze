@@ -8,11 +8,11 @@ export default class extends Timer{
     }
     start(){
         this.going = true;
-        setTimeout(this.draw,this.delay);
+        setTimeout(this.draw.bind(this),this.delay);
     }
-    draw=()=>{
+    draw(){
         if (this.going) {
-            setTimeout(this.draw,this.delay);
+            setTimeout(this.draw.bind(this),this.delay);
             this.ct++
             this.cb(this.ct,this);
         }

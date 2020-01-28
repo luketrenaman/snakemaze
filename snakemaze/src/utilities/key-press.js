@@ -6,7 +6,7 @@ export default new class{
         this.moveKeys = [];
         this.mostRecentKey;
     }
-    listen = function() {
+    listen() {
         var a = this;
         let addMove = (key) =>{
             if(this.moveKeys.indexOf(key) === -1){

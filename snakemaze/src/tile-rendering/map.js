@@ -1,5 +1,4 @@
 import shapes from "../drawing/shapes";
-import dirt from "./dirt";
 export default function(arr,tiles) {
     //Map size is 20 blocks tall and 32 wide
     //0 is grass 1 is dirt
@@ -36,9 +35,12 @@ function getName(x, y) {
                     break;
                     case 1:
                         //PIXI.loader.resources["assets/tile.png"].texture
-                        cell = new PIXI.Sprite(dirt(getName(j, i)));
+                        //cell = new PIXI.Sprite(dirt(getName(j, i)));
+                        cell = new PIXI.Sprite(PIXI.loader.resources["assets/maze-wall.png"].texture);
                         cell.x = j * 32;
                         cell.y = i * 32;
+                        cell.scale.x = 0.5;
+                        cell.scale.y = 0.5;
                         tiles.addChild(cell);
                         break;
                 }
