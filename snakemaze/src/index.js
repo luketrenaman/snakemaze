@@ -20,7 +20,7 @@ Number.prototype.mod = function(n) {
 	return ((this % n) + n) % n;
 }; 
 key.listen(); 
-window.g = {} as globalController;
+window.g = {};
 g.renderer = PIXI.autoDetectRenderer(832, 640);
 g.renderer.backgroundColor = 0x444444;
 g.all = new PIXI.Container();
@@ -295,7 +295,7 @@ function setup() {
 		let countdown = new PIXI.Text("3", {
 			font: "52px Pixel",
 			fill: "white"
-		} as TextStyleOptions);
+		});
 		g.stage.addChild(countdown);
 		let gameTick = new GameTick(function(frames,self){
 			if (frames > 15) {

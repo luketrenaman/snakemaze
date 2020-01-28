@@ -1,10 +1,9 @@
 class MenuManager{
-    menus: Array<Menu>;
     constructor(){
         this.menus = [];
     }
     
-    show(menuName:string){
+    show(menuName){
         this.hide();
         this.menus.forEach(function(val) {
             if(val.name === menuName){
@@ -16,7 +15,7 @@ class MenuManager{
                         g.base.txt.setStyle({
                             font: "35px Pixel",
                             fill: "#e74c3c"
-                        } as TextStyleOptions);
+                        });
                     }
                     if(val.name === "victory"){
                         g.base.txt.setText("Level complete!");
@@ -24,7 +23,7 @@ class MenuManager{
                             {
                                 font: "35px Pixel",
                                 fill: "#2ecc71"
-                            } as TextStyleOptions)
+                            })
                     }
                     g.base.addChild(g.base.txt);
                     val.addChild(g.base);
@@ -40,15 +39,12 @@ class MenuManager{
             val.visible = false;
         })
     }
-    push(menu:Menu){
+    push(menu){
         this.menus.push(menu);
     }
 }
 class Menu extends PIXI.Container{
-    zOrder:number;
-    name: string;
-    sound:boolean;
-    constructor(name:string,sound:boolean){
+    constructor(name,sound){
         super()
         this.name = name;
         this.sound = sound;
@@ -59,7 +55,6 @@ class Menu extends PIXI.Container{
 import shapes from "../drawing/shapes";
 import button from "./button";
 class SoundManager extends PIXI.Container{
-    zOrder:number;
     constructor(){
         super();
         this.x = 832-128-16;
@@ -68,11 +63,7 @@ class SoundManager extends PIXI.Container{
     }
 }
 class SoundMenu extends PIXI.Sprite{
-    enabled: Boolean;
-    textureOn: PIXI.Texture;
-    textureOff: PIXI.Texture;
-    name:string;
-    constructor(x:number,y:number,textureOn:PIXI.Texture,textureOff:PIXI.Texture,name:string){
+    constructor(x,y,textureOn,textureOff,name){
         super(textureOn);
         this.name = name;
         this.enabled = true;
@@ -109,18 +100,7 @@ class SoundMenu extends PIXI.Sprite{
         localStorage.setItem("snakemaze_save_data",JSON.stringify(g.save));
     }
 }
-interface DifficultyConfig{
-    long:number,
-    medium:number,
-    short:number,
-    tickrate:number,
-    name:string,
-    color:string,
-    value:number
-}
 class TrophyManager extends PIXI.Container{
-    trophies:Array<TrophySelect>;
-    txt:PIXI.Text;
     constructor(){
         super();
         this.x = 32;
@@ -132,7 +112,7 @@ class TrophyManager extends PIXI.Container{
     }
     select(num){
         let trophy;
-        this.children.forEach(function(val:TrophySelect){
+        this.children.forEach(function(val){
             if(val.config && val.config.value === num){
                 trophy = val;
             }
@@ -147,7 +127,7 @@ class TrophyManager extends PIXI.Container{
         g.save.selectedDifficulty = num;
         localStorage.setItem("snakemaze_save_data",JSON.stringify(g.save));
     }
-    add(trophy:TrophySelect){
+    add(trophy){
         this.addChild(trophy);
     }
     updateDifficulty(){
@@ -156,22 +136,20 @@ class TrophyManager extends PIXI.Container{
             {
                 font: "35px Pixel",
                 fill: g.difficulty.color
-            } as TextStyleOptions)
+            })
     }
 }
 class TrophySelect extends PIXI.Sprite{
-    config:DifficultyConfig;
-    constructor(tex,x:number,config:DifficultyConfig){
+    constructor(tex,x,config){
         super(tex);
         this.x = x;
         this.config = config;
         button(this,this.x,this.y,() =>{
-            (this.parent as TrophyManager).select(this.config.value);
+            (this.parent).select(this.config.value);
         })
     }
 }
 class TrophyIcon extends PIXI.Sprite{
-    value:number;
     constructor(metal,value){
         super(PIXI.loader.resources["assets/award-" + metal + ".png"].texture);
         this.scale.x = 0.75;
@@ -199,7 +177,7 @@ class LevelSelect extends PIXI.Sprite{
         var text = new PIXI.Text(i + j*5, {
             font: "48px Pixel",
             fill: "white"
-        } as TextStyleOptions);
+        });
         text.anchor.x = 0.5;
         text.x = 32;
         text.y = 8;
@@ -208,7 +186,7 @@ class LevelSelect extends PIXI.Sprite{
 
     }
     showTrophies(completion){
-        this.children.forEach(function(icon:TrophyIcon){
+        this.children.forEach(function(icon){
             if(icon.value <= completion){
                 icon.visible = true;
             };
@@ -383,7 +361,7 @@ let allowReplay = true;
     }
     g.manager.levelCompletion = function(levelCompletion){
         for(let i = 0; i < levelSelect.levels.length;i++){
-            (levelSelect.levels[i] as LevelSelect).showTrophies(levelCompletion[i]);
+            (levelSelect.levels[i]).showTrophies(levelCompletion[i]);
         }
     }
     //Relevant to save data

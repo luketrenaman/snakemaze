@@ -1,9 +1,6 @@
 export default class{
-    going:boolean;
-    ct:number;
-    cb:Function;
 
-    constructor(cb:(ct:number,obj:Object,diff:number) => (void)){
+    constructor(cb){
         this.going = true;
         this.ct = 0;
         this.cb = cb;

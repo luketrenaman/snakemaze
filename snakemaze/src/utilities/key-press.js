@@ -1,15 +1,4 @@
-interface Tether {
-    key: number;
-    func:Function;
-    type:string;
-    perma:boolean;
-}
-
 export default new class{
-    map:Array<number>;
-    tethers:Array<Object>;
-    moveKeys:Array<Number>;
-    mostRecentKey:Number;
     constructor(){
         var a = this;
         this.map = [];
@@ -19,12 +8,12 @@ export default new class{
     }
     listen = function() {
         var a = this;
-        let addMove = (key:number) =>{
+        let addMove = (key) =>{
             if(this.moveKeys.indexOf(key) === -1){
                 this.moveKeys.unshift(key);
             }
         }
-        let reMove = (key:number) => {
+        let reMove = (key) => {
             if(this.moveKeys.indexOf(key) !== -1){
                 this.moveKeys.splice(this.moveKeys.indexOf(key),1);
             }
@@ -35,7 +24,7 @@ export default new class{
             if (a.map.indexOf(e) == -1) {
                 a.map.push(e);
             }
-            a.tethers.forEach(function(tether:Tether, index:number) {
+            a.tethers.forEach(function(tether, index) {
                 if (tether.type == "down") {
                     if (e === tether.key) {
                         tether.func();
@@ -64,7 +53,7 @@ export default new class{
             if (a.map.indexOf(e) != -1) {
                 a.map.splice(a.map.indexOf(e), 1);
             }
-            a.tethers.forEach(function(tether:Tether, index:number) {
+            a.tethers.forEach(function(tether, index) {
                 if (tether.type == "up") {
                     if (e === tether.key) {
                         tether.func();
@@ -86,7 +75,7 @@ export default new class{
             }
         };
     };
-    check(key, callback:Function, not?) {
+    check(key, callback, not) {
         var a = this;
         if (typeof key != "object") {
             key = [key];
@@ -102,7 +91,7 @@ export default new class{
             not();
         }
     };
-    waitUp(key, func, perma?) {
+    waitUp(key, func, perma) {
         var a = this;
         if(typeof key != "object"){
             key = [key]
@@ -119,7 +108,7 @@ export default new class{
             });
         })
     };
-    waitDown(key, func, perma?) {
+    waitDown(key, func, perma) {
         var a = this;
         if(typeof key != "object"){
             key = [key]

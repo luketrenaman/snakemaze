@@ -1,12 +1,7 @@
 import Timer from "./timer";
 export default class extends Timer{
-    going:boolean;
-    ct:number;
-    cb:Function;
-    diff:number;
-    then:number
 
-    constructor(cb:(ct:number,obj:Object,diff:number) => (void)){
+    constructor(cb){
         super(cb);
         this.then = Date.now();
         this.diff;

@@ -2,9 +2,6 @@ import shapes from "../drawing/shapes";
 import { TextStyleOptions } from "pixi.js";
 import key from "../utilities/key-press";
 class Segment extends PIXI.Sprite {
-    segmentType:string;
-    zIndex:number;
-
     constructor(type){
     //Layering for segments, positioning, etc.
     super(PIXI.loader.resources["assets/snake-" + type + ".png"].texture);
@@ -21,15 +18,8 @@ class Segment extends PIXI.Sprite {
         this.segmentType = type;    
     }
 }
-interface rules{
-    current:number,
-    max:number
-}
 let ab = new PIXI.Sprite(shapes.rectangle(128, 96, "rgba(44, 62, 80,0.7)"));
 class Counter extends PIXI.Sprite{
-    zOrder:number;
-    rules:rules;
-    display:PIXI.Text;
     constructor(){
         super(shapes.rectangle(128, 96, "rgba(0, 0, 0,0.7)"))
         this.zOrder = -2;
@@ -38,7 +28,7 @@ class Counter extends PIXI.Sprite{
         this.rules = {
             current:0,
             max:g.difficulty[g.maze.duration]
-        } as rules;
+        };
         //Generate icons for the counter
         for(let i = 0;i<3;i++){
             let icon = new PIXI.Sprite(PIXI.loader.resources["assets/gem-"+(i+1)+".png"].texture);
@@ -51,7 +41,7 @@ class Counter extends PIXI.Sprite{
         let display = new PIXI.Text("00", {
             font: "52px pixelmono",
             fill: "white"
-        } as TextStyleOptions);
+        });
         display.y = 52;
         display.x = 8;
         this.display = display;
@@ -59,7 +49,7 @@ class Counter extends PIXI.Sprite{
         let total = new PIXI.Text("/" + (this.rules.max < 10 ? "0" + this.rules.max : this.rules.max), {
             font: "30px pixelmono",
             fill: "white"
-        } as TextStyleOptions);
+        });
         total.x = display.width + 16;
         total.y = 52;
         this.addChild(total);
@@ -67,10 +57,6 @@ class Counter extends PIXI.Sprite{
     }
 }
 class ExitSprite extends PIXI.Sprite{
-    cycle:number;
-    diff:number;
-    coord:location;
-    zIndex:number;
     constructor(coord){
         super(PIXI.loader.resources["assets/rainbow.json"].textures["rainbow1.png"]);
         this.cycle = 1;
@@ -83,20 +69,7 @@ class ExitSprite extends PIXI.Sprite{
         this.zIndex = 1;
     }
 }
-interface location{
-    x:number;
-    y:number;
-}
 export default class{
-    gems:Array<PIXI.Sprite>;
-    exit: boolean
-    sprites: Array<Segment>;
-    counter: Counter;
-    locations: Array<location>;
-    direction: string;
-    predirection:string;
-    over:boolean;
-    exitSprite: ExitSprite;
     constructor() {
         this.over = false
         this.exit = false;
@@ -258,7 +231,7 @@ export default class{
         piece.y = (this.locations.length-1).y*32;
         this.layer();
         this.counter.rules.current++;
-        this.counter.display.text = <string>(this.counter.rules.current < 10 ? "0" + this.counter.rules.current : this.counter.rules.current);
+        this.counter.display.text = (this.counter.rules.current < 10 ? "0" + this.counter.rules.current : this.counter.rules.current);
         if (this.counter.rules.current == this.counter.rules.max) {
             let len = a.gems.length
             for (let i = len - 1; i >= 0; i--) {
