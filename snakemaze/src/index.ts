@@ -141,7 +141,7 @@ function setup() {
 				return 0;
 			}
 			if(py < -y + 640){
-				return -y + 640; 
+				return -y + 640;
 			}
 			return py;
 		}

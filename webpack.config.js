@@ -1,10 +1,12 @@
-{
+var path = require('path');
+var cwd = "snakemaze/";
+module.exports = {
 		"mode":"production",
 		//"devtool": "source-map",
 		"entry": "./" + cwd + "src/index.ts",
 		"output": {
-			"path": require("path").resolve("./" + cwd),
-			"filename": cwd + "bundle.js"
+			"path": path.resolve(__dirname, 'dist'),
+			"filename": "bundle.js"
 		},
 		"resolve": {
 			"extensions": ['.ts', '.js', '.json']
