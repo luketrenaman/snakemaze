@@ -24576,7 +24576,7 @@ window.g = {};
 g.renderer = PIXI.autoDetectRenderer(832, 640);
 g.renderer.backgroundColor = 0x444444;
 g.all = new PIXI.Container();
-document.body.appendChild(g.renderer.view)
+document.body.appendChild(g.renderer.view);
 PIXI.loader
 .add("assets/maze-wall.png")
 .add("assets/trophy-bronze.png")
@@ -25523,6 +25523,12 @@ __webpack_require__.r(__webpack_exports__);
         }
         document.onkeydown = (e) => {
             e = e || window.event;
+
+            //Patch for scrolling on small screens
+            if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+                e.preventDefault();
+            }
+
             e = e.which || e.keyCode || 0;
             if (a.map.indexOf(e) == -1) {
                 a.map.push(e);

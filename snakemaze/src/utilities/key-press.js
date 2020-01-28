@@ -20,6 +20,12 @@ export default new class{
         }
         document.onkeydown = (e) => {
             e = e || window.event;
+
+            //Patch for scrolling on small screens
+            if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+                e.preventDefault();
+            }
+
             e = e.which || e.keyCode || 0;
             if (a.map.indexOf(e) == -1) {
                 a.map.push(e);

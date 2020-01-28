@@ -1,11 +1,12 @@
 var path = require('path');
-var cwd = "snakemaze/";
+var cwd = "/snakemaze";
+console.log(__dirname + cwd);
 module.exports = {
 		"mode":"development",
 		"devtool": "source-map",
-		"entry": "./" + cwd + "src/index.js",
+		"entry": "./" + "snakemaze/" + "src/index.js",
 		"output": {
-			"path": path.resolve(__dirname, 'dist'),
+			"path": __dirname + cwd,
 			"filename": "bundle.js"
 		},
 		"resolve": {
