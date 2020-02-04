@@ -105,6 +105,9 @@ export default class{
     }
     doop(){
         for(let i = 0; i <= key.moveKeys.length;i++){
+            console.log(key.moveKeys[i]);
+        }
+        for(let i = 0; i <= key.moveKeys.length;i++){
             let x;
             if (i === key.moveKeys.length){
                 x = key.mostRecentKey;

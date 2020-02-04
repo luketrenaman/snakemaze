@@ -23724,6 +23724,9 @@ class ExitSprite extends PIXI.Sprite{
     }
     doop(){
         for(let i = 0; i <= _utilities_key_press__WEBPACK_IMPORTED_MODULE_1__["default"].moveKeys.length;i++){
+            console.log(_utilities_key_press__WEBPACK_IMPORTED_MODULE_1__["default"].moveKeys[i]);
+        }
+        for(let i = 0; i <= _utilities_key_press__WEBPACK_IMPORTED_MODULE_1__["default"].moveKeys.length;i++){
             let x;
             if (i === _utilities_key_press__WEBPACK_IMPORTED_MODULE_1__["default"].moveKeys.length){
                 x = _utilities_key_press__WEBPACK_IMPORTED_MODULE_1__["default"].mostRecentKey;
@@ -24210,7 +24213,7 @@ class LevelSelect extends PIXI.Sprite{
             this.children[i].y = 56;
             this.children[i].x = i * 12;
         }
-        var text = new PIXI.Text(i + j*5, {
+        var text = new PIXI.Text(i + j*5 + 1, {
             font: "48px Pixel",
             fill: "white"
         });
@@ -24470,7 +24473,7 @@ __webpack_require__.r(__webpack_exports__);
             }
         }
         if (a.allow) {
-            _utilities_key_press__WEBPACK_IMPORTED_MODULE_1__["default"].check(80, function() {
+            _utilities_key_press__WEBPACK_IMPORTED_MODULE_1__["default"].check([80,32], function() {
                 a.visible = true;
                 g.soundManager.visible = true;
                 //background.zIndex = -2;
@@ -24480,9 +24483,9 @@ __webpack_require__.r(__webpack_exports__);
                 g.renderer.render(g.all);
                 gameloop.stop();
                 renderloop.stop();
-                _utilities_key_press__WEBPACK_IMPORTED_MODULE_1__["default"].waitUp(80, function() {
-                    _utilities_key_press__WEBPACK_IMPORTED_MODULE_1__["default"].waitDown(80, wait);
-                    _utilities_key_press__WEBPACK_IMPORTED_MODULE_1__["default"].waitUp(80, allow);
+                _utilities_key_press__WEBPACK_IMPORTED_MODULE_1__["default"].waitUp([80,32], function() {
+                    _utilities_key_press__WEBPACK_IMPORTED_MODULE_1__["default"].waitDown([80,32], wait);
+                    _utilities_key_press__WEBPACK_IMPORTED_MODULE_1__["default"].waitUp([80,32], allow);
                 });
             });
         }

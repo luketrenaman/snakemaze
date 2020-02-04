@@ -174,7 +174,7 @@ class LevelSelect extends PIXI.Sprite{
             this.children[i].y = 56;
             this.children[i].x = i * 12;
         }
-        var text = new PIXI.Text(i + j*5, {
+        var text = new PIXI.Text(i + j*5 + 1, {
             font: "48px Pixel",
             fill: "white"
         });

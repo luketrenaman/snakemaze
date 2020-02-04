@@ -50,7 +50,7 @@ export default class extends PIXI.Sprite{
             }
         }
         if (a.allow) {
-            key.check(80, function() {
+            key.check([80,32], function() {
                 a.visible = true;
                 g.soundManager.visible = true;
                 //background.zIndex = -2;
@@ -60,9 +60,9 @@ export default class extends PIXI.Sprite{
                 g.renderer.render(g.all);
                 gameloop.stop();
                 renderloop.stop();
-                key.waitUp(80, function() {
-                    key.waitDown(80, wait);
-                    key.waitUp(80, allow);
+                key.waitUp([80,32], function() {
+                    key.waitDown([80,32], wait);
+                    key.waitUp([80,32], allow);
                 });
             });
         }
