@@ -1,3 +1,4 @@
+import key from "../utilities/key-press";
 class MenuManager{
     constructor(){
         this.menus = [];
@@ -54,6 +55,7 @@ class Menu extends PIXI.Container{
 }
 import shapes from "../drawing/shapes";
 import button from "./button";
+import keyPress from "../utilities/key-press";
 class SoundManager extends PIXI.Container{
     constructor(){
         super();
@@ -322,8 +324,8 @@ export default function(){
     g.base.addChild(replay);
     g.base.addChild(next);
     
-let allowReplay = true;
-    replay.on('click',function(){
+    let allowReplay = true;
+    function testReplay(){
         if(allowReplay){
             allowReplay = false;
             g.level.kill();
@@ -332,7 +334,16 @@ let allowReplay = true;
                 allowReplay = true;
             },50);
         }
-    });
+    }
+    replay.on('click',testReplay);
+    //r pressed, restart level
+    key.waitDown(82,testReplay,true);
+    //Esc pressed, exit game
+    key.waitDown(27,function(){
+        g.level.kill();
+        g.manager.show("level");
+    },true);
+
     next.on('click',function(){
         if(allowReplay){
             allowReplay = false;

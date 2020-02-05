@@ -24035,8 +24035,10 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _drawing_shapes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../drawing/shapes */ "./snakemaze/src/drawing/shapes.js");
-/* harmony import */ var _button__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./button */ "./snakemaze/src/components/button.js");
+/* harmony import */ var _utilities_key_press__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utilities/key-press */ "./snakemaze/src/utilities/key-press.js");
+/* harmony import */ var _drawing_shapes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../drawing/shapes */ "./snakemaze/src/drawing/shapes.js");
+/* harmony import */ var _button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./button */ "./snakemaze/src/components/button.js");
+
 class MenuManager{
     constructor(){
         this.menus = [];
@@ -24093,6 +24095,7 @@ class Menu extends PIXI.Container{
 }
 
 
+
 class SoundManager extends PIXI.Container{
     constructor(){
         super();
@@ -24108,7 +24111,7 @@ class SoundMenu extends PIXI.Sprite{
         this.enabled = true;
         this.textureOn = textureOn;
         this.textureOff = textureOff;
-        Object(_button__WEBPACK_IMPORTED_MODULE_1__["default"])(this, x, y, () => {
+        Object(_button__WEBPACK_IMPORTED_MODULE_2__["default"])(this, x, y, () => {
                 if (!this.enabled) {
                     this.enable();
                 }
@@ -24183,7 +24186,7 @@ class TrophySelect extends PIXI.Sprite{
         super(tex);
         this.x = x;
         this.config = config;
-        Object(_button__WEBPACK_IMPORTED_MODULE_1__["default"])(this,this.x,this.y,() =>{
+        Object(_button__WEBPACK_IMPORTED_MODULE_2__["default"])(this,this.x,this.y,() =>{
             (this.parent).select(this.config.value);
         })
     }
@@ -24200,7 +24203,7 @@ class TrophyIcon extends PIXI.Sprite{
 class LevelSelect extends PIXI.Sprite{
     constructor(i,j){
         super(PIXI.loader.resources["assets/background-incomplete.png"].texture);
-        Object(_button__WEBPACK_IMPORTED_MODULE_1__["default"])(
+        Object(_button__WEBPACK_IMPORTED_MODULE_2__["default"])(
             this, i * 128 + 128, j * 128 + 128, function () {
                 g.level = new g.newLevel(i + j * 5);
             }
@@ -24256,7 +24259,7 @@ class LevelSelect extends PIXI.Sprite{
     startScreen.addChild(background);
     let start = new PIXI.Sprite(PIXI.loader.resources["assets/start.png"].texture)
     startScreen.addChild(start);
-    Object(_button__WEBPACK_IMPORTED_MODULE_1__["default"])(start, 64 * 4 + 32, 64 * 6, function () {
+    Object(_button__WEBPACK_IMPORTED_MODULE_2__["default"])(start, 64 * 4 + 32, 64 * 6, function () {
             g.manager.show("level");
         })
     // -- LEVEL SELECT --
@@ -24316,14 +24319,14 @@ class LevelSelect extends PIXI.Sprite{
     // -- QUIT BUTTON --
     let exit = new PIXI.Sprite(PIXI.loader.resources["assets/back.png"].texture);
     levelSelect.addChild(exit);
-    Object(_button__WEBPACK_IMPORTED_MODULE_1__["default"])(
+    Object(_button__WEBPACK_IMPORTED_MODULE_2__["default"])(
         exit, 32, 32, function () {
             g.manager.show("start");
         }
         )
     // -- MENU TO SHOW ON DEATH --
     //TODO
-    g.base = new PIXI.Sprite(_drawing_shapes__WEBPACK_IMPORTED_MODULE_0__["default"].rectangle(64*6,64*4,"rgba(0, 0, 0,0.7)"));
+    g.base = new PIXI.Sprite(_drawing_shapes__WEBPACK_IMPORTED_MODULE_1__["default"].rectangle(64*6,64*4,"rgba(0, 0, 0,0.7)"));
     g.base.x = 832 /2 - g.base.width / 2;
     g.base.y = 640 / 2 - g.base.height / 2;
 
@@ -24332,7 +24335,7 @@ class LevelSelect extends PIXI.Sprite{
     g.base.txt.x = g.base.width / 2
     g.base.txt.y = 32;
     let exit2 = new PIXI.Sprite(PIXI.loader.resources["assets/menu.png"].texture);
-    Object(_button__WEBPACK_IMPORTED_MODULE_1__["default"])(
+    Object(_button__WEBPACK_IMPORTED_MODULE_2__["default"])(
         exit2, 0, 0, function () {
             g.level.kill();
             g.manager.show("level");
@@ -24343,11 +24346,11 @@ class LevelSelect extends PIXI.Sprite{
     next.scale.x = -1;
     next.anchor.x = 0.5;
 
-    Object(_button__WEBPACK_IMPORTED_MODULE_1__["default"])(
+    Object(_button__WEBPACK_IMPORTED_MODULE_2__["default"])(
         replay,replay.x,replay.y,function(){
         }
     )
-    Object(_button__WEBPACK_IMPORTED_MODULE_1__["default"])(
+    Object(_button__WEBPACK_IMPORTED_MODULE_2__["default"])(
         next,next.x,next.y,function(){
         }
     )
@@ -24361,8 +24364,8 @@ class LevelSelect extends PIXI.Sprite{
     g.base.addChild(replay);
     g.base.addChild(next);
     
-let allowReplay = true;
-    replay.on('click',function(){
+    let allowReplay = true;
+    function testReplay(){
         if(allowReplay){
             allowReplay = false;
             g.level.kill();
@@ -24371,7 +24374,16 @@ let allowReplay = true;
                 allowReplay = true;
             },50);
         }
-    });
+    }
+    replay.on('click',testReplay);
+    //r pressed, restart level
+    _utilities_key_press__WEBPACK_IMPORTED_MODULE_0__["default"].waitDown(82,testReplay,true);
+    //Esc pressed, exit game
+    _utilities_key_press__WEBPACK_IMPORTED_MODULE_0__["default"].waitDown(27,function(){
+        g.level.kill();
+        g.manager.show("level");
+    },true);
+
     next.on('click',function(){
         if(allowReplay){
             allowReplay = false;
