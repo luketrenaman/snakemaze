@@ -183,12 +183,16 @@ function setup() {
 			gameTick.stop();
 			//Create a new loop with no controls
 			let n = 0;
-			snake.counter.xvel = 0;
+			if(g.maze.mode === "normal"){
+				snake.counter.xvel = 0;
+			}
 			g.level.endLoop = new fps(function(frames, self,diff) {
 				//make the portal continue to animate
 				snake.portalAnim(diff);
-				snake.counter.x -= 100 * diff * (snake.counter.x - 416 + snake.counter.width/2) / 20;
-				snake.counter.y -= 100 * diff * (snake.counter.y - 500) / 20;
+				if(g.maze.mode === "normal"){
+					snake.counter.x -= 100 * diff * (snake.counter.x - 416 + snake.counter.width/2) / 20;
+					snake.counter.y -= 100 * diff * (snake.counter.y - 500) / 20;
+				}
 				if(condition === "victory"){
 					if(n === 0){
 						g.manager.show("victory");

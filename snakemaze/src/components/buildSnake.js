@@ -84,11 +84,11 @@ export default class{
         this.sprites.push(new Segment("tail"));
         g.stage.y += 320 - this.sprites[0].worldTransform.ty;
         g.stage.x += 416 - this.sprites[0].worldTransform.tx;
-        this.counter = new Counter();
         if(g.maze.mode === "normal"){
             this.fruit();
             this.fruit();
             this.fruit();
+            this.counter = new Counter();
         }
         else{
             this.exit = true;
@@ -304,7 +304,7 @@ export default class{
             g.level.end("death");
             this.over = true;
         }
-        if (this.counter.rules.current != this.counter.rules.max) {
+        if (g.maze.mode === "normal" && this.counter.rules.current != this.counter.rules.max) {
             this.gems.forEach((gem)=> {
                 if (this.locations[0].x === gem.coord.x && this.locations[0].y === gem.coord.y) {
                     a.gems.splice(a.gems.indexOf(gem), 1);

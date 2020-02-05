@@ -23703,11 +23703,11 @@ class ExitSprite extends PIXI.Sprite{
         this.sprites.push(new Segment("tail"));
         g.stage.y += 320 - this.sprites[0].worldTransform.ty;
         g.stage.x += 416 - this.sprites[0].worldTransform.tx;
-        this.counter = new Counter();
         if(g.maze.mode === "normal"){
             this.fruit();
             this.fruit();
             this.fruit();
+            this.counter = new Counter();
         }
         else{
             this.exit = true;
@@ -23923,7 +23923,7 @@ class ExitSprite extends PIXI.Sprite{
             g.level.end("death");
             this.over = true;
         }
-        if (this.counter.rules.current != this.counter.rules.max) {
+        if (g.maze.mode === "normal" && this.counter.rules.current != this.counter.rules.max) {
             this.gems.forEach((gem)=> {
                 if (this.locations[0].x === gem.coord.x && this.locations[0].y === gem.coord.y) {
                     a.gems.splice(a.gems.indexOf(gem), 1);
@@ -24740,12 +24740,16 @@ function setup() {
 			gameTick.stop();
 			//Create a new loop with no controls
 			let n = 0;
-			snake.counter.xvel = 0;
+			if(g.maze.mode === "normal"){
+				snake.counter.xvel = 0;
+			}
 			g.level.endLoop = new _utilities_fps__WEBPACK_IMPORTED_MODULE_2__["default"](function(frames, self,diff) {
 				//make the portal continue to animate
 				snake.portalAnim(diff);
-				snake.counter.x -= 100 * diff * (snake.counter.x - 416 + snake.counter.width/2) / 20;
-				snake.counter.y -= 100 * diff * (snake.counter.y - 500) / 20;
+				if(g.maze.mode === "normal"){
+					snake.counter.x -= 100 * diff * (snake.counter.x - 416 + snake.counter.width/2) / 20;
+					snake.counter.y -= 100 * diff * (snake.counter.y - 500) / 20;
+				}
 				if(condition === "victory"){
 					if(n === 0){
 						g.manager.show("victory");
