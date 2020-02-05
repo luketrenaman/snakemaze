@@ -6,7 +6,7 @@ module.exports = {
 		"devtool": "source-map",
 		"entry": "./" + "snakemaze/" + "src/index.js",
 		"output": {
-			"path": __dirname + cwd,
+			"path": require("path").resolve("./" + cwd),
 			"filename": "bundle.js"
 		},
 		"resolve": {

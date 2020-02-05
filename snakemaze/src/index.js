@@ -332,13 +332,13 @@ function setup() {
             background.children.forEach(function(val) {
 				val.y = (val.orig.y * 64 + g.stage.y).mod(640 + 64) - g.stage.y - 64
 				val.x = (val.orig.x * 64 + g.stage.x).mod(832 + 64) - g.stage.x - 64
-			})
+			});
 			tiles.children.forEach(function(val) {
 				val.visible = !(val.x + g.stage.x < -32 || val.x + g.stage.x > 864 || val.y + g.stage.y < -32 || val.y + g.stage.y > 672)
-			})
+			});
 			g.renderer.render(g.all);
 			pause.handle(self, gameTick,background);
-		})
+		});
 		return this;
 	}
 }

@@ -25,15 +25,14 @@ gulp.task('webpack',function(){
     .on('error', function handleError() {
         this.emit('end'); // Recover from errors
     })
-    .pipe(gulp.dest(""))
+    .pipe(gulp.dest("./snakemaze"))
     .pipe(browserSync.stream());
 })
 
 gulp.task('default',["browserSync"], function(callback) {
-            browserSync.reload()
-                gulp.watch(cwd + 'src/**/*',["webpack"])
-                gulp.watch(cwd + '**/*.html', browserSync.reload); //reload
-                gulp.watch(cwd + '**/*.css', browserSync.reload); //reload
-                gulp.watch(cwd + '**/*.glsl', ["webpack"]); //reload
-        // Other stoof
+    browserSync.reload()
+    gulp.watch(cwd + 'src/**/*',["webpack"])
+    gulp.watch(cwd + '**/*.html', browserSync.reload); //reload
+    gulp.watch(cwd + '**/*.css', browserSync.reload); //reload
+    gulp.watch(cwd + '**/*.glsl', ["webpack"]); //reload
 });

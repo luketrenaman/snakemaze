@@ -32,7 +32,7 @@ export default new class{
             }
             a.tethers.forEach(function(tether, index) {
                 if (tether.type == "down") {
-                    if (e === tether.key) {
+                    if (tether.keys.indexOf(e) !== -1) {
                         tether.func();
                         if (!tether.perma) a.tethers.splice(index, 1);
                     }
@@ -61,7 +61,7 @@ export default new class{
             }
             a.tethers.forEach(function(tether, index) {
                 if (tether.type == "up") {
-                    if (e === tether.key) {
+                    if (tether.keys.indexOf(e) !== -1) {
                         tether.func();
                         if (!tether.perma) a.tethers.splice(index, 1);
                     }
@@ -105,14 +105,12 @@ export default new class{
         if (perma === undefined) {
             perma = false;
         }
-        key.forEach(function(keys){
-            a.tethers.push({
-                "key": keys,
-                "func": func,
-                "type": "up",
-                "perma": perma
-            });
-        })
+        a.tethers.push({
+            "keys": key,
+            "func": func,
+            "type": "up",
+            "perma": perma
+        });
     };
     waitDown(key, func, perma) {
         var a = this;
@@ -122,13 +120,11 @@ export default new class{
         if (perma === undefined) {
             perma = false;
         }
-        key.forEach(function(keys){
-            a.tethers.push({
-                "key": keys,
-                "func": func,
-                "type": "down",
-                "perma": perma
-            });
-        })
+        a.tethers.push({
+            "keys": key,
+            "func": func,
+            "type": "down",
+            "perma": perma
+        });
     };
 }();
