@@ -214,7 +214,7 @@ export default function(){
     );
     g.all.addChild(g.soundManager);
     // -- START SCREEN --
-    let startScreen = new Menu("start",true);
+    let startScreen = new Menu("start",false);
     let background = new PIXI.Sprite(PIXI.loader.resources["assets/titlescreen.png"].texture)
     startScreen.addChild(background);
     let start = new PIXI.Sprite(PIXI.loader.resources["assets/start.png"].texture)
