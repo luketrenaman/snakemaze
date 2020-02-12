@@ -305,6 +305,7 @@ function setup() {
 				//TODO CHECK LOCATION
 				snake.shoop();
 				snake.checkMove();
+				snake.eat();
 			} else {
 				if (Math.ceil(3 - frames / 5) === 0) {
 					countdown.visible = false;
