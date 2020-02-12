@@ -24736,6 +24736,10 @@ function setup() {
 				g.level.endLoop.stop();
 				g.level.endLoop = null;
 			}
+			if(g.level.gameTick){
+				g.level.gameTick.stop();
+				g.level.gameTick = null;
+			}
 			g.all.removeChild(g.stage);
 			g.all.removeChild(pause);
 			g.maze = null;
@@ -24756,43 +24760,12 @@ function setup() {
 				snake.counter.xvel = 0;
 			}
 			g.level.endLoop = new _utilities_fps__WEBPACK_IMPORTED_MODULE_2__["default"](function(frames, self,diff) {
-				//make the portal continue to animate
-				snake.portalAnim(diff);
 				if(g.maze.mode === "normal"){
 					snake.counter.x -= 100 * diff * (snake.counter.x - 416 + snake.counter.width/2) / 20;
 					snake.counter.y -= 100 * diff * (snake.counter.y - 500) / 20;
 				}
-				if(condition === "victory"){
-					if(n === 0){
-						g.manager.show("victory");
-						g.save.levelCompletion[num] = g.difficulty.value
-						localStorage.setItem("snakemaze_save_data",JSON.stringify(g.save));
-						g.manager.levelCompletion(g.save.levelCompletion);
-					}
-					if(snake.sprites.length !== n - 1){
-						if (frames % 10 === 0){
-							g.stage.removeChild(snake.sprites[n]);
-							snake.checkMove();
-							if(snake.sprites.length !== n - 2){
-								snake.sprites[n + 1].setTexture(PIXI.loader.resources["assets/snake-portal.png"].texture)
-							}
-							n++;
-						}
-					}
-				}
-				if(condition === "death"){
-					g.manager.show("death");
-					if (frames % 10 === 0) {
-						if (snake.sprites.length - 1 === n) {
-							snake.sprites[n].tint = 0x000;
-						} else {
-							do {
-								snake.sprites[n].tint = 0x000;
-								n++
-							} while (snake.locations[n].x === snake.locations[n + 1].x && snake.locations[n].y === snake.locations[n + 1].y)
-						}
-					}
-				}
+				//make the portal continue to animate
+				snake.portalAnim(diff);
 				if (snake.sprites[n]) {
 					camera(diff,snake.sprites[n]);
 				} else{
@@ -24807,6 +24780,38 @@ function setup() {
 				})
 				g.renderer.render(g.all);
 			});
+			g.level.gameTick = new _utilities_gametick__WEBPACK_IMPORTED_MODULE_3__["default"](function(frames,self){
+				if(condition === "victory"){
+					if(n === 0){
+						g.manager.show("victory");
+						g.save.levelCompletion[num] = g.difficulty.value
+						localStorage.setItem("snakemaze_save_data",JSON.stringify(g.save));
+						g.manager.levelCompletion(g.save.levelCompletion);
+					}
+					if(snake.sprites.length !== n - 1){
+							g.stage.removeChild(snake.sprites[n]);
+							snake.checkMove();
+							if(snake.sprites.length !== n - 2){
+								snake.sprites[n + 1].setTexture(PIXI.loader.resources["assets/snake-portal.png"].texture)
+							}
+							n++;
+					}
+				}
+				if(condition === "death"){
+					if(n === 0){
+						n = 1;
+					}
+					g.manager.show("death");
+						if (snake.sprites.length - 1 === n) {
+							snake.sprites[n].tint = 0x000;
+						} else {
+							do {
+								snake.sprites[n].tint = 0x000;
+								n++
+							} while (snake.locations[n].x === snake.locations[n + 1].x && snake.locations[n].y === snake.locations[n + 1].y)
+						}
+				}
+			},g.difficulty.tickrate);
 		}
 		//Create a pause menu
 		let pause = new _components_pause__WEBPACK_IMPORTED_MODULE_6__["default"]();
