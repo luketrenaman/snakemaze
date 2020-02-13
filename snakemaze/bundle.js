@@ -23918,10 +23918,10 @@ class ExitSprite extends PIXI.Sprite{
         }
         if (death && !this.over) {
             //TODO = HANDLE DEATH OF THE SNAKE WITH A DEATH SCREEN
-
+            console.log("death tested");
             collide = true;
-            g.level.end("death");
             this.over = true;
+            g.level.end("death");
         }
         if (g.maze.mode === "normal" && this.counter.rules.current != this.counter.rules.max) {
             this.gems.forEach((gem)=> {
@@ -23946,8 +23946,9 @@ class ExitSprite extends PIXI.Sprite{
                 this.exitSprite.setTexture(PIXI.loader.resources["assets/rainbow.json"].textures["rainbow" + this.exitSprite.cycle + ".png"]);
                 if (this.locations[0].x === this.exitSprite.coord.x && this.locations[0].y === this.exitSprite.coord.y && !this.over) {
                     //TODO = WIN SCREEN
-                    g.level.end("victory")
+                    console.log("victory tested");
                     this.over = true;
+                    g.level.end("victory")
                 }
             }
         }
@@ -24780,6 +24781,7 @@ function setup() {
 				})
 				g.renderer.render(g.all);
 			});
+			console.log(condition + "," + snake.over);
 			g.level.gameTick = new _utilities_gametick__WEBPACK_IMPORTED_MODULE_3__["default"](function(frames,self){
 				if(condition === "victory"){
 					if(n === 0){
@@ -24788,13 +24790,15 @@ function setup() {
 						localStorage.setItem("snakemaze_save_data",JSON.stringify(g.save));
 						g.manager.levelCompletion(g.save.levelCompletion);
 					}
-					if(snake.sprites.length !== n - 1){
+					if(snake.sprites.length !== n){
+						if(snake.sprites[n]){
 							g.stage.removeChild(snake.sprites[n]);
 							snake.checkMove();
-							if(snake.sprites.length !== n - 2){
-								snake.sprites[n + 1].setTexture(PIXI.loader.resources["assets/snake-portal.png"].texture)
-							}
-							n++;
+						};
+						if(snake.sprites[n + 1]){
+							snake.sprites[n + 1].setTexture(PIXI.loader.resources["assets/snake-portal.png"].texture)
+						};
+						n++;
 					}
 				}
 				if(condition === "death"){
@@ -24812,6 +24816,7 @@ function setup() {
 						}
 				}
 			},g.difficulty.tickrate);
+			
 		}
 		//Create a pause menu
 		let pause = new _components_pause__WEBPACK_IMPORTED_MODULE_6__["default"]();
@@ -24879,7 +24884,6 @@ function setup() {
 				//TODO CHECK LOCATION
 				snake.shoop();
 				snake.checkMove();
-				snake.eat();
 			} else {
 				if (Math.ceil(3 - frames / 5) === 0) {
 					countdown.visible = false;

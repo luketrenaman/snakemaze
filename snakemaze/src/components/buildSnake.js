@@ -299,10 +299,10 @@ export default class{
         }
         if (death && !this.over) {
             //TODO = HANDLE DEATH OF THE SNAKE WITH A DEATH SCREEN
-
+            console.log("death tested");
             collide = true;
-            g.level.end("death");
             this.over = true;
+            g.level.end("death");
         }
         if (g.maze.mode === "normal" && this.counter.rules.current != this.counter.rules.max) {
             this.gems.forEach((gem)=> {
@@ -327,8 +327,9 @@ export default class{
                 this.exitSprite.setTexture(PIXI.loader.resources["assets/rainbow.json"].textures["rainbow" + this.exitSprite.cycle + ".png"]);
                 if (this.locations[0].x === this.exitSprite.coord.x && this.locations[0].y === this.exitSprite.coord.y && !this.over) {
                     //TODO = WIN SCREEN
-                    g.level.end("victory")
+                    console.log("victory tested");
                     this.over = true;
+                    g.level.end("victory")
                 }
             }
         }

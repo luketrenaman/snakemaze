@@ -211,6 +211,7 @@ function setup() {
 				})
 				g.renderer.render(g.all);
 			});
+			console.log(condition + "," + snake.over);
 			g.level.gameTick = new GameTick(function(frames,self){
 				if(condition === "victory"){
 					if(n === 0){
@@ -219,13 +220,15 @@ function setup() {
 						localStorage.setItem("snakemaze_save_data",JSON.stringify(g.save));
 						g.manager.levelCompletion(g.save.levelCompletion);
 					}
-					if(snake.sprites.length !== n - 1){
+					if(snake.sprites.length !== n){
+						if(snake.sprites[n]){
 							g.stage.removeChild(snake.sprites[n]);
 							snake.checkMove();
-							if(snake.sprites.length !== n - 2){
-								snake.sprites[n + 1].setTexture(PIXI.loader.resources["assets/snake-portal.png"].texture)
-							}
-							n++;
+						};
+						if(snake.sprites[n + 1]){
+							snake.sprites[n + 1].setTexture(PIXI.loader.resources["assets/snake-portal.png"].texture)
+						};
+						n++;
 					}
 				}
 				if(condition === "death"){
@@ -243,6 +246,7 @@ function setup() {
 						}
 				}
 			},g.difficulty.tickrate);
+			
 		}
 		//Create a pause menu
 		let pause = new pauseConstructor();
@@ -310,7 +314,6 @@ function setup() {
 				//TODO CHECK LOCATION
 				snake.shoop();
 				snake.checkMove();
-				snake.eat();
 			} else {
 				if (Math.ceil(3 - frames / 5) === 0) {
 					countdown.visible = false;
