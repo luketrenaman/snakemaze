@@ -239,11 +239,18 @@ function setup() {
 						if (snake.sprites.length - 1 === n) {
 							snake.sprites[n].tint = 0x000;
 						} else {
-							do {
-								snake.sprites[n].tint = 0x000;
-								n++
-							} while (snake.locations[n].x === snake.locations[n + 1].x && snake.locations[n].y === snake.locations[n + 1].y)
+							try{
+								do {
+									snake.sprites[n].tint = 0x000;
+									n++
+								} while (snake.locations[n].x === snake.locations[n + 1].x && snake.locations[n].y === snake.locations[n + 1].y)
+							}
+							catch{
+								console.error("goteem");
+							}
 						}
+
+
 				}
 			},g.difficulty.tickrate);
 			
