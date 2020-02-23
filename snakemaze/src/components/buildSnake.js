@@ -17,10 +17,9 @@ class Segment extends PIXI.Sprite {
         this.segmentType = type;    
     }
 }
-let ab = new PIXI.Sprite(shapes.rectangle(128, 96, "rgba(44, 62, 80,0.7)"));
 class Counter extends PIXI.Sprite{
     constructor(){
-        super(shapes.rectangle(128, 96, "rgba(0, 0, 0,0.7)"))
+        super(shapes.rectangle(128, 96, "rgba(0, 0, 0,0.45)"))
         this.zOrder = -2;
         this.x = 832 - 32 * 4; //position in bottom right
         this.y = 640 - 32* 3; //position in bottom right
