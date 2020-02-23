@@ -146,10 +146,10 @@ function setup() {
 		}
 		function camera(diff,spr){
 			if(calcy){
-				g.stage.y += diff * 100 * ((320 - spr.worldTransform.ty) / (40 - (+(Math.abs(320 - snake.sprites[0].worldTransform.ty) > 640)) * 39));
+				g.stage.y += diff * 75 * ((320 - spr.worldTransform.ty) / (40 - (+(Math.abs(320 - snake.sprites[0].worldTransform.ty) > 640)) * 39));
 			}
 			if(calcx){
-				g.stage.x += diff * 100 * ((416 - spr.worldTransform.tx) / (40 - (+(Math.abs(416 - snake.sprites[0].worldTransform.tx) > 832)) * 39));
+				g.stage.x += diff * 75 * ((416 - spr.worldTransform.tx) / (40 - (+(Math.abs(416 - snake.sprites[0].worldTransform.tx) > 832)) * 39));
 			}
 			g.stage.y = fixy(g.stage.y);
 			g.stage.x = fixx(g.stage.x);
