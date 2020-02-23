@@ -245,7 +245,7 @@ function setup() {
 									n++
 								} while (snake.locations[n].x === snake.locations[n + 1].x && snake.locations[n].y === snake.locations[n + 1].y)
 							}
-							catch{
+							catch (e){
 								console.error("goteem");
 							}
 						}

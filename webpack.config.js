@@ -2,8 +2,8 @@ var path = require('path');
 var cwd = "\\snakemaze";
 console.log(__dirname + cwd);
 module.exports = {
-		"mode":"development",
-		"devtool": "source-map",
+		"mode":"production",
+		//"devtool": "source-map",
 		"entry": "./" + "snakemaze/" + "src/index.js",
 		"output": {
 			"path": require("path").resolve("./" + cwd),
