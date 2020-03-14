@@ -237,7 +237,8 @@ export default function(){
         "long":20,
         "medium":10,
         "short":5,
-        "tickrate":200,
+        "trials":2,
+        "tickrate":175,
         "name":"casual",
         "color":"#e59734",
         "value":1
@@ -246,24 +247,27 @@ export default function(){
         "long":25,
         "medium":15,
         "short":8,
-        "tickrate":160,
+        "trials":3,
+        "tickrate":150,
         "name":"normal",
         "color":"#b8b8b8",
         "value":2
     });
     let gold = new TrophySelect(PIXI.loader.resources["assets/trophy-gold.png"].texture,(68+32)*2,{
-        "long":40,
+        "long":30,
         "medium":20,
         "short":10,
-        "tickrate":130,
+        "trials":4,
+        "tickrate":125,
         "name":"hard",
         "color":"#f6d91f",
         "value":3
     });
     let diamond = new TrophySelect(PIXI.loader.resources["assets/trophy-diamond.png"].texture,(68+32)*3,{
-        "long":50,
+        "long":40,
         "medium":25,
         "short":12,
+        "trials":5,
         "tickrate":100,
         "name":"insane",
         "color":"#2ac4b3",

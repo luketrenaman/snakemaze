@@ -78,18 +78,33 @@ export default class{
         ];
         this.sprites = [];
         this.gems = [];
+
         this.sprites.push(new Segment("head"));
         this.sprites.push(new Segment("body"));
         this.sprites.push(new Segment("tail"));
         g.stage.y += 320 - this.sprites[0].worldTransform.ty;
         g.stage.x += 416 - this.sprites[0].worldTransform.tx;
-        if(g.maze.mode === "normal"){
-            this.fruit();
-            this.fruit();
-            this.fruit();
+
+        this.gemSpawns = [];
+        for(let i = 0; i < g.maze.data.length;i++){
+            for(let j = 0; j < g.maze.data[0].length;j++){
+                if(g.maze.data[i][j] === 2){
+                    this.gemSpawns.push({
+                        "x":j,
+                        "y":i
+                    })
+                }
+            }
+        }
+
+        if(g.maze.mode === "normal" || g.maze.mode === "trials"){
+            for(let i = 0; i < g.maze.fruits;i++){
+                console.log(i);
+                this.fruit();
+            };
             this.counter = new Counter();
         }
-        else{
+        else if(g.maze.mode === "crash"){
             this.exit = true;
             this.exitSprite = new ExitSprite(g.maze.end);
             g.stage.addChild(this.exitSprite);
@@ -251,7 +266,11 @@ export default class{
                 }) && g.maze.data[spawn.y][spawn.x] === 2;
                 if (safe) {
                     a.exit = true;
-                    a.exitSprite = new ExitSprite(spawn);
+                    if(g.maze.mode === "trials"){
+                        a.exitSprite = new ExitSprite(g.maze.end);
+                    } else{
+                        a.exitSprite = new ExitSprite(spawn);
+                    }
                     g.stage.addChild(a.exitSprite);
                 } else {
                     check()
@@ -310,12 +329,14 @@ export default class{
             this.over = true;
             g.level.end("death");
         }
-        if (g.maze.mode === "normal" && this.counter.rules.current != this.counter.rules.max) {
+        if (g.maze.mode === "normal" || g.maze.mode === "trials" && this.counter.rules.current != this.counter.rules.max) {
             this.gems.forEach((gem)=> {
                 if (this.locations[0].x === gem.coord.x && this.locations[0].y === gem.coord.y) {
                     a.gems.splice(a.gems.indexOf(gem), 1);
                     g.stage.removeChild(gem);
-                    a.fruit();
+                    if(g.maze.mode === "normal"){
+                        a.fruit();
+                    }
                     a.eat();
                 }
             })
@@ -353,11 +374,8 @@ export default class{
     fruit() {
         let a = this;
 
-        function check(){
-            let spawn = {
-                x:Math.floor(g.maze.data[0].length*Math.random()),
-                y:Math.floor(g.maze.data.length*Math.random())
-            };
+        function check(i){
+            let spawn = a.gemSpawns[i];
             let safe = a.locations.every(function(val) {
                 return !(val.x === spawn.x && val.y === spawn.y);
             }) && a.gems.every(function(val) {
@@ -378,9 +396,9 @@ export default class{
                 a.gems.push(gem);
                 g.stage.addChild(gem);
             } else {
-                check()
+                check((i + 1) % a.gemSpawns.length);
             }
         }
-        check()
+        check(Math.floor(Math.random() * this.gemSpawns.length));
     }
 }
