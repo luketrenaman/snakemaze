@@ -197,7 +197,7 @@ function setup() {
 				}
 				//make the portal continue to animate
 				snake.portalAnim(diff);
-				if (snake.sprites[n]) {
+				if (snake.sprites[n] && condition === "death") {
 					camera(diff,snake.sprites[n]);
 				} else{
 					camera(diff,snake.exitSprite);
