@@ -25,6 +25,7 @@ g.renderer.backgroundColor = 0x444444;
 g.all = new PIXI.Container();
 document.body.appendChild(g.renderer.view);
 PIXI.loader
+.add("assets/title-text.png")
 .add("assets/portal.png")
 .add("assets/level-select.png")
 .add("assets/maze-wall.png")

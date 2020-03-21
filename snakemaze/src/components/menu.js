@@ -223,8 +223,12 @@ export default function(){
     g.all.addChild(g.soundManager);
     // -- START SCREEN --
     let startScreen = new Menu("start",false);
-    let background = new PIXI.Sprite(PIXI.loader.resources["assets/titlescreen.png"].texture)
+    let background = new PIXI.Sprite(PIXI.loader.resources["assets/level-select.png"].texture) //832, 640
     startScreen.addChild(background);
+    let titleText = new PIXI.Sprite(PIXI.loader.resources["assets/title-text.png"].texture)
+    titleText.x = 832 / 2 - 512 / 2;
+    titleText.y = 64 * 3 - 256 / 2;
+    startScreen.addChild(titleText);
     let start = new PIXI.Sprite(PIXI.loader.resources["assets/start.png"].texture)
     startScreen.addChild(start);
     button(start, 64 * 4 + 32, 64 * 6, function () {
