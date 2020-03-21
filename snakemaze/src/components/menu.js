@@ -27,6 +27,7 @@ class MenuManager{
                             })
                     }
                     g.base.addChild(g.base.txt);
+                    g.base.isNextAllowed();
                     val.addChild(g.base);
                     
                 }
@@ -99,7 +100,7 @@ class SoundMenu extends PIXI.Sprite{
         if(this.name === "music"){
             g.save.musicEnabled = this.enabled;
         }
-        localStorage.setItem("snakemaze_save_data",JSON.stringify(g.save));
+        localStorage.setItem("snakemaze_save",JSON.stringify(g.save));
     }
 }
 class TrophyManager extends PIXI.Container{
@@ -113,12 +114,19 @@ class TrophyManager extends PIXI.Container{
         this.addChild(this.txt);
     }
     select(num){
+        if((num === 4 && !g.save.levelCompletion.every(function(lv){
+            return lv > 2;
+        }))){
+            return;
+        }
         let trophy;
         this.children.forEach(function(val){
             if(val.config && val.config.value === num){
                 trophy = val;
             }
-            val.alpha = 0.6;
+            if(val.config){
+                val.alpha = 0.6;
+            }
         })
         trophy.alpha = 1;
         this.txt.alpha = 1;
@@ -127,7 +135,7 @@ class TrophyManager extends PIXI.Container{
         g.renderer.render(g.all);
         //save selected difficulty
         g.save.selectedDifficulty = num;
-        localStorage.setItem("snakemaze_save_data",JSON.stringify(g.save));
+        localStorage.setItem("snakemaze_save",JSON.stringify(g.save));
     }
     add(trophy){
         this.addChild(trophy);
@@ -224,6 +232,8 @@ export default function(){
         })
     // -- LEVEL SELECT --
     let levelSelect = new Menu("level",true);
+    let levelBackground = new PIXI.Sprite(PIXI.loader.resources["assets/level-select.png"].texture);
+    levelSelect.addChild(levelBackground);
     levelSelect.levels = [];
     for(let i = 0;i < 5;i++){
         for(let j = 0;j < 2;j++){
@@ -279,6 +289,10 @@ export default function(){
     trophyManager.add(silver);
     trophyManager.add(gold);
     trophyManager.add(diamond);
+    let lock = new PIXI.Sprite(PIXI.loader.resources["assets/trophy-diamond-locked.png"].texture);
+    trophyManager.add(lock);
+    lock.x = (68+32)*3 + 12;
+    lock.y = 12;
     levelSelect.addChild(trophyManager);
     // -- QUIT BUTTON --
     let exit = new PIXI.Sprite(PIXI.loader.resources["assets/back.png"].texture);
@@ -327,10 +341,22 @@ export default function(){
     g.base.addChild(exit2);
     g.base.addChild(replay);
     g.base.addChild(next);
-    
+    g.base.isNextAllowed = function(){
+        let comp = 1;
+        g.save.levelCompletion.forEach(function(val){
+            comp += val > 0;
+        });
+        let unlocked = comp >= g.manager.num + 1;
+        if(unlocked){
+            next.alpha = 1;
+        } else{
+            next.alpha = 0;
+            next.interactive = false;
+        }
+    }
     let allowReplay = true;
     function testReplay(){
-        if(allowReplay){
+        if(allowReplay && g.stage){
             allowReplay = false;
             g.level.kill();
             setTimeout(function(){
@@ -344,8 +370,10 @@ export default function(){
     key.waitDown(82,testReplay,true);
     //Esc pressed, exit game
     key.waitDown(27,function(){
-        g.level.kill();
-        g.manager.show("level");
+        if(g.stage){
+            g.level.kill();
+            g.manager.show("level");
+        }
     },true);
 
     next.on('click',function(){
@@ -376,8 +404,31 @@ export default function(){
     }
     g.manager.levelCompletion = function(levelCompletion){
         for(let i = 0; i < levelSelect.levels.length;i++){
-            (levelSelect.levels[i]).showTrophies(levelCompletion[i]);
+            //if x levels are completed, x + 2 level will be unlocked
+            let comp = 1;
+            levelCompletion.forEach(function(val){
+                comp += val > 0;
+            });
+
+            if(comp >= i){
+                levelSelect.levels[i].interactive = true;
+                levelSelect.levels[i].alpha = 1;
+                levelSelect.levels[i].showTrophies(levelCompletion[i]);
+            } else{
+                levelSelect.levels[i].interactive = false;
+                levelSelect.levels[i].alpha = 0.6;
+            }
         }
+        if(g.save.levelCompletion.every(function(lv){
+            return lv > 2;
+        })){
+            lock.visible = false;
+            diamond.interactive = true;
+        } else{
+            lock.visible = true;
+            diamond.interactive = false;
+        }
+        console.log(lock.visible);
     }
     //Relevant to save data
 }

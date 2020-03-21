@@ -99,7 +99,6 @@ export default class{
 
         if(g.maze.mode === "normal" || g.maze.mode === "trials"){
             for(let i = 0; i < g.maze.fruits;i++){
-                console.log(i);
                 this.fruit();
             };
             this.counter = new Counter();
@@ -318,13 +317,11 @@ export default class{
         }
         if (this.exitSprite && this.locations[0].x === this.exitSprite.coord.x && this.locations[0].y === this.exitSprite.coord.y && !this.over) {
             //TODO = WIN SCREEN
-            console.log("victory tested");
             this.over = true;
             g.level.end("victory")
         }
         if (death && !this.over) {
             //TODO = HANDLE DEATH OF THE SNAKE WITH A DEATH SCREEN
-            console.log("death tested");
             collide = true;
             this.over = true;
             g.level.end("death");

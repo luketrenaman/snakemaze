@@ -13,22 +13,26 @@ import menuConstructor from "./components/menu";
 import pauseConstructor from "./components/pause";
 import buildSnake from "./components/buildSnake";
 //Tile rendering
-import tileRender from "./tile-rendering/map";
 Number.prototype.mod = function(n) {
 	return ((this % n) + n) % n;
 }; 
 key.listen(); 
 window.g = {};
-g.renderer = PIXI.autoDetectRenderer(832, 640);
+g.renderer = PIXI.autoDetectRenderer(832, 640,{
+	antialias:true
+});
 g.renderer.backgroundColor = 0x444444;
 g.all = new PIXI.Container();
 document.body.appendChild(g.renderer.view);
 PIXI.loader
+.add("assets/portal.png")
+.add("assets/level-select.png")
 .add("assets/maze-wall.png")
 .add("assets/trophy-bronze.png")
 .add("assets/trophy-silver.png")
 .add("assets/trophy-gold.png")
 .add("assets/trophy-diamond.png")
+.add("assets/trophy-diamond-locked.png")
 .add("assets/award-bronze.png")
 .add("assets/award-silver.png")
 .add("assets/award-gold.png")
@@ -57,7 +61,7 @@ function setup() {
 	]
 	//Button is a function that creates an interactive sprite at a certain position, and provide a callback
 	//Get save data
-	g.save = localStorage.getItem("snakemaze_save_data");
+	g.save = localStorage.getItem("snakemaze_save");
 	if(g.save !== null){
 		g.save = JSON.parse(g.save);
 	} else{
@@ -71,7 +75,7 @@ function setup() {
 			"musicEnabled":true,
 			"levelCompletion":levelCompletion
 		};
-		localStorage.setItem("snakemaze_save_data",JSON.stringify(g.save));
+		localStorage.setItem("snakemaze_save",JSON.stringify(g.save));
 	}
 	
 	menuConstructor();
@@ -211,13 +215,12 @@ function setup() {
 				})
 				g.renderer.render(g.all);
 			});
-			console.log(condition + "," + snake.over);
 			g.level.gameTick = new GameTick(function(frames,self){
 				if(condition === "victory"){
 					if(n === 0){
 						g.manager.show("victory");
 						g.save.levelCompletion[num] = g.difficulty.value
-						localStorage.setItem("snakemaze_save_data",JSON.stringify(g.save));
+						localStorage.setItem("snakemaze_save",JSON.stringify(g.save));
 						g.manager.levelCompletion(g.save.levelCompletion);
 					}
 					if(snake.sprites.length !== n){
@@ -246,7 +249,7 @@ function setup() {
 								} while (snake.locations[n].x === snake.locations[n + 1].x && snake.locations[n].y === snake.locations[n + 1].y)
 							}
 							catch (e){
-								console.error("goteem");
+								
 							}
 						}
 
@@ -265,7 +268,7 @@ function setup() {
 		background.zIndex = 500;
 		for (let i = -2; i < 26; i++) {
 			for (let j = -2; j < 20; j++) {
-				var rand = Math.random() * bias[bias.length - 1]
+				var rand = Math.random() * bias[bias.length - 1];
 				var x = new PIXI.Sprite(textures[bias.indexOf(bias.filter(function(val) {
 					return rand < val;
 				})[0])]);
@@ -280,17 +283,39 @@ function setup() {
 				background.addChild(x);
 			}
 		}
+		let portals = new PIXI.Container();
+		portals.zIndex = 499;
 		let tiles = new PIXI.Container();
 		tiles.zIndex = -1;
+		for (let i = 0; i < g.maze.data.length; i++) {
+			g.maze.data[i].forEach(function(cell, j) {
+				if(typeof cell === "object"){
+					cell = new PIXI.Sprite(PIXI.loader.resources["assets/portal.png"].texture); //portal
+					cell.x = j * 32;
+					cell.y = i * 32;
+					portals.addChild(cell)
+				} else{
+					if(cell === 1){
+						//PIXI.loader.resources["assets/tile.png"].texture
+						//cell = new PIXI.Sprite(dirt(getName(j, i)));
+						cell = new PIXI.Sprite(PIXI.loader.resources["assets/maze-wall.png"].texture);
+						cell.x = j * 32;
+						cell.y = i * 32;
+						cell.scale.x = 0.5;
+						cell.scale.y = 0.5;
+						tiles.addChild(cell);
+					}
+				}
+			})
+		}
 		g.stage.addChild(tiles);
-		tileRender(g.maze.data, tiles);
 		g.stage.addChild(background);
+		g.stage.addChild(portals);
 		let snake = new buildSnake();
 		snake.layer();
 		
 
 		g.all.updateLayersOrder();
-		let start = 1;
 		//Start by moving the snake to allow instantaneous snake positioning
 		for (let i = 0; i < 2; i++) {
 			switch (levels[num].snake.direction) {
