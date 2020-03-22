@@ -1,5 +1,10 @@
 import shapes from "../drawing/shapes";
 import key from "../utilities/key-press";
+let deathSound = new Howl({
+	src:['assets/death.mp3'],
+	loop:false,
+	volume:1
+});
 class Segment extends PIXI.Sprite {
     constructor(type){
     //Layering for segments, positioning, etc.
@@ -321,9 +326,11 @@ export default class{
             g.level.end("victory")
         }
         if (death && !this.over) {
+            
             //TODO = HANDLE DEATH OF THE SNAKE WITH A DEATH SCREEN
             collide = true;
             this.over = true;
+            deathSound.play();
             g.level.end("death");
         }
         if (g.maze.mode === "normal" || g.maze.mode === "trials" && this.counter.rules.current != this.counter.rules.max) {

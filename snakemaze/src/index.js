@@ -24,6 +24,18 @@ g.renderer = PIXI.autoDetectRenderer(832, 640,{
 g.renderer.backgroundColor = 0x444444;
 g.all = new PIXI.Container();
 document.body.appendChild(g.renderer.view);
+let song = new Howl({
+	src:['assets/snak.mp3','assets/snak.ogg'],
+	loop:true,
+	volume:1
+});
+song.play();
+let qbum = new Howl({
+	src: ['assets/startsfx1.mp3']
+});
+let lbum = new Howl({
+	src: ['assets/startsfx2.mp3']
+});
 PIXI.loader
 .add("assets/title-text.png")
 .add("assets/portal.png")
@@ -71,7 +83,7 @@ function setup() {
 			levelCompletion.push(0);
 		};
 		g.save = {
-			"selectedDifficulty":1,
+			"selectedDifficulty":2,
 			"soundsEnabled":true,
 			"musicEnabled":true,
 			"levelCompletion":levelCompletion
@@ -180,6 +192,7 @@ function setup() {
 			g.all.removeChild(pause);
 			g.maze = null;
 			g.stage = null;
+			pause.removeHandlers();
 			pause = null;
 			delete this.end;
 			snake = null;
@@ -220,7 +233,9 @@ function setup() {
 				if(condition === "victory"){
 					if(n === 0){
 						g.manager.show("victory");
-						g.save.levelCompletion[num] = g.difficulty.value
+						if(g.difficulty.value > g.save.levelCompletion[num]){
+							g.save.levelCompletion[num] = g.difficulty.value;
+						}
 						localStorage.setItem("snakemaze_save",JSON.stringify(g.save));
 						g.manager.levelCompletion(g.save.levelCompletion);
 					}
@@ -342,6 +357,7 @@ function setup() {
 			fill: "white"
 		});
 		g.stage.addChild(countdown);
+		song.volume = 0;
 		let gameTick = new GameTick(function(frames,self){
 			if (frames > 15) {
 				//TODO CHECK LOCATION
@@ -350,7 +366,13 @@ function setup() {
 			} else {
 				if (Math.ceil(3 - frames / 5) === 0) {
 					countdown.visible = false;
+					lbum.play();
+					song.volume = 1;
+
 				} else {
+					if (frames % 5 === 1){
+						qbum.play();
+					}
 					countdown.setText(Math.ceil(3 - frames / 5));
 				}
 			}

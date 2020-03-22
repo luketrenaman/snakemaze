@@ -24,11 +24,13 @@ export default class extends PIXI.Sprite{
         button(abort, 32, 32, () => {
                 g.level.kill();
                 g.manager.show("level");
-                g.all.removeChild(this);
                 g.renderer.render(g.all);
                 this.veto = true;
             })
         this.addChild(abort);
+    }
+    removeHandlers(){
+        
     }
     handle(renderloop,gameloop,background) {
         let a = this;
