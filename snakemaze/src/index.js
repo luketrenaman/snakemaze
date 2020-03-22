@@ -9,7 +9,7 @@ import GameTick from "./utilities/gametick";
 //Level
 import levels from "./level/levels";
 //Components
-import menuConstructor from "./components/menu";
+import { menuConstructor,theme } from "./components/menu";
 import pauseConstructor from "./components/pause";
 import buildSnake from "./components/buildSnake";
 //Tile rendering
@@ -24,12 +24,6 @@ g.renderer = PIXI.autoDetectRenderer(832, 640,{
 g.renderer.backgroundColor = 0x444444;
 g.all = new PIXI.Container();
 document.body.appendChild(g.renderer.view);
-let song = new Howl({
-	src:['assets/snak.mp3','assets/snak.ogg'],
-	loop:true,
-	volume:0
-});
-song.play();
 let qbum = new Howl({
 	src: ['assets/startsfx1.mp3']
 });
@@ -115,7 +109,7 @@ function setup() {
 		});
 	};
 	g.newLevel = function(num) {
-		Math.seedrandom(num.toString() + "snak");
+		Math.seedrandom(num.toString() + "snake");
 		key.mostRecentKey = null;
 		g.manager.num = num;
 		if (levels[num] == undefined) return; 
@@ -232,10 +226,10 @@ function setup() {
 			g.level.gameTick = new GameTick(function(frames,self){
 				if(condition === "victory"){
 					if(n === 0){
-						g.manager.show("victory");
 						if(g.difficulty.value > g.save.levelCompletion[num]){
 							g.save.levelCompletion[num] = g.difficulty.value;
 						}
+						g.manager.show("victory");
 						localStorage.setItem("snakemaze_save",JSON.stringify(g.save));
 						g.manager.levelCompletion(g.save.levelCompletion);
 					}
@@ -357,6 +351,7 @@ function setup() {
 			fill: "white"
 		});
 		g.stage.addChild(countdown);
+		theme.fade(1,0.5,300);
 		let gameTick = new GameTick(function(frames,self){
 			if (frames > 15) {
 				//TODO CHECK LOCATION
@@ -367,6 +362,7 @@ function setup() {
 					countdown.visible = false;
 					if(g.save.soundsEnabled){
 						lbum.play();
+						theme.fade(0.5,1,1000);
 					}
 
 				} else {

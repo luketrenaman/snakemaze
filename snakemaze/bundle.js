@@ -24072,14 +24072,22 @@ __webpack_require__.r(__webpack_exports__);
 /*!******************************************!*\
   !*** ./snakemaze/src/components/menu.js ***!
   \******************************************/
-/*! exports provided: default */
+/*! exports provided: theme, menuConstructor */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "theme", function() { return theme; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "menuConstructor", function() { return menuConstructor; });
 /* harmony import */ var _utilities_key_press__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utilities/key-press */ "./snakemaze/src/utilities/key-press.js");
 /* harmony import */ var _drawing_shapes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../drawing/shapes */ "./snakemaze/src/drawing/shapes.js");
 /* harmony import */ var _button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./button */ "./snakemaze/src/components/button.js");
+
+let theme = new Howl({
+	src:['assets/snak.mp3','assets/snak.ogg'],
+	loop:true,
+	volume:1
+});
 
 class MenuManager{
     constructor(){
@@ -24181,6 +24189,12 @@ class SoundMenu extends PIXI.Sprite{
         }
         if(this.name === "music"){
             g.save.musicEnabled = this.enabled;
+            if(this.enabled){
+                theme.pause();
+                theme.play();
+            } else{
+                theme.pause();
+            }
         }
         localStorage.setItem("snakemaze_save",JSON.stringify(g.save));
     }
@@ -24290,7 +24304,8 @@ class LevelSelect extends PIXI.Sprite{
     }
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (function(){
+let menuConstructor = function(){
+
     g.manager = new MenuManager();
     // -- START SCREEN --
     let startScreen = new Menu("start",true);
@@ -24304,6 +24319,12 @@ class LevelSelect extends PIXI.Sprite{
     startScreen.addChild(start);
     Object(_button__WEBPACK_IMPORTED_MODULE_2__["default"])(start, 64 * 4 + 32, 64 * 6, function () {
             g.manager.show("level");
+            if(g.save.musicEnabled){
+                theme.pause();
+                theme.play();
+
+
+            }
         })
     // -- LEVEL SELECT --
     let levelSelect = new Menu("level",true);
@@ -24516,7 +24537,7 @@ class LevelSelect extends PIXI.Sprite{
         console.log(lock.visible);
     }
     //Relevant to save data
-});
+}
 
 
 /***/ }),
@@ -24696,12 +24717,6 @@ g.renderer = PIXI.autoDetectRenderer(832, 640,{
 g.renderer.backgroundColor = 0x444444;
 g.all = new PIXI.Container();
 document.body.appendChild(g.renderer.view);
-let song = new Howl({
-	src:['assets/snak.mp3','assets/snak.ogg'],
-	loop:true,
-	volume:0
-});
-song.play();
 let qbum = new Howl({
 	src: ['assets/startsfx1.mp3']
 });
@@ -24763,7 +24778,7 @@ function setup() {
 		localStorage.setItem("snakemaze_save",JSON.stringify(g.save));
 	}
 	
-	Object(_components_menu__WEBPACK_IMPORTED_MODULE_5__["default"])();
+	Object(_components_menu__WEBPACK_IMPORTED_MODULE_5__["menuConstructor"])();
 	//Manipulate previous menu settings with save data
 	if(g.save.musicEnabled){
 		g.soundManager.children[0].enable();
@@ -24787,7 +24802,7 @@ function setup() {
 		});
 	};
 	g.newLevel = function(num) {
-		Math.seedrandom(num.toString() + "snak");
+		Math.seedrandom(num.toString() + "snake");
 		_utilities_key_press__WEBPACK_IMPORTED_MODULE_0__["default"].mostRecentKey = null;
 		g.manager.num = num;
 		if (_level_levels__WEBPACK_IMPORTED_MODULE_4__["default"][num] == undefined) return; 
@@ -24904,10 +24919,10 @@ function setup() {
 			g.level.gameTick = new _utilities_gametick__WEBPACK_IMPORTED_MODULE_3__["default"](function(frames,self){
 				if(condition === "victory"){
 					if(n === 0){
-						g.manager.show("victory");
 						if(g.difficulty.value > g.save.levelCompletion[num]){
 							g.save.levelCompletion[num] = g.difficulty.value;
 						}
+						g.manager.show("victory");
 						localStorage.setItem("snakemaze_save",JSON.stringify(g.save));
 						g.manager.levelCompletion(g.save.levelCompletion);
 					}
@@ -25029,6 +25044,7 @@ function setup() {
 			fill: "white"
 		});
 		g.stage.addChild(countdown);
+		_components_menu__WEBPACK_IMPORTED_MODULE_5__["theme"].fade(1,0.5,300);
 		let gameTick = new _utilities_gametick__WEBPACK_IMPORTED_MODULE_3__["default"](function(frames,self){
 			if (frames > 15) {
 				//TODO CHECK LOCATION
@@ -25039,6 +25055,7 @@ function setup() {
 					countdown.visible = false;
 					if(g.save.soundsEnabled){
 						lbum.play();
+						_components_menu__WEBPACK_IMPORTED_MODULE_5__["theme"].fade(0.5,1,1000);
 					}
 
 				} else {

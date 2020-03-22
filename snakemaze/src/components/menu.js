@@ -1,4 +1,10 @@
 import key from "../utilities/key-press";
+export let theme = new Howl({
+	src:['assets/snak.mp3','assets/snak.ogg'],
+	loop:true,
+	volume:1
+});
+
 class MenuManager{
     constructor(){
         this.menus = [];
@@ -99,6 +105,12 @@ class SoundMenu extends PIXI.Sprite{
         }
         if(this.name === "music"){
             g.save.musicEnabled = this.enabled;
+            if(this.enabled){
+                theme.pause();
+                theme.play();
+            } else{
+                theme.pause();
+            }
         }
         localStorage.setItem("snakemaze_save",JSON.stringify(g.save));
     }
@@ -208,7 +220,8 @@ class LevelSelect extends PIXI.Sprite{
     }
 }
 
-export default function(){
+export let menuConstructor = function(){
+
     g.manager = new MenuManager();
     // -- START SCREEN --
     let startScreen = new Menu("start",true);
@@ -222,6 +235,12 @@ export default function(){
     startScreen.addChild(start);
     button(start, 64 * 4 + 32, 64 * 6, function () {
             g.manager.show("level");
+            if(g.save.musicEnabled){
+                theme.pause();
+                theme.play();
+
+
+            }
         })
     // -- LEVEL SELECT --
     let levelSelect = new Menu("level",true);
