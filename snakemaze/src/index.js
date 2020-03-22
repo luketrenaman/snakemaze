@@ -27,7 +27,7 @@ document.body.appendChild(g.renderer.view);
 let song = new Howl({
 	src:['assets/snak.mp3','assets/snak.ogg'],
 	loop:true,
-	volume:1
+	volume:0
 });
 song.play();
 let qbum = new Howl({

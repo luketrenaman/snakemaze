@@ -327,9 +327,11 @@ export default class{
                     }
                 });
             });
-            this.locations[0].x = target.x;
-            this.locations[0].y = target.y;
-            this.predirection = target.direction;
+            if(target !== undefined){
+                this.locations[0].x = target.x;
+                this.locations[0].y = target.y;
+                this.predirection = target.direction;
+            }
             this.checkMove();
             return;
         }
