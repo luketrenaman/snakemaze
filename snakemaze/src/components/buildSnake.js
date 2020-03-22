@@ -5,6 +5,16 @@ let deathSound = new Howl({
 	loop:false,
 	volume:1
 });
+let gemSound = new Howl({
+	src:['assets/gem.mp3'],
+	loop:false,
+	volume:1
+});
+let escapeSound = new Howl({
+	src:['assets/escape.mp3'],
+	loop:false,
+	volume:1
+});
 class Segment extends PIXI.Sprite {
     constructor(type){
     //Layering for segments, positioning, etc.
@@ -244,6 +254,9 @@ export default class{
         this.collide();
     }
     eat() {
+        if(g.save.soundsEnabled){
+            gemSound.play();
+        }
         let a = this;
         let piece = new Segment("body");
         this.sprites.splice(this.sprites.length - 1, 0, piece);
@@ -323,6 +336,9 @@ export default class{
         if (this.exitSprite && this.locations[0].x === this.exitSprite.coord.x && this.locations[0].y === this.exitSprite.coord.y && !this.over) {
             //TODO = WIN SCREEN
             this.over = true;
+            if(g.save.soundsEnabled){
+                escapeSound.play();
+            }
             g.level.end("victory")
         }
         if (death && !this.over) {
@@ -330,7 +346,9 @@ export default class{
             //TODO = HANDLE DEATH OF THE SNAKE WITH A DEATH SCREEN
             collide = true;
             this.over = true;
-            deathSound.play();
+            if(g.save.soundsEnabled){
+                deathSound.play();
+            }
             g.level.end("death");
         }
         if (g.maze.mode === "normal" || g.maze.mode === "trials" && this.counter.rules.current != this.counter.rules.max) {

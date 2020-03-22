@@ -23623,6 +23623,16 @@ let deathSound = new Howl({
 	loop:false,
 	volume:1
 });
+let gemSound = new Howl({
+	src:['assets/gem.mp3'],
+	loop:false,
+	volume:1
+});
+let escapeSound = new Howl({
+	src:['assets/escape.mp3'],
+	loop:false,
+	volume:1
+});
 class Segment extends PIXI.Sprite {
     constructor(type){
     //Layering for segments, positioning, etc.
@@ -23862,6 +23872,9 @@ class ExitSprite extends PIXI.Sprite{
         this.collide();
     }
     eat() {
+        if(g.save.soundsEnabled){
+            gemSound.play();
+        }
         let a = this;
         let piece = new Segment("body");
         this.sprites.splice(this.sprites.length - 1, 0, piece);
@@ -23941,6 +23954,9 @@ class ExitSprite extends PIXI.Sprite{
         if (this.exitSprite && this.locations[0].x === this.exitSprite.coord.x && this.locations[0].y === this.exitSprite.coord.y && !this.over) {
             //TODO = WIN SCREEN
             this.over = true;
+            if(g.save.soundsEnabled){
+                escapeSound.play();
+            }
             g.level.end("victory")
         }
         if (death && !this.over) {
@@ -23948,7 +23964,9 @@ class ExitSprite extends PIXI.Sprite{
             //TODO = HANDLE DEATH OF THE SNAKE WITH A DEATH SCREEN
             collide = true;
             this.over = true;
-            deathSound.play();
+            if(g.save.soundsEnabled){
+                deathSound.play();
+            }
             g.level.end("death");
         }
         if (g.maze.mode === "normal" || g.maze.mode === "trials" && this.counter.rules.current != this.counter.rules.max) {
@@ -24545,7 +24563,9 @@ __webpack_require__.r(__webpack_exports__);
         this.addChild(abort);
     }
     removeHandlers(){
-        
+        _utilities_key_press__WEBPACK_IMPORTED_MODULE_1__["default"].tethers = _utilities_key_press__WEBPACK_IMPORTED_MODULE_1__["default"].tethers.filter(function(val){
+            return !(val.keys[0] === 80 && val.keys[1] === 32);
+        })
     }
     handle(renderloop,gameloop,background) {
         let a = this;
@@ -25007,7 +25027,6 @@ function setup() {
 			fill: "white"
 		});
 		g.stage.addChild(countdown);
-		song.volume = 0;
 		let gameTick = new _utilities_gametick__WEBPACK_IMPORTED_MODULE_3__["default"](function(frames,self){
 			if (frames > 15) {
 				//TODO CHECK LOCATION
@@ -25016,11 +25035,12 @@ function setup() {
 			} else {
 				if (Math.ceil(3 - frames / 5) === 0) {
 					countdown.visible = false;
-					lbum.play();
-					song.volume = 1;
+					if(g.save.soundsEnabled){
+						lbum.play();
+					}
 
 				} else {
-					if (frames % 5 === 1){
+					if (frames % 5 === 1 && g.save.soundsEnabled){
 						qbum.play();
 					}
 					countdown.setText(Math.ceil(3 - frames / 5));

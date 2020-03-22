@@ -30,7 +30,9 @@ export default class extends PIXI.Sprite{
         this.addChild(abort);
     }
     removeHandlers(){
-        
+        key.tethers = key.tethers.filter(function(val){
+            return !(val.keys[0] === 80 && val.keys[1] === 32);
+        })
     }
     handle(renderloop,gameloop,background) {
         let a = this;

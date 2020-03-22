@@ -357,7 +357,6 @@ function setup() {
 			fill: "white"
 		});
 		g.stage.addChild(countdown);
-		song.volume = 0;
 		let gameTick = new GameTick(function(frames,self){
 			if (frames > 15) {
 				//TODO CHECK LOCATION
@@ -366,11 +365,12 @@ function setup() {
 			} else {
 				if (Math.ceil(3 - frames / 5) === 0) {
 					countdown.visible = false;
-					lbum.play();
-					song.volume = 1;
+					if(g.save.soundsEnabled){
+						lbum.play();
+					}
 
 				} else {
-					if (frames % 5 === 1){
+					if (frames % 5 === 1 && g.save.soundsEnabled){
 						qbum.play();
 					}
 					countdown.setText(Math.ceil(3 - frames / 5));
