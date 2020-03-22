@@ -24292,17 +24292,6 @@ class LevelSelect extends PIXI.Sprite{
 
 /* harmony default export */ __webpack_exports__["default"] = (function(){
     g.manager = new MenuManager();
-    // -- HANDLE MUSIC --
-    g.soundManager = new SoundManager();
-    g.soundManager.addChild(new SoundMenu(-4,0,
-        PIXI.loader.resources["assets/music.png"].texture,
-        PIXI.loader.resources["assets/nomusic.png"].texture,"music")
-    )
-    g.soundManager.addChild(new SoundMenu(64,0,
-        PIXI.loader.resources["assets/sound.png"].texture,
-        PIXI.loader.resources["assets/nosound.png"].texture,"sound")
-    );
-    g.all.addChild(g.soundManager);
     // -- START SCREEN --
     let startScreen = new Menu("start",true);
     let background = new PIXI.Sprite(PIXI.loader.resources["assets/level-select.png"].texture) //832, 640
@@ -24380,6 +24369,17 @@ class LevelSelect extends PIXI.Sprite{
     lock.x = (68+32)*3 + 12;
     lock.y = 12;
     levelSelect.addChild(trophyManager);
+    // -- HANDLE MUSIC --
+    g.soundManager = new SoundManager();
+    g.soundManager.addChild(new SoundMenu(-4,0,
+        PIXI.loader.resources["assets/music.png"].texture,
+        PIXI.loader.resources["assets/nomusic.png"].texture,"music")
+    )
+    g.soundManager.addChild(new SoundMenu(64,0,
+        PIXI.loader.resources["assets/sound.png"].texture,
+        PIXI.loader.resources["assets/nosound.png"].texture,"sound")
+    );
+    g.all.addChild(g.soundManager);
     // -- QUIT BUTTON --
     let exit = new PIXI.Sprite(PIXI.loader.resources["assets/back.png"].texture);
     levelSelect.addChild(exit);
