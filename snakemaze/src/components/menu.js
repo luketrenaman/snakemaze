@@ -66,7 +66,7 @@ import keyPress from "../utilities/key-press";
 class SoundManager extends PIXI.Container{
     constructor(){
         super();
-        this.x = 832-128-16;
+        this.x = 832-192-16;
         this.y = 640-64-16;
         this.zOrder = -4;
     }
@@ -79,6 +79,10 @@ class SoundMenu extends PIXI.Sprite{
         this.textureOn = textureOn;
         this.textureOff = textureOff;
         button(this, x, y, () => {
+            if(this.name === "tutorial"){
+                g.manager.show("tutorial");
+                return;
+            }
                 if (!this.enabled) {
                     this.enable();
                 }
@@ -223,6 +227,18 @@ class LevelSelect extends PIXI.Sprite{
 export let menuConstructor = function(){
 
     g.manager = new MenuManager();
+    // -- TUTORIAL SCREEN --
+    let tutorialScreen = new Menu("tutorial",false);
+    let tutorial = new PIXI.Sprite(PIXI.loader.resources["assets/tutorial.png"].texture);
+    tutorialScreen.addChild(tutorial);
+    // -- QUIT TO LEVEL SELECT FROM TUTORIAL SCREEN --
+    let exitTutorial = new PIXI.Sprite(PIXI.loader.resources["assets/back.png"].texture);
+    tutorialScreen.addChild(exitTutorial);
+    button(
+        exitTutorial, 32, 32, function () {
+            g.manager.show("level");
+        }
+        )
     // -- START SCREEN --
     let startScreen = new Menu("start",true);
     let background = new PIXI.Sprite(PIXI.loader.resources["assets/level-select.png"].texture) //832, 640
@@ -234,7 +250,9 @@ export let menuConstructor = function(){
     let start = new PIXI.Sprite(PIXI.loader.resources["assets/start.png"].texture)
     startScreen.addChild(start);
     button(start, 64 * 4 + 32, 64 * 6, function () {
-            g.manager.show("level");
+            g.manager.show("tutorial");
+            g.save.firstPlaythrough = false;
+            localStorage.setItem("snakemaze_save",JSON.stringify(g.save));
             if(g.save.musicEnabled){
                 theme.pause();
                 theme.play();
@@ -309,15 +327,19 @@ export let menuConstructor = function(){
     // -- HANDLE MUSIC --
     g.soundManager = new SoundManager();
     g.soundManager.addChild(new SoundMenu(-4,0,
+        PIXI.loader.resources["assets/tut.png"].texture,
+        PIXI.loader.resources["assets/tut.png"].texture,"tutorial")
+    )
+    g.soundManager.addChild(new SoundMenu(64,0,
         PIXI.loader.resources["assets/music.png"].texture,
         PIXI.loader.resources["assets/nomusic.png"].texture,"music")
     )
-    g.soundManager.addChild(new SoundMenu(64,0,
+    g.soundManager.addChild(new SoundMenu(132,0,
         PIXI.loader.resources["assets/sound.png"].texture,
         PIXI.loader.resources["assets/nosound.png"].texture,"sound")
     );
     g.all.addChild(g.soundManager);
-    // -- QUIT BUTTON --
+    // -- QUIT TO TITLE SCREEN BUTTON --
     let exit = new PIXI.Sprite(PIXI.loader.resources["assets/back.png"].texture);
     levelSelect.addChild(exit);
     button(

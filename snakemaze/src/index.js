@@ -31,6 +31,8 @@ let lbum = new Howl({
 	src: ['assets/startsfx2.mp3']
 });
 PIXI.loader
+.add("assets/tut.png")
+.add("assets/tutorial.png")
 .add("assets/title-text.png")
 .add("assets/portal.png")
 .add("assets/level-select.png")
@@ -80,7 +82,8 @@ function setup() {
 			"selectedDifficulty":2,
 			"soundsEnabled":true,
 			"musicEnabled":true,
-			"levelCompletion":levelCompletion
+			"levelCompletion":levelCompletion,
+			"firstPlaythrough":true
 		};
 		localStorage.setItem("snakemaze_save",JSON.stringify(g.save));
 	}
