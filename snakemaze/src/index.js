@@ -31,6 +31,7 @@ let lbum = new Howl({
 	src: ['assets/startsfx2.mp3']
 });
 PIXI.loader
+.add("assets/x.png")
 .add("assets/tut.png")
 .add("assets/tutorial.png")
 .add("assets/title-text.png")

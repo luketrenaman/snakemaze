@@ -57,6 +57,7 @@ export default class extends PIXI.Sprite{
             key.check([80,32], function() {
                 a.visible = true;
                 g.soundManager.visible = true;
+                g.manager.current = "pause";
                 //background.zIndex = -2;
                 a.zIndex = -3;
                 g.all.updateLayersOrder();

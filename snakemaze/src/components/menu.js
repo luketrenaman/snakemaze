@@ -8,12 +8,25 @@ export let theme = new Howl({
 class MenuManager{
     constructor(){
         this.menus = [];
+        this.current = "";
     }
     
     show(menuName){
         this.hide();
+        if(menuName === "pause"){
+            g.soundManager.visible = true;
+            g.renderer.render(g.all);
+            return;
+        }
+        if(menuName !== "tutorial"){
+            this.current = menuName;
+        }
         this.menus.forEach(function(val) {
             if(val.name === menuName){
+                if(menuName === "tutorial"){
+                    g.all.removeChild(val);
+                    g.all.addChild(val);
+                }
                 val.visible = true;
                 g.soundManager.visible = val.sound;
                 if(val.name === "victory" || val.name === "death"){
@@ -63,6 +76,7 @@ class Menu extends PIXI.Container{
 import shapes from "../drawing/shapes";
 import button from "./button";
 import keyPress from "../utilities/key-press";
+import { getGeneratedNameForNode, textSpanIsEmpty } from "typescript";
 class SoundManager extends PIXI.Container{
     constructor(){
         super();
@@ -232,11 +246,11 @@ export let menuConstructor = function(){
     let tutorial = new PIXI.Sprite(PIXI.loader.resources["assets/tutorial.png"].texture);
     tutorialScreen.addChild(tutorial);
     // -- QUIT TO LEVEL SELECT FROM TUTORIAL SCREEN --
-    let exitTutorial = new PIXI.Sprite(PIXI.loader.resources["assets/back.png"].texture);
+    let exitTutorial = new PIXI.Sprite(PIXI.loader.resources["assets/x.png"].texture);
     tutorialScreen.addChild(exitTutorial);
     button(
-        exitTutorial, 32, 32, function () {
-            g.manager.show("level");
+        exitTutorial, 768-32, 24, function () {
+            g.manager.show(g.manager.current);
         }
         )
     // -- START SCREEN --
@@ -250,8 +264,13 @@ export let menuConstructor = function(){
     let start = new PIXI.Sprite(PIXI.loader.resources["assets/start.png"].texture)
     startScreen.addChild(start);
     button(start, 64 * 4 + 32, 64 * 6, function () {
+        if(g.save.firstPlaythrough){
             g.manager.show("tutorial");
             g.save.firstPlaythrough = false;
+            g.manager.current = "level";
+        } else{
+            g.manager.show("level");
+        }
             localStorage.setItem("snakemaze_save",JSON.stringify(g.save));
             if(g.save.musicEnabled){
                 theme.pause();
@@ -472,7 +491,6 @@ export let menuConstructor = function(){
             lock.visible = true;
             diamond.interactive = false;
         }
-        console.log(lock.visible);
     }
     //Relevant to save data
 }
