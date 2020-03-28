@@ -1,5 +1,3 @@
-const TerserPlugin = require('terser-webpack-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 var path = require('path');
 var cwd = "\\snakemaze";
 console.log(__dirname + cwd);
@@ -13,14 +11,11 @@ module.exports = {
 		"resolve": {
 			"extensions": ['.js', '.json']
 		},
-		plugins: [
-			new BundleAnalyzerPlugin()
-		],
-		optimization: {
+		/*optimization: {
 			minimizer: [
 			 new TerserPlugin(),
 			]
-		   }
+		   }*/
 		/*"module": {
 			"rules": [{
 				"test": /\.ts$/,

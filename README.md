@@ -3,4 +3,4 @@ Snakemaze is a game with 10 levels, each one more difficult than the last. Depen
 # How I made it
 This game is built using webpack so I can use modules that I have developed in the past to save time while developing. I tried using typescript for a bit, but it was too much work to make everything compatible so I reverted to normal javascript. The rendering library I use is PIXI.js.
 # Progress
-You can see what I currently have left to do under the issues tab. Feel free to submit your own ideas, or bugs that you may find while playing the game.
+This project is finished, but if you find any glitches or have suggestions, please submit them under the [issues tab](https://github.com/luketrenaman/snakemaze/issues).
