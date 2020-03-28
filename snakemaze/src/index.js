@@ -12,6 +12,11 @@ import levels from "./level/levels";
 import { menuConstructor,theme } from "./components/menu";
 import pauseConstructor from "./components/pause";
 import buildSnake from "./components/buildSnake";
+kongregateAPI.loadAPI(function(){
+	window.kongregate = kongregateAPI.getAPI();
+	// kongregate.services.getUsername(), etc
+	// Proceed with loading your game...
+  });
 //Tile rendering
 Number.prototype.mod = function(n) {
 	return ((this % n) + n) % n;
@@ -47,7 +52,7 @@ PIXI.loader
 .add("assets/award-silver.png")
 .add("assets/award-gold.png")
 .add("assets/award-diamond.png")
-.add("assets/snake-portal.png").add("assets/menu.png").add("assets/refresh.png").add("assets/sound.png").add("assets/nosound.png").add("assets/background-incomplete.png").add("assets/background-complete.png").add("assets/snake-head.png").add("assets/rainbow.json").add("assets/snake-body.png").add("assets/snake-corner.png").add("assets/snake-tail.png").add("assets/grass.png").add("assets/flowers-1.png").add("assets/flowers-2.png").add("assets/rock.png").add("assets/gem-1.png").add("assets/gem-2.png").add("assets/gem-3.png").add("assets/level-1.png").add("assets/titlescreen.png").add("assets/start.png").add("assets/back.png").add("assets/music.png").add("assets/nomusic.png").load(fonts);
+.add("assets/snake-portal.png").add("assets/menu.png").add("assets/refresh.png").add("assets/sound.png").add("assets/nosound.png").add("assets/background-incomplete.png").add("assets/background-complete.png").add("assets/snake-head.png").add("assets/rainbow.json").add("assets/snake-body.png").add("assets/snake-corner.png").add("assets/snake-tail.png").add("assets/grass.png").add("assets/flowers-1.png").add("assets/flowers-2.png").add("assets/rock.png").add("assets/gem-1.png").add("assets/gem-2.png").add("assets/gem-3.png").add("assets/start.png").add("assets/back.png").add("assets/music.png").add("assets/nomusic.png").load(fonts);
 function fonts() {
 	WebFont.load({
 		custom: {
@@ -236,6 +241,7 @@ function setup() {
 						g.manager.show("victory");
 						localStorage.setItem("snakemaze_save",JSON.stringify(g.save));
 						g.manager.levelCompletion(g.save.levelCompletion);
+						kongregate.stats.submit("Trophies",g.save.levelCompletion.reduce(function(a,b){return a+b}))
 					}
 					if(snake.sprites.length !== n){
 						if(snake.sprites[n]){

@@ -1,0 +1,14 @@
+
+@font-face{
+    font-family: "Pixel";
+    src: url("assets/pixel.ttf") format("truetype");
+}
+@font-face{
+    font-family: "pixelmono";
+    src: url("assets/pixel-mono.ttf") format("truetype");
+}
+body{
+    background:#fff;
+    color:#111;
+    font-family:"Pixel","pixelmono"
+}

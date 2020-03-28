@@ -4,6 +4,15 @@
   "description": "bruh its like snake but in a maze",
   "main": "gulpfile.js",
   "dependencies": {
+  },
+  "devDependencies": {
+    "@types/pixi.js": "^4.8.9",
+    "babel-loader": "^8.0.6",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-2": "^6.24.1",
+    "terser-webpack-plugin": "^2.3.5",
+    "webpack-bundle-analyzer": "^3.6.1",
+    "webpack-cli": "^3.3.11",
     "@babel/core": "^7.0.0",
     "awesome-typescript-loader": "^5.2.1",
     "babel-core": "^6.26.3",
@@ -19,15 +28,6 @@
     "webpack": "^4.40.2",
     "webpack-stream": "^5.2.1",
     "yargs": "^13.3.0"
-  },
-  "devDependencies": {
-    "@types/pixi.js": "^4.8.9",
-    "babel-loader": "^8.0.6",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-stage-2": "^6.24.1",
-    "terser-webpack-plugin": "^2.3.5",
-    "webpack-bundle-analyzer": "^3.6.1",
-    "webpack-cli": "^3.3.11"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
