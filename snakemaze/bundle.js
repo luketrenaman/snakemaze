@@ -24494,6 +24494,7 @@ let menuConstructor = function(){
         let unlocked = comp >= g.manager.num + 1;
         if(unlocked){
             next.alpha = 1;
+            next.interactive = true;
         } else{
             next.alpha = 0;
             next.interactive = false;
