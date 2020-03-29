@@ -331,8 +331,8 @@ export default class{
                 this.locations[0].x = target.x;
                 this.locations[0].y = target.y;
                 this.predirection = target.direction;
+                this.checkMove();
             }
-            this.checkMove();
             return;
         }
         if (this.exitSprite && this.locations[0].x === this.exitSprite.coord.x && this.locations[0].y === this.exitSprite.coord.y && !this.over) {
@@ -404,8 +404,7 @@ export default class{
                 return !(val.x === spawn.x && val.y === spawn.y);
             }) && a.gems.every(function(val) {
                     return !(val.coord.x === spawn.x && val.coord.y === spawn.y);
-                })
-             && g.maze.data[spawn.y][spawn.x] === 2;
+                });
             if (safe) {
                 let gem = new PIXI.Sprite(PIXI.loader.resources["assets/gem-" + Math.ceil(Math.random() * 3) + ".png"].texture)
                 gem.x = spawn.x * 32;
