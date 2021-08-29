@@ -97,14 +97,14 @@ function setup() {
 	menuConstructor();
 	//Manipulate previous menu settings with save data
 	if(g.save.musicEnabled){
-		g.soundManager.children[0].enable();
-	} else{
-		g.soundManager.children[0].disable();
-	}
-	if(g.save.soundsEnabled){
 		g.soundManager.children[1].enable();
 	} else{
 		g.soundManager.children[1].disable();
+	}
+	if(g.save.soundsEnabled){
+		g.soundManager.children[2].enable();
+	} else{
+		g.soundManager.children[2].disable();
 	}
 	g.manager.selectDifficulty(g.save.selectedDifficulty);
 	g.manager.levelCompletion(g.save.levelCompletion);

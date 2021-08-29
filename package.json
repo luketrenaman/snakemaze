@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "description": "bruh its like snake but in a maze",
   "main": "gulpfile.js",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/pixi.js": "^4.8.9",
     "babel-loader": "^8.0.6",
