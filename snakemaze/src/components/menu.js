@@ -75,7 +75,6 @@ class Menu extends PIXI.Container{
 }
 import shapes from "../drawing/shapes";
 import button from "./button";
-import keyPress from "../utilities/key-press";
 class SoundManager extends PIXI.Container{
     constructor(){
         super();
