@@ -118,7 +118,11 @@ function setup() {
 		});
 	};
 	g.newLevel = function(num) {
-		Math.seedrandom(num.toString() + "sna");
+		if(num === 9){
+			Math.seedrandom(num.toString() + "snake");
+		} else{
+			Math.seedrandom(num.toString() + "sna");
+		}
 		key.mostRecentKey = null;
 		g.manager.num = num;
 		if (levels[num] == undefined) return; 
