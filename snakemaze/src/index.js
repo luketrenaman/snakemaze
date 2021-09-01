@@ -12,11 +12,6 @@ import levels from "./level/levels";
 import { menuConstructor,theme } from "./components/menu";
 import pauseConstructor from "./components/pause";
 import buildSnake from "./components/buildSnake";
-kongregateAPI.loadAPI(function(){
-	window.kongregate = kongregateAPI.getAPI();
-	// kongregate.services.getUsername(), etc
-	// Proceed with loading your game...
-  });
 //Tile rendering
 Number.prototype.mod = function(n) {
 	return ((this % n) + n) % n;
@@ -245,7 +240,6 @@ function setup() {
 						g.manager.show("victory");
 						localStorage.setItem("snakemaze_save",JSON.stringify(g.save));
 						g.manager.levelCompletion(g.save.levelCompletion);
-						kongregate.stats.submit("Trophies",g.save.levelCompletion.reduce(function(a,b){return a+b}))
 					}
 					if(snake.sprites.length !== n){
 						if(snake.sprites[n]){
