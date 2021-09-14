@@ -52,7 +52,7 @@ function fonts() {
 	WebFont.load({
 		custom: {
 			families: ['Pixel', 'pixelmono'],
-			urls: ["/stylesheet.css"]
+			urls: ["stylesheet.css"]
 		},
 		active: e => {
 			// now start setting up your PixiJS (or canvas) stuff!
