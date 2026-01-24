@@ -217,9 +217,9 @@ class LevelSelect extends PIXI.Sprite{
             fill: "white"
         });
         text.anchor.x = 0.5;
-        text.anchor.y = 0.5;
+        text.anchor.y = 0;
         text.x = 32;
-        text.y = 32;
+        text.y = 8;
         text.value = 0;
         this.addChild(text);
 
